@@ -1,4 +1,4 @@
-package server;
+package server.models.Problem;
 
 public enum ProblemType {
   exercise,

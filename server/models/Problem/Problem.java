@@ -1,8 +1,7 @@
-package server;
+package server.models.Problem;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -80,7 +79,7 @@ public class Problem {
     this.type = b.type;
     this.solutionPath = b.solutionPath;
     this.isChallenge = b.isChallenge;
-    this.topics = b.topics;
+    this.topics = b.topics == null ? new ArrayList<>() : new ArrayList<>(b.topics);
     this.points = b.points;
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
@@ -132,7 +131,7 @@ public class Problem {
     touch();
   }
 
-  public void changeType(ProblemType newType) {
+  public void updateType(ProblemType newType) {
     this.type = Objects.requireNonNull(newType);
     touch();
   }
@@ -149,9 +148,13 @@ public class Problem {
     touch();
   }
 
-  public void updateTopics(List<String> newTopics) {
-    this.topics = Collections.unmodifiableList(new ArrayList<String>(Objects.requireNonNull(newTopics)));
+  public void newTopicsList(List<String> newTopics) {
+    this.topics = new ArrayList<String>(Objects.requireNonNull(newTopics));
     touch();
+  }
+
+  public void addTopic(String newTopic) {
+    this.topics.add(newTopic);
   }
 
   public void moveSolutionPath(String newPath) {
