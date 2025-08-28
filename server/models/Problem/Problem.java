@@ -166,7 +166,9 @@ public class Problem {
   public String toString() {
     return "Problem{" +
         "id=" + id +
+        ", description=" + description +
         ", type=" + type +
+        ", solutionPath=" + solutionPath +
         ", isChallenge=" + isChallenge +
         ", points=" + points +
         ", topics=" + topics +
