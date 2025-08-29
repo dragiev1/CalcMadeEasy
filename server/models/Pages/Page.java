@@ -10,7 +10,8 @@ import server.models.Problem.Problem;
 
 public class Page {
   private final UUID id;
-  private String content;  // Latex markdown text
+  private String content; // Latex markdown text
+  private int problemQuantity;
   private List<Problem> exercises;
   private List<Problem> homework;
   private Instant createdAt;
@@ -31,6 +32,10 @@ public class Page {
 
     public Builder content(String content) {
       this.content = content;
+      return this;
+    }
+
+    public Builder problemQuantity(int problemQuantity) {
       return this;
     }
 
@@ -64,8 +69,13 @@ public class Page {
     this.content = b.content;
     this.exercises = b.exercises == null ? new ArrayList<>() : new ArrayList<>(b.exercises);
     this.homework = b.homework == null ? new ArrayList<>() : new ArrayList<>(b.homework);
+    this.problemQuantity = b.exercises.size() + b.homework.size();
     this.createdAt = b.createdAt;
     this.updatedAt = b.updatedAt;
+  }
+
+  public void touch() {
+    this.updatedAt = Instant.now();
   }
 
   // Getters
@@ -78,6 +88,23 @@ public class Page {
     return content;
   }
 
+  public int getProblemQuantity() {
+    return problemQuantity;
+  }
+
+  public Problem getExerciseProblemById(UUID id) {
+    return exercises.stream()
+        .filter(problem -> problem.getId().equals(id))
+        .findFirst()
+        .orElse(null);
+  }
+
+  public Problem getHWProblemById(UUID id) {
+    return homework.stream()
+        .filter(problem -> problem.getId().equals(id))
+        .findFirst()
+        .orElse(null);
+  }
 
   public List<Problem> getExercises() {
     return exercises;
@@ -87,29 +114,62 @@ public class Page {
     return homework;
   }
 
-  public Instant getCreatedAt() { 
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
   public Instant getUpdatedAt() {
     return updatedAt;
   }
-
+  
 
   // Setters
   public void updateContent(String newContent) {
     this.content = newContent;
+    touch();
   }
 
   public void addNewExercise(Problem newExercise) {
     this.exercises.add(newExercise);
+    problemQuantity++;
+    touch();
+  }
+
+  public void removeExercise(UUID id) {
+    for (Problem p : exercises) {
+      if (p.getId().equals(id)) {
+        this.exercises.remove(p);
+        System.out.println("Removed " + p.getId() + " from exercise list");
+      }
+    }
+  }
+
+  public void removeHomework(UUID id) {
+    for (Problem p : homework) {
+      if (p.getId().equals(id)) {
+        this.homework.remove(p);
+        System.out.println("Removed " + p.toString() + "\nfrom homework list");
+      }
+    }
   }
 
   public void replaceExerciseList(List<Problem> newExercises) {
+    problemQuantity -= this.homework.size(); // Subtract old quantity of problems
     this.exercises = new ArrayList<Problem>(Objects.requireNonNull(newExercises));
+    problemQuantity += this.homework.size(); // Add new quantity of problems
+    touch();
   }
 
-  public void touch() {
-    this.updatedAt = Instant.now();
+  public void addNewHWProblem(Problem newHWProblem) {
+    this.homework.add(newHWProblem);
+    problemQuantity++;
+    touch();
+  }
+
+  public void replaceHomeworkList(List<Problem> newHomeworks) {
+    problemQuantity -= this.homework.size(); // Subtract old quantity of problems
+    this.homework = new ArrayList<Problem>(Objects.requireNonNull(newHomeworks));
+    problemQuantity += this.homework.size(); // Add new quantity of problems
+    touch();
   }
 }
