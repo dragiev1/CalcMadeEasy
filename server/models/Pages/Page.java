@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import server.models.Problem.Problem;
 
@@ -23,7 +26,6 @@ public class Page {
     private List<Problem> exercises;
     private List<Problem> homework;
     private Instant createdAt;
-    private Instant updatedAt;
 
     public Builder id(UUID id) {
       this.id = id;
@@ -39,23 +41,18 @@ public class Page {
       return this;
     }
 
-    public Builder exercises(List<Problem> exercises) {
-      this.exercises = exercises;
+    public Builder exercises(Problem... exercises) {
+      this.exercises = List.of(exercises);
       return this;
     }
 
-    public Builder homework(List<Problem> homework) {
-      this.homework = homework;
+    public Builder homework(Problem... homework) {
+      this.homework = List.of(homework);
       return this;
     }
 
     public Builder createdAt(Instant createdAt) {
       this.createdAt = createdAt;
-      return this;
-    }
-
-    public Builder updatedAt(Instant updatedAt) {
-      this.updatedAt = updatedAt;
       return this;
     }
 
@@ -70,8 +67,8 @@ public class Page {
     this.exercises = b.exercises == null ? new ArrayList<>() : new ArrayList<>(b.exercises);
     this.homework = b.homework == null ? new ArrayList<>() : new ArrayList<>(b.homework);
     this.problemQuantity = b.exercises.size() + b.homework.size();
-    this.createdAt = b.createdAt;
-    this.updatedAt = b.updatedAt;
+    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
+    this.updatedAt = this.createdAt;
   }
 
   public void touch() {
@@ -92,18 +89,11 @@ public class Page {
     return problemQuantity;
   }
 
-  public Problem getExerciseProblemById(UUID id) {
-    return exercises.stream()
-        .filter(problem -> problem.getId().equals(id))
-        .findFirst()
-        .orElse(null);
-  }
-
-  public Problem getHWProblemById(UUID id) {
-    return homework.stream()
-        .filter(problem -> problem.getId().equals(id))
-        .findFirst()
-        .orElse(null);
+  // TODO: Fix get by topic somehow, works for everything else.
+  public <T> List<Problem> getProblemsBy(Function<Problem, T> attributeExtractor, T value, List<Problem> problems) {
+    return problems.stream()
+        .filter(problem -> Objects.equals(attributeExtractor.apply(problem), value))
+        .collect(Collectors.toList());
   }
 
   public List<Problem> getExercises() {
@@ -121,7 +111,6 @@ public class Page {
   public Instant getUpdatedAt() {
     return updatedAt;
   }
-  
 
   // Setters
   public void updateContent(String newContent) {
@@ -171,5 +160,23 @@ public class Page {
     this.homework = new ArrayList<Problem>(Objects.requireNonNull(newHomeworks));
     problemQuantity += this.homework.size(); // Add new quantity of problems
     touch();
+  }
+
+  @Override
+  public String toString() {
+    return "Page{\n" +
+        "id=" + id +
+        ", content=" + content +
+        ", homeworks=" + homework.toString() +
+        ", exercises=" + exercises.toString() +
+        ", total problems=" + problemQuantity +
+        ", createdAt=" + createdAt +
+        ", updatedAt=" + updatedAt +
+        "\n}";
+  }
+
+  // Allows for simplicity when creating a new Page object
+  public static Builder builder() {
+    return new Builder();
   }
 }

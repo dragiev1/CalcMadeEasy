@@ -53,8 +53,8 @@ public class Problem {
       return this;
     }
 
-    public Builder topics(List<String> topics) {
-      this.topics = topics;
+    public Builder topics(String... topics) {
+      this.topics = new ArrayList<>(List.of(topics));
       return this;
     }
 
@@ -164,7 +164,7 @@ public class Problem {
 
   @Override
   public String toString() {
-    return "Problem{" +
+    return "\nProblem{\n" +
         "id=" + id +
         ", description=" + description +
         ", type=" + type +
@@ -174,7 +174,7 @@ public class Problem {
         ", topics=" + topics +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
-        '}';
+        "\n}";
   }
 
   // Allows for simplicity when creating a new Problem object
