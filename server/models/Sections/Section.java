@@ -13,20 +13,16 @@ public class Section {
   private String description;
   private String title;
   private float progress;
-  private int numOfPages;
   private List<Page> pages;
   private Instant createdAt;
   private Instant updatedAt;
 
-  public class Builder {
+  public static class Builder {
     private UUID id;
     private String description;
     private String title;
-    private int problemQuantity;
     private float progress;
-    private int numOfPages;
     private List<Page> pages;
-    private Instant updatedAt;
     private Instant createdAt;
 
     public Builder id(UUID id) {
@@ -44,18 +40,8 @@ public class Section {
       return this;
     }
 
-    public Builder problemQuantity(int problemQuantity) {
-      this.problemQuantity = problemQuantity;
-      return this;
-    }
-
     public Builder progress(float progress) {
       this.progress = progress;
-      return this;
-    }
-
-    public Builder numOfPages(int numOfPages) {
-      this.numOfPages = numOfPages;
       return this;
     }
 
@@ -66,11 +52,6 @@ public class Section {
 
     public Builder createdAt(Instant createdAt) {
       this.createdAt = createdAt;
-      return this;
-    }
-
-    public Builder updatedAt(Instant updatedAt) {
-      this.updatedAt = updatedAt;
       return this;
     }
 
@@ -85,7 +66,6 @@ public class Section {
     this.title = b.title;
     this.progress = b.progress;
     this.pages = b.pages == null ? new ArrayList<>() : new ArrayList<>(b.pages);
-    this.numOfPages = b.pages.size();
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
   }
@@ -105,6 +85,10 @@ public class Section {
 
   public float getProgress() {
     return progress;
+  }
+
+  public int getPageQuantity() {
+    return pages.size();
   }
 
   public List<Page> getPages() {
@@ -138,11 +122,6 @@ public class Section {
     touch();
   }
 
-  public void updatePageQuantity(int newPageQuantity) {
-    this.numOfPages += newPageQuantity;
-    touch();
-  }
-
   public void addPage(Page newPage) {
     this.pages.add(Objects.requireNonNull(newPage));
     touch();
@@ -164,4 +143,20 @@ public class Section {
     }
   }
 
+  @Override
+  public String toString() {
+    return "Section{" +
+      "id=" + id +
+      ", description=" + description + 
+      ", title=" + title +
+      ", progress=" + progress +
+      ", pages=" + pages.toString() +
+      ", updatedAt=" + updatedAt +
+      ", createdAt=" + createdAt +
+      '}';
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
 }

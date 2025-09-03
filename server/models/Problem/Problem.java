@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Problem {
-  private final UUID id; // Unique Identifier
+  private final UUID id;
   private String description;
   private ProblemType type;
   private String solutionPath;
