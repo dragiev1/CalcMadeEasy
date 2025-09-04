@@ -2,6 +2,7 @@ package server.models.Pages;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -89,10 +90,21 @@ public class Page {
     return problemQuantity;
   }
 
-  // TODO: Fix get by topic somehow, works for everything else.
-  public <T> List<Problem> getProblemsBy(Function<Problem, T> attributeExtractor, T value, List<Problem> problems) {
+  public <T> List<Problem> getProblemsBy(
+      Function<Problem, T> attributeExtractor, 
+      T value, 
+      List<Problem> problems) {
     return problems.stream()
         .filter(problem -> Objects.equals(attributeExtractor.apply(problem), value))
+        .collect(Collectors.toList());
+  }
+
+  public <T> List<Problem> getProblemsContaining(
+      Function<Problem, Collection<T>> attributeExtractor,
+      T value,
+      List<Problem> problems) {
+    return problems.stream()
+        .filter(problem -> attributeExtractor.apply(problem).contains(value))
         .collect(Collectors.toList());
   }
 
