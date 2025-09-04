@@ -1,13 +1,11 @@
 package server;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import server.models.Pages.Page;
 import server.models.Problem.Problem;
 import server.models.Problem.ProblemType;
 
 class Main {
+  
   public static void main(String[] args) {
     // Test to see if Page.java is working properly.
     Problem problem1 = Problem.builder()
@@ -43,7 +41,7 @@ class Main {
         .homework(problem1, problem2, problem3)
         .build();
 
-    
-
+    page1.removeHomework(problem3.getId());
+    System.out.println(page1.toString());
   }
 }

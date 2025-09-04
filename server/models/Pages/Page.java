@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import server.models.Problem.Problem;
@@ -141,8 +140,15 @@ public class Page {
       if (p.getId().equals(id)) {
         this.exercises.remove(p);
         System.out.println("Removed " + p.getId() + " from exercise list");
+        return;
       }
     }
+  }
+
+  public void addNewHW(Problem newHomework) {
+    this.homework.add(newHomework);
+    problemQuantity++;
+    touch();
   }
 
   public void removeHomework(UUID id) {
@@ -150,6 +156,7 @@ public class Page {
       if (p.getId().equals(id)) {
         this.homework.remove(p);
         System.out.println("Removed " + p.toString() + "\nfrom homework list");
+        return;
       }
     }
   }
