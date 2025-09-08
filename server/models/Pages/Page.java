@@ -89,15 +89,30 @@ public class Page {
     return problemQuantity;
   }
 
+  /*
+   * Returns a list of problems that satisfy the attribute inputted.
+   * 
+   * @params Function<Problem, T> attributeExtractor = lamba
+   * expression that is sending a problem related function for data extraction.
+   * T value = value using to search for problems to retrieve.
+   */
   public <T> List<Problem> getProblemsBy(
-      Function<Problem, T> attributeExtractor, 
-      T value, 
+      Function<Problem, T> attributeExtractor,
+      T value,
       List<Problem> problems) {
     return problems.stream()
         .filter(problem -> Objects.equals(attributeExtractor.apply(problem), value))
         .collect(Collectors.toList());
   }
 
+  /*
+   * Returns a list of problems by containing a certain value.
+   * 
+   * @params Function<Problem, Collection<T>> attributeExtractor = lamba
+   * expression that is sending an arbitrary type collection for data extraction
+   * within this generic method.
+   * T value = value using to search for problems to retrieve.
+   */
   public <T> List<Problem> getProblemsContaining(
       Function<Problem, Collection<T>> attributeExtractor,
       T value,
@@ -124,53 +139,42 @@ public class Page {
   }
 
   // Setters
+
   public void setContent(String newContent) {
     this.content = newContent;
     touch();
   }
 
-  public void addNewExercise(Problem newExercise) {
+  public void setNewExercise(Problem newExercise) {
     this.exercises.add(newExercise);
     problemQuantity++;
     touch();
   }
 
-  public void removeExercise(UUID id) {
-    for (Problem p : exercises) {
-      if (p.getId().equals(id)) {
-        this.exercises.remove(p);
-        System.out.println("Removed " + p.getId() + " from exercise list");
-        return;
-      }
-    }
-  }
-
-  public void addNewHW(Problem newHomework) {
+  public void setNewHW(Problem newHomework) {
     this.homework.add(newHomework);
     problemQuantity++;
     touch();
   }
 
-  public void removeHomework(UUID id) {
-    for (Problem p : homework) {
+  // Removers
+
+  // Removes a problem from a list provided. (eg. exercises or homeworks)
+  public void removeProblem(List<Problem> problems, UUID id) {
+    for (Problem p : problems) {
       if (p.getId().equals(id)) {
-        this.homework.remove(p);
-        System.out.println("Removed " + p.toString() + "\nfrom homework list");
+        problems.remove(p);
+        System.out.println("Removed " + p.getId() + " from given list");
         return;
       }
     }
+    problemQuantity--;
   }
 
   public void replaceExerciseList(List<Problem> newExercises) {
     problemQuantity -= this.homework.size(); // Subtract old quantity of problems
     this.exercises = new ArrayList<Problem>(Objects.requireNonNull(newExercises));
     problemQuantity += this.homework.size(); // Add new quantity of problems
-    touch();
-  }
-
-  public void addNewHWProblem(Problem newHWProblem) {
-    this.homework.add(newHWProblem);
-    problemQuantity++;
     touch();
   }
 
@@ -191,7 +195,7 @@ public class Page {
         ", total problems=" + problemQuantity +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
-        "\n}";
+        "\n} 1 out of " + problemQuantity + " total problems.";
   }
 
   // Allows for simplicity when creating a new Page object

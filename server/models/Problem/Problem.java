@@ -166,12 +166,14 @@ public class Problem {
 
   // Removers
   public void removeTopic(UUID problemId, String topic) {
-    if (topic.isEmpty()) System.out.println("Empty topic inputted");
+    if (topic.isEmpty())
+      System.out.println("Empty topic inputted");
 
     if (this.topics.contains(topic)) {
       this.topics.remove(topic);
       return;
-    } else System.out.println(topic + " not found in list.");
+    } else
+      System.out.println(topic + " not found in list.");
   }
 
   @Override

@@ -1,5 +1,7 @@
 package server;
 
+import java.util.List;
+
 import server.models.Pages.Page;
 import server.models.Problem.Problem;
 import server.models.Problem.ProblemSolutionType;
@@ -41,7 +43,12 @@ class Main {
         .homework(problem1, problem2, problem3)
         .build();
 
-    page1.removeHomework(problem3.getId());
+    
     System.out.println(page1.toString());
+
+    page1.removeProblem(page1.getHomework(), problem1.getId());
+
+    System.out.println(page1.toString());
+
   }
 }
