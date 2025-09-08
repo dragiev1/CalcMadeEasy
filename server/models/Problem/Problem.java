@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Problem {
   private final UUID id;
   private String description;
-  private ProblemType type;
+  private ProblemSolutionType type;
   private String solutionPath;
   private boolean isChallenge;
   private List<String> topics;
@@ -21,7 +21,7 @@ public class Problem {
   public static class Builder {
     private UUID id;
     private String description;
-    private ProblemType type;
+    private ProblemSolutionType type;
     private String solutionPath;
     private boolean isChallenge;
     private List<String> topics;
@@ -38,7 +38,7 @@ public class Problem {
       return this;
     }
 
-    public Builder type(ProblemType type) {
+    public Builder type(ProblemSolutionType type) {
       this.type = type;
       return this;
     }
@@ -94,7 +94,7 @@ public class Problem {
     return description;
   }
 
-  public ProblemType getType() {
+  public ProblemSolutionType getType() {
     return type;
   }
 
@@ -133,7 +133,7 @@ public class Problem {
     touch();
   }
 
-  public void setType(ProblemType newType) {
+  public void setType(ProblemSolutionType newType) {
     this.type = Objects.requireNonNull(newType);
     touch();
   }
@@ -179,7 +179,7 @@ public class Problem {
     return "\nProblem{\n" +
         "id=" + id +
         ", description=" + description +
-        ", type=" + type +
+        ", solution type=" + type +
         ", solutionPath=" + solutionPath +
         ", isChallenge=" + isChallenge +
         ", points=" + points +
