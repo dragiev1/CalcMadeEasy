@@ -126,29 +126,31 @@ public class Problem {
     this.updatedAt = Instant.now();
   }
 
-  public void updateDescription(String newDescription) {
+  // Setters
+
+  public void setDescription(String newDescription) {
     this.description = Objects.requireNonNull(newDescription);
     touch();
   }
 
-  public void updateType(ProblemType newType) {
+  public void setType(ProblemType newType) {
     this.type = Objects.requireNonNull(newType);
     touch();
   }
 
-  public void updateDifficulty(boolean trueOrFalse) {
+  public void setDifficulty(boolean trueOrFalse) {
     this.isChallenge = trueOrFalse;
     touch();
   }
 
-  public void updatePoints(int newPoints) {
+  public void setPoints(int newPoints) {
     if (newPoints < 0)
       throw new IllegalArgumentException("Points cannot be negative!");
     this.points = newPoints;
     touch();
   }
 
-  public void newTopicsList(List<String> newTopics) {
+  public void setTopicsList(List<String> newTopics) {
     this.topics = new ArrayList<String>(Objects.requireNonNull(newTopics));
     touch();
   }
@@ -157,9 +159,19 @@ public class Problem {
     this.topics.add(newTopic);
   }
 
-  public void moveSolutionPath(String newPath) {
+  public void setSolutionPath(String newPath) {
     this.solutionPath = Objects.requireNonNull(newPath);
     touch();
+  }
+
+  // Removers
+  public void removeTopic(UUID problemId, String topic) {
+    if (topic.isEmpty()) System.out.println("Empty topic inputted");
+
+    if (this.topics.contains(topic)) {
+      this.topics.remove(topic);
+      return;
+    } else System.out.println(topic + " not found in list.");
   }
 
   @Override

@@ -124,7 +124,7 @@ public class Page {
   }
 
   // Setters
-  public void updateContent(String newContent) {
+  public void setContent(String newContent) {
     this.content = newContent;
     touch();
   }
