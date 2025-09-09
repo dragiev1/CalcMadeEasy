@@ -12,7 +12,6 @@ public class Section {
   private final UUID id;
   private String description;
   private String title;
-  private double progress;
   private List<Page> pages;
   private Instant createdAt;
   private Instant updatedAt;
@@ -21,7 +20,6 @@ public class Section {
     private UUID id;
     private String description;
     private String title;
-    private double progress;
     private List<Page> pages;
     private Instant createdAt;
 
@@ -37,11 +35,6 @@ public class Section {
 
     public Builder title(String title) {
       this.title = title;
-      return this;
-    }
-
-    public Builder progress(double progress) {
-      this.progress = progress;
       return this;
     }
 
@@ -64,7 +57,6 @@ public class Section {
     this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.description = b.description;
     this.title = b.title;
-    this.progress = b.progress;
     this.pages = b.pages == null ? new ArrayList<>() : new ArrayList<>(b.pages);
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
@@ -81,10 +73,6 @@ public class Section {
 
   public String getTitle() {
     return title;
-  }
-
-  public double getProgress() {
-    return progress;
   }
 
   public int getPageQuantity() {
@@ -111,11 +99,6 @@ public class Section {
 
   public void setDescription(String newDescription) {
     this.description = newDescription;
-    touch();
-  }
-
-  public void setProgress(double newProgress) {
-    this.progress = newProgress;
     touch();
   }
 
@@ -156,7 +139,6 @@ public class Section {
         "id=" + id +
         ", description=" + description +
         ", title=" + title +
-        ", progress=" + progress +
         ", pageQuantity=" + pages.size() +
         ", updatedAt=" + updatedAt +
         ", createdAt=" + createdAt +
