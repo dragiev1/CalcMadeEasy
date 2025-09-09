@@ -2,6 +2,7 @@ package server.models.Pages;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -23,8 +24,8 @@ public class Page {
   public static class Builder {
     private UUID id;
     private String content;
-    private List<Problem> exercises;
-    private List<Problem> homework;
+    private List<Problem> exercises  = new ArrayList<>();
+    private List<Problem> homework  = new ArrayList<>();
     private Instant createdAt;
 
     public Builder id(UUID id) {
@@ -42,12 +43,12 @@ public class Page {
     }
 
     public Builder exercises(Problem... exercises) {
-      this.exercises = List.of(exercises);
+      this.exercises = Arrays.asList(exercises);
       return this;
     }
 
     public Builder homework(Problem... homework) {
-      this.homework = List.of(homework);
+      this.homework = Arrays.asList(homework);
       return this;
     }
 
@@ -64,8 +65,8 @@ public class Page {
   private Page(Builder b) {
     this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.content = b.content;
-    this.exercises = b.exercises == null ? new ArrayList<>() : new ArrayList<>(b.exercises);
-    this.homework = b.homework == null ? new ArrayList<>() : new ArrayList<>(b.homework);
+    this.exercises = b.exercises;
+    this.homework = b.homework;
     this.problemQuantity = b.exercises.size() + b.homework.size();
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
@@ -165,10 +166,10 @@ public class Page {
       if (p.getId().equals(id)) {
         problems.remove(p);
         System.out.println("Removed " + p.getId() + " from given list");
+        problemQuantity--;
         return;
       }
     }
-    problemQuantity--;
   }
 
   public void replaceExerciseList(List<Problem> newExercises) {
@@ -190,12 +191,12 @@ public class Page {
     return "Page{\n" +
         "id=" + id +
         ", content=" + content +
-        ", homeworks=" + homework.toString() +
-        ", exercises=" + exercises.toString() +
+//        ", homeworks=" + homework.toString() +
+//        ", exercises=" + exercises.toString() +
         ", total problems=" + problemQuantity +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
-        "\n} 1 out of " + problemQuantity + " total problems.";
+        "\n}";
   }
 
   // Allows for simplicity when creating a new Page object

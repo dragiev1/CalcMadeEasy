@@ -181,7 +181,7 @@ public class Problem {
     return "\nProblem{\n" +
         "id=" + id +
         ", description=" + description +
-        ", solution type=" + type +
+        ", solutionType=" + type +
         ", solutionPath=" + solutionPath +
         ", isChallenge=" + isChallenge +
         ", points=" + points +

@@ -12,7 +12,7 @@ public class Section {
   private final UUID id;
   private String description;
   private String title;
-  private float progress;
+  private double progress;
   private List<Page> pages;
   private Instant createdAt;
   private Instant updatedAt;
@@ -21,7 +21,7 @@ public class Section {
     private UUID id;
     private String description;
     private String title;
-    private float progress;
+    private double progress;
     private List<Page> pages;
     private Instant createdAt;
 
@@ -40,13 +40,13 @@ public class Section {
       return this;
     }
 
-    public Builder progress(float progress) {
+    public Builder progress(double progress) {
       this.progress = progress;
       return this;
     }
 
-    public Builder pages(List<Page> pages) {
-      this.pages = pages;
+    public Builder pages(Page... pages) {
+      this.pages = List.of(pages);
       return this;
     }
 
@@ -83,7 +83,7 @@ public class Section {
     return title;
   }
 
-  public float getProgress() {
+  public double getProgress() {
     return progress;
   }
 
@@ -107,53 +107,60 @@ public class Section {
     this.updatedAt = Instant.now();
   }
 
-  public void updateDescription(String newDescription) {
+  // Setters
+
+  public void setDescription(String newDescription) {
     this.description = newDescription;
     touch();
   }
 
-  public void updateProgress(float newProgress) {
+  public void setProgress(double newProgress) {
     this.progress = newProgress;
     touch();
   }
 
-  public void updateTitle(String newTitle) {
+  public void setTitle(String newTitle) {
     this.title = newTitle;
     touch();
   }
 
-  public void addPage(Page newPage) {
+  public void setPage(Page newPage) {
     this.pages.add(Objects.requireNonNull(newPage));
     touch();
   }
 
-  public void replacePages(List<Page> newPages) {
-    this.pages = new ArrayList<Page>(Objects.requireNonNull(newPages));
+  public void setPageList(Page... newPages) {
+    this.pages = new ArrayList<Page>();
+    for (Page p : newPages) this.pages.add(p);
     touch();
   }
 
+  // Removers
+
   public void removePageById(UUID id) {
     if (pages.isEmpty() || pages == null)
-      System.out.println("No pages in this section");
-    for (Page p : pages) {
+      System.out.println("No pages in this section.");
+    for (Page p : this.pages) {
       if (p.getId().equals(id)) {
         pages.remove(p);
         System.out.println("Removed " + p.toString() + "\nfrom pages list");
+        return;
       }
     }
+    touch();
   }
 
   @Override
   public String toString() {
     return "Section{" +
-      "id=" + id +
-      ", description=" + description + 
-      ", title=" + title +
-      ", progress=" + progress +
-      ", pages=" + pages.toString() +
-      ", updatedAt=" + updatedAt +
-      ", createdAt=" + createdAt +
-      '}';
+        "id=" + id +
+        ", description=" + description +
+        ", title=" + title +
+        ", progress=" + progress +
+        ", pageQuantity=" + pages.size() +
+        ", updatedAt=" + updatedAt +
+        ", createdAt=" + createdAt +
+        '}';
   }
 
   public static Builder builder() {

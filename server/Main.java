@@ -1,13 +1,12 @@
 package server;
 
-import java.util.List;
-
 import server.models.Pages.Page;
 import server.models.Problem.Problem;
 import server.models.Problem.ProblemSolutionType;
+import server.models.Sections.Section;
 
 class Main {
-  
+
   public static void main(String[] args) {
     // Test to see if Page.java is working properly.
     Problem problem1 = Problem.builder()
@@ -40,15 +39,20 @@ class Main {
     Page page1 = Page.builder()
         .content("MATH STUFF HERE HEHEHHEHEHEHEHEHEHEHEHEE")
         .exercises(problem1, problem2)
+        .build();
+    Page page2 = Page.builder()
+        .content("YAY MORE MATH!")
         .homework(problem1, problem2, problem3)
         .build();
+    Page page3 = Page.builder()
+        .content("more math...")
+        .exercises(problem2)
+        .homework(problem3)
+        .build();
 
-    
-    System.out.println(page1.toString());
-
-    page1.removeProblem(page1.getHomework(), problem1.getId());
-
-    System.out.println(page1.toString());
-
+    Section section1 = Section.builder()
+        .title("Precalc Review")
+        .description("This will be a review for precalculus. In this section you will learn...")
+        .build();
   }
 }
