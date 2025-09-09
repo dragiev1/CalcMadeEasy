@@ -145,6 +145,7 @@ public class Section {
         '}';
   }
 
+  // Allows for simplicity when creating a new Section object
   public static Builder builder() {
     return new Builder();
   }
