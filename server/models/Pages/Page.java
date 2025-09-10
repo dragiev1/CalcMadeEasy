@@ -173,9 +173,9 @@ public class Page {
   }
 
   public void replaceExerciseList(List<Problem> newExercises) {
-    problemQuantity -= this.homework.size(); // Subtract old quantity of problems
+    problemQuantity -= this.exercises.size(); // Subtract old quantity of problems
     this.exercises = new ArrayList<Problem>(Objects.requireNonNull(newExercises));
-    problemQuantity += this.homework.size(); // Add new quantity of problems
+    problemQuantity += this.exercises.size(); // Add new quantity of problems
     touch();
   }
 

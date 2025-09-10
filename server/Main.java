@@ -1,5 +1,6 @@
 package server;
 
+import server.models.Chapters.Chapter;
 import server.models.Pages.Page;
 import server.models.Problem.Problem;
 import server.models.Problem.ProblemSolutionType;
@@ -53,6 +54,17 @@ class Main {
     Section section1 = Section.builder()
         .title("Precalc Review")
         .description("This will be a review for precalculus. In this section you will learn...")
+        .build();
+    Section section2 = Section.builder()
+        .title("Limits and Continuity")
+        .description("This will be the first chapter of Calculus!")
+        .pages(page1)
+        .build();
+    
+    Chapter chapter1 = Chapter.builder()
+        .title("Limits and Continuity")
+        .description("In this chapter we will learn the fundamentals of calculus.")
+        .sections(section1, section2)
         .build();
   }
 }

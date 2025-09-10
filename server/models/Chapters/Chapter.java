@@ -15,7 +15,7 @@ public class Chapter {
   private Instant createdAt;
   private Instant updatedAt;
 
-  private static class Builder {
+  public static class Builder {
     private UUID id;
     private String description;
     private String title;
@@ -57,6 +57,8 @@ public class Chapter {
     this.description = b.description;
     this.title = b.title;
     this.sections = b.sections == null ? new ArrayList<Section>() : new ArrayList<Section>(b.sections);
+    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
+    this.updatedAt = this.createdAt;
   }
 
   public void touch() {
@@ -107,7 +109,7 @@ public class Chapter {
   }
 
   public void setNewSectionList(Section... newSections) {
-    this.sections = new ArrayList<Section>();
+    this.sections = new ArrayList<Section>();  // Wipe out old data
     for (Section s : newSections)
       this.sections.add(s);
   }
@@ -128,7 +130,7 @@ public class Chapter {
     return "Page{\n" +
         "id=" + id +
         ", description=" + description +
-        ", sections=" + sections.toString() +
+        ", sectionsQuantity=" + sections.size() +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "\n}";
