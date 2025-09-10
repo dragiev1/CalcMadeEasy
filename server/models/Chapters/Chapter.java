@@ -2,6 +2,7 @@ package server.models.Chapters;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +38,8 @@ public class Chapter {
       return this;
     }
 
-    public Builder sections(List<Section> sections) {
-      this.sections = sections;
+    public Builder sections(Section... sections) {
+      this.sections = Arrays.asList(sections);
       return this;
     }
 
@@ -101,15 +102,17 @@ public class Chapter {
     touch();
   }
 
-  public void setNewSection(Section newSection) {
+  // Can either add one or more sections as once.
+  public void setNewSections(Section... newSection) {
     if (newSection == null)
-      System.out.println("Cannot add a null section");
+      System.out.println("Cannot add a null or empty section");
     else
-      this.sections.add(newSection);
+      for(Section s : newSection) this.sections.add(s);
   }
 
+  // Fully replaces section list with new sections. 
   public void setNewSectionList(Section... newSections) {
-    this.sections = new ArrayList<Section>();  // Wipe out old data
+    this.sections = new ArrayList<Section>();  // Wipes out old data
     for (Section s : newSections)
       this.sections.add(s);
   }
@@ -127,7 +130,7 @@ public class Chapter {
   }
 
   public String toString() {
-    return "Page{\n" +
+    return "\nChapter{\n" +
         "id=" + id +
         ", description=" + description +
         ", sectionsQuantity=" + sections.size() +

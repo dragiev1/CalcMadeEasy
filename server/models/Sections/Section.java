@@ -135,7 +135,7 @@ public class Section {
 
   @Override
   public String toString() {
-    return "Section{" +
+    return "\nSection{" +
         "id=" + id +
         ", description=" + description +
         ", title=" + title +

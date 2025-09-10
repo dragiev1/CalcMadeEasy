@@ -12,7 +12,7 @@ public class User {
   private String email;
   private String profilePicUrl; // Will store url provided by Google
   private int numCourseTaking;
-  private List<Course> courses;
+  private List<Course> courses;  // Stores courses the user is enrolled in
   private Instant createdAt;
   private Instant updatedAt;
 
@@ -24,7 +24,7 @@ public class User {
     private String email;
     private String profilePicUrl;
     private int numCourseTaking;
-    private List<Course> courses;
+    private List<Course> courses = new ArrayList<>();
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -85,7 +85,7 @@ public class User {
     this.email = b.email;
     this.profilePicUrl = b.profilePicUrl;
     this.numCourseTaking = b.numCourseTaking;
-    this.courses = b.courses;
+    this.courses = b.courses == null ? new ArrayList<>() : new ArrayList<>(b.courses);
     this.createdAt = b.createdAt;
     this.updatedAt = b.updatedAt;
   }

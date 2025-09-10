@@ -66,5 +66,6 @@ class Main {
         .description("In this chapter we will learn the fundamentals of calculus.")
         .sections(section1, section2)
         .build();
+
   }
 }
