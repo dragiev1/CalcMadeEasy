@@ -1,6 +1,7 @@
 package server;
 
 import server.models.Chapters.Chapter;
+import server.models.Courses.Course;
 import server.models.Pages.Page;
 import server.models.Problem.Problem;
 import server.models.Problem.ProblemSolutionType;
@@ -65,6 +66,12 @@ class Main {
         .title("Limits and Continuity")
         .description("In this chapter we will learn the fundamentals of calculus.")
         .sections(section1, section2)
+        .build();
+
+    Course course1 = Course.builder()
+        .title("Calculus I")
+        .description("In this course we will learn the fundamentals of calculus")
+        .chapters(chapter1)
         .build();
 
   }

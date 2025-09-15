@@ -103,7 +103,7 @@ public class Chapter {
   }
 
   // Can either add one or more sections as once.
-  public void setNewSections(Section... newSection) {
+  public void setSections(Section... newSection) {
     if (newSection == null)
       System.out.println("Cannot add a null or empty section");
     else
@@ -111,7 +111,7 @@ public class Chapter {
   }
 
   // Fully replaces section list with new sections. 
-  public void setNewSectionList(Section... newSections) {
+  public void setSectionList(Section... newSections) {
     this.sections = new ArrayList<Section>();  // Wipes out old data
     for (Section s : newSections)
       this.sections.add(s);

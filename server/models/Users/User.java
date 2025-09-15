@@ -1,9 +1,11 @@
-package server.models;
+package server.models.Users;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import server.models.Courses.Course;
 
 public class User {
   private final UUID id; // Unique identifier for user

@@ -24,8 +24,8 @@ public class Page {
   public static class Builder {
     private UUID id;
     private String content;
-    private List<Problem> exercises  = new ArrayList<>();
-    private List<Problem> homework  = new ArrayList<>();
+    private List<Problem> exercises = new ArrayList<>();
+    private List<Problem> homework = new ArrayList<>();
     private Instant createdAt;
 
     public Builder id(UUID id) {
@@ -146,15 +146,31 @@ public class Page {
     touch();
   }
 
-  public void setNewExercise(Problem newExercise) {
+  public void setExercise(Problem newExercise) {
     this.exercises.add(newExercise);
     problemQuantity++;
     touch();
   }
 
-  public void setNewHW(Problem newHomework) {
+  public void setHW(Problem newHomework) {
     this.homework.add(newHomework);
     problemQuantity++;
+    touch();
+  }
+
+  // Replaces exercise list; writes over old list.
+  public void setExerciseList(List<Problem> newExercises) {
+    problemQuantity -= this.exercises.size(); // Subtract old quantity of problems
+    this.exercises = new ArrayList<Problem>(Objects.requireNonNull(newExercises));
+    problemQuantity += this.exercises.size(); // Add new quantity of problems
+    touch();
+  }
+
+  // Replaces homework list; writes over old list.
+  public void setHomeworkList(List<Problem> newHomeworks) {
+    problemQuantity -= this.homework.size(); // Subtract old quantity of problems
+    this.homework = new ArrayList<Problem>(Objects.requireNonNull(newHomeworks));
+    problemQuantity += this.homework.size(); // Add new quantity of problems
     touch();
   }
 
@@ -172,27 +188,13 @@ public class Page {
     }
   }
 
-  public void replaceExerciseList(List<Problem> newExercises) {
-    problemQuantity -= this.exercises.size(); // Subtract old quantity of problems
-    this.exercises = new ArrayList<Problem>(Objects.requireNonNull(newExercises));
-    problemQuantity += this.exercises.size(); // Add new quantity of problems
-    touch();
-  }
-
-  public void replaceHomeworkList(List<Problem> newHomeworks) {
-    problemQuantity -= this.homework.size(); // Subtract old quantity of problems
-    this.homework = new ArrayList<Problem>(Objects.requireNonNull(newHomeworks));
-    problemQuantity += this.homework.size(); // Add new quantity of problems
-    touch();
-  }
-
   @Override
   public String toString() {
     return "\nPage{\n" +
         "id=" + id +
         ", content=" + content +
-//        ", homeworks=" + homework.toString() +
-//        ", exercises=" + exercises.toString() +
+        // ", homeworks=" + homework.toString() +
+        // ", exercises=" + exercises.toString() +
         ", total problems=" + problemQuantity +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +

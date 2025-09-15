@@ -155,17 +155,17 @@ public class Problem {
     touch();
   }
 
-  public void addTopic(String newTopic) {
-    this.topics.add(newTopic);
-  }
-
   public void setSolutionPath(String newPath) {
     this.solutionPath = Objects.requireNonNull(newPath);
     touch();
   }
 
+  public void setTopic(String newTopic) {
+    this.topics.add(newTopic);
+  }
+
   // Removers
-  public void removeTopic(UUID problemId, String topic) {
+  public void removeTopic(String topic) {
     if (topic.isEmpty())
       System.out.println("Empty topic inputted");
 
