@@ -1,4 +1,4 @@
-package server.models.Problem;
+package server.src.models.Problem;
 
 public class ProblemServices {
 
@@ -26,6 +26,14 @@ public class ProblemServices {
       return Math.abs(solution - correctSolution) < 1e-6;
 
     } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  public static boolean VerifyExpressionSolution(String userSolution, String problemSolution) {
+    try {
+      return true;
+    } catch (Exception e) {
       return false;
     }
   }

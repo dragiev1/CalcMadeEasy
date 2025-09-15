@@ -1,4 +1,4 @@
-package server.models.Courses;
+package server.src.models.Courses;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import server.models.Chapters.Chapter;
+import server.src.models.Chapters.Chapter;
 
 public class Course {
   private final UUID id;

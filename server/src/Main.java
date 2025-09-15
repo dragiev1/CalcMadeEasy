@@ -1,4 +1,4 @@
-package server;
+package server.src;
 
 // import server.models.Chapters.Chapter;
 // import server.models.Courses.Course;

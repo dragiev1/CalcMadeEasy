@@ -1,4 +1,4 @@
-package server.models.Problem;
+package server.src.models.Problem;
 
 public enum VerificationResult {
   CORRECT,

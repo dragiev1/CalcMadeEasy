@@ -1,4 +1,4 @@
-package server.models.Users;
+package server.src.models.Users;
 
 public class UserServices {
   private final User user;
