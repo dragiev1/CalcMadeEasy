@@ -1,4 +1,4 @@
-package server.src.models.Pages;
+package models.Pages;
 
 public class PageServices {
   private final Page page;

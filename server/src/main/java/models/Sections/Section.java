@@ -1,4 +1,4 @@
-package server.src.models.Sections;
+package models.Sections;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import server.src.models.Pages.Page;
+import models.Pages.Page;
 
 public class Section {
   private final UUID id;

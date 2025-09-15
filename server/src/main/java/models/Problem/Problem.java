@@ -1,4 +1,4 @@
-package server.src.models.Problem;
+package models.Problem;
 
 import java.time.Instant;
 import java.util.ArrayList;

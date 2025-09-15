@@ -1,4 +1,4 @@
-package server.src.models.Chapters;
+package models.Chapters;
 
 public class ChapterServices {
   private final Chapter chapter;

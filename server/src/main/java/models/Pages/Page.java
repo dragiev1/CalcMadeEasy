@@ -1,4 +1,4 @@
-package server.src.models.Pages;
+package models.Pages;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import server.src.models.Problem.Problem;
+import models.Problem.Problem;
 
 public class Page {
   private final UUID id;

@@ -1,4 +1,4 @@
-package server.src.models.Chapters;
+package models.Chapters;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import server.src.models.Sections.Section;
+import models.Sections.Section;
 
 public class Chapter {
   private final UUID id;

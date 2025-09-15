@@ -1,24 +1,33 @@
-package server.src;
 
-// import server.models.Chapters.Chapter;
-// import server.models.Courses.Course;
-// import server.models.Pages.Page;
-// import server.models.Problem.Problem;
-// import server.models.Problem.ProblemSolutionType;
-// import server.models.Sections.Section;
+import models.Problem.Problem;
+import models.Problem.ProblemServices;
+import models.Problem.ProblemSolutionType;
 
 class Main {
 
   public static void main(String[] args) {
     // Test to see if Page.java is working properly.
-    // Problem problem1 = Problem.builder()
-    //     .description("Derivate 2x.")
-    //     .type(ProblemSolutionType.NUMERICAL)
-    //     .points(1)
-    //     .solutionPath("Solutions/Derivatives/2.md")
-    //     .isChallenge(false)
-    //     .topics("Derivatives", "Power Rule")
-    //     .build();
+    Problem problem1 = Problem.builder()
+        .description("Derivate 2x.")
+        .type(ProblemSolutionType.EXPRESSION)
+        .points(1)
+        .solution("sin(43x^2) + cos^2(32/3) - x^22 + x^2")
+        .isChallenge(false)
+        .topics("Derivatives", "Power Rule")
+        .build();
+
+    ProblemServices service = new ProblemServices();
+
+    boolean correct = service.verifySolution(problem1, "cos^2(32/3) + sin(43x^2) - x^22 + x^2");
+
+    System.out.println(correct);
+
+
+
+
+
+
+
 
     // Problem problem2 = Problem.builder()
     //     .description("Integrate 2xdx.")

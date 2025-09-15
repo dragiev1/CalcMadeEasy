@@ -1,4 +1,4 @@
-package server.src.models.Problem;
+package models.Problem;
 
 public enum ProblemSolutionType {
   NUMERICAL,

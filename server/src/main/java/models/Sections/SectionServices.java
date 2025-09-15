@@ -1,4 +1,4 @@
-package server.src.models.Sections;
+package models.Sections;
 
 public class SectionServices {
   private final Section section;

@@ -1,4 +1,4 @@
-package server.src.models.Courses;
+package models.Courses;
 
 public class CourseServices {
   private final Course course;
