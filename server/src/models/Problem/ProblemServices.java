@@ -1,5 +1,8 @@
 package server.src.models.Problem;
 
+import org.matheclipse.core.eval.ExprEvaluator;
+import org.matheclipse.core.interfaces.IExpr;
+
 public class ProblemServices {
 
   public static boolean verifySolution(Problem problem, String userSolution) {
@@ -32,6 +35,8 @@ public class ProblemServices {
 
   public static boolean VerifyExpressionSolution(String userSolution, String problemSolution) {
     try {
+      ExprEvaluator util = new ExprEvaluator(false, 100);
+      IExpr userExpr = util.parse(userSolution);
       return true;
     } catch (Exception e) {
       return false;
