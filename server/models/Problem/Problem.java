@@ -10,7 +10,7 @@ public class Problem {
   private final UUID id;
   private String description;
   private ProblemSolutionType type;
-  private String solutionPath;
+  private String solution;
   private boolean isChallenge;
   private List<String> topics;
   private int points;
@@ -22,7 +22,7 @@ public class Problem {
     private UUID id;
     private String description;
     private ProblemSolutionType type;
-    private String solutionPath;
+    private String solution;
     private boolean isChallenge;
     private List<String> topics;
     private int points;
@@ -43,8 +43,8 @@ public class Problem {
       return this;
     }
 
-    public Builder solutionPath(String solutionPath) {
-      this.solutionPath = solutionPath;
+    public Builder solution(String solution) {
+      this.solution = solution;
       return this;
     }
 
@@ -77,7 +77,7 @@ public class Problem {
     this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.description = b.description;
     this.type = b.type;
-    this.solutionPath = b.solutionPath;
+    this.solution = b.solution;
     this.isChallenge = b.isChallenge;
     this.topics = b.topics == null ? new ArrayList<>() : new ArrayList<>(b.topics);
     this.points = b.points;
@@ -98,8 +98,8 @@ public class Problem {
     return type;
   }
 
-  public String getSolutionPath() {
-    return solutionPath;
+  public String getSolution() {
+    return solution;
   }
 
   public boolean getIsChallenge() {
@@ -155,8 +155,8 @@ public class Problem {
     touch();
   }
 
-  public void setSolutionPath(String newPath) {
-    this.solutionPath = Objects.requireNonNull(newPath);
+  public void setSolution(String newPath) {
+    this.solution = Objects.requireNonNull(newPath);
     touch();
   }
 
@@ -182,7 +182,7 @@ public class Problem {
         "id=" + id +
         ", description=" + description +
         ", solutionType=" + type +
-        ", solutionPath=" + solutionPath +
+        ", solution=" + solution +
         ", isChallenge=" + isChallenge +
         ", points=" + points +
         ", topics=" + topics +
