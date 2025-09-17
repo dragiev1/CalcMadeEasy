@@ -14,7 +14,7 @@ public class User {
   private String email;
   private String profilePicUrl; // Will store url provided by Google
   private int numCourseTaking;
-  private List<Course> courses;  // Stores courses the user is enrolled in
+  private List<Course> courses; // Stores courses the user is enrolled in
   private Instant createdAt;
   private Instant updatedAt;
 
@@ -60,8 +60,9 @@ public class User {
       return this;
     }
 
-    public Builder courses(List<Course> courses) {
-      this.courses = courses;
+    public Builder courses(Course... courses) {
+      if(courses == null || courses.length == 0)
+      this.courses = List.of(courses);
       return this;
     }
 
@@ -129,17 +130,44 @@ public class User {
     return updatedAt;
   }
 
+  // Setters
   public void touch() {
     this.updatedAt = Instant.now();
   }
 
-  public void updateCourseQuantity(int newQuantity) {
+  public void setCourseQuantity(int newQuantity) {
     this.numCourseTaking = newQuantity;
   }
 
   public void enrollNewCourse(Course newCourse) {
-    if(courses == null) courses = new ArrayList<>();
-    else updateCourseQuantity(getNumCoursesTaking() + 1);
+    if (courses == null)
+      courses = new ArrayList<>();
+    else
+      setCourseQuantity(getNumCoursesTaking() + 1);
+
     this.courses.add(newCourse);
+    touch();
+  }
+
+  public void setProfilePicUrl(String newUrl) {
+    this.profilePicUrl = newUrl;
+    touch();
+  }
+
+  public String toString() {
+    return "\nUser{\n" +
+        "id=" + id +
+        ", name=" + firstName + " " + lastName +
+        ", email=" + email +
+        ", profilePicUrl=" + profilePicUrl +
+        ", numOfCourses=" + numCourseTaking +
+        // ", courses=" + courses.toString() +
+        ", createdAt=" + createdAt +
+        ", updatedAt=" + updatedAt +
+        "\n}";
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 }

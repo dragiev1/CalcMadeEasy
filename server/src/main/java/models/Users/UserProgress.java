@@ -82,4 +82,17 @@ public class UserProgress {
     }
   }
 
+  public String toString() {
+    return "\nUserProgress{\n" +
+        "id=" + id +
+        ", UserId=" + userId + 
+        ", ProblemId=" + problemId +
+        ", pointsGiven=" + pointsEarned +
+        ", solved=" + solved +
+        ", attempts=" + attempts +
+        ", lastAttemptedAt=" + lastAttempted +
+        ", createdAt=" + createdAt +
+        ", updatedAt=" + updatedAt +
+        "\n}";
+  }
 }
