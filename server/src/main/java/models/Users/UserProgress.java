@@ -5,6 +5,11 @@ import java.util.UUID;
 
 import models.Problem.Problem;
 
+/*
+ * An object for storing progress with a many-to-many relationship including unique users and problems.  
+ * Supports for calculation of specific parts of a course's progress or total progress without bloating 
+ * other classes.
+*/
 public class UserProgress {
   private final UUID id;
   private final UUID userId;
@@ -85,7 +90,7 @@ public class UserProgress {
   public String toString() {
     return "\nUserProgress{\n" +
         "id=" + id +
-        ", UserId=" + userId + 
+        ", UserId=" + userId +
         ", ProblemId=" + problemId +
         ", pointsGiven=" + pointsEarned +
         ", solved=" + solved +
