@@ -1,6 +1,6 @@
-package services;
+package com.calcmadeeasy.services;
 
-import models.Courses.Course;
+import com.calcmadeeasy.models.Courses.Course;
 
 public class CourseServices {
   private final Course course;

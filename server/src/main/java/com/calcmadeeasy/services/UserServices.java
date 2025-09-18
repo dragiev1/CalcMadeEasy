@@ -1,6 +1,6 @@
-package services;
+package com.calcmadeeasy.services;
 
-import models.Users.User;
+import com.calcmadeeasy.models.Users.User;
 
 public class UserServices {
   private final User user;

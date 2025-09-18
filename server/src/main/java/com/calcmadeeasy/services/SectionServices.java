@@ -1,6 +1,6 @@
-package services;
+package com.calcmadeeasy.services;
 
-import models.Sections.Section;
+import com.calcmadeeasy.models.Sections.Section;
 
 public class SectionServices {
   private final Section section;

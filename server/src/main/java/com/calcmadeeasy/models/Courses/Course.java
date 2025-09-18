@@ -1,4 +1,4 @@
-package models.Courses;
+package com.calcmadeeasy.models.Courses;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import models.Chapters.Chapter;
+import com.calcmadeeasy.models.Chapters.Chapter;
 
 public class Course {
   private final UUID id;

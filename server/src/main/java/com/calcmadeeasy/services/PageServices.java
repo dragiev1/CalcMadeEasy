@@ -1,6 +1,6 @@
-package services;
+package com.calcmadeeasy.services;
 
-import models.Pages.Page;
+import com.calcmadeeasy.models.Pages.Page;
 
 public class PageServices {
   private final Page page;

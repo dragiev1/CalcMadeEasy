@@ -1,11 +1,11 @@
-package models.Users;
+package com.calcmadeeasy.models.Users;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import models.Courses.Course;
+import com.calcmadeeasy.models.Courses.Course;
 
 public class User {
   private final UUID id; // Unique identifier for user

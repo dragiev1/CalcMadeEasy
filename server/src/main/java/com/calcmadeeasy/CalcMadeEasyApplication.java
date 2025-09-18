@@ -1,12 +1,14 @@
-import models.Chapters.Chapter;
-import models.Courses.Course;
-import models.Pages.Page;
-import models.Problem.Problem;
-import models.Problem.ProblemSolutionType;
-import models.Sections.Section;
-import models.Users.User;
-import models.Users.UserProgress;
-import services.ProblemServices;
+package com.calcmadeeasy;
+
+import com.calcmadeeasy.models.Chapters.Chapter;
+import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.models.Pages.Page;
+import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Sections.Section;
+import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.models.Users.UserProgress;
+import com.calcmadeeasy.services.ProblemServices;
 
 class CalcMadeEasyApplication {
 

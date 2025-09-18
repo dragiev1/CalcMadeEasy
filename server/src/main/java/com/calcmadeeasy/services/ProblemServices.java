@@ -1,10 +1,10 @@
-package services;
+package com.calcmadeeasy.services;
 
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.interfaces.IExpr;
 
-import models.Problem.Problem;
-import models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.ProblemSolutionType;
 
 public class ProblemServices {
 

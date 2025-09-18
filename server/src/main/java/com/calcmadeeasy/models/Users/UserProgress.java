@@ -1,9 +1,9 @@
-package models.Users;
+package com.calcmadeeasy.models.Users;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.Problem;
 
 /*
  * An object for storing progress with a many-to-many relationship including unique users and problems.  

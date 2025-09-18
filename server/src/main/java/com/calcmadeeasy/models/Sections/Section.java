@@ -1,18 +1,20 @@
-package models.Chapters;
+package com.calcmadeeasy.models.Sections;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-import models.Sections.Section;
+import com.calcmadeeasy.models.Pages.Page;
 
-public class Chapter {
+
+
+public class Section {
   private final UUID id;
   private String description;
   private String title;
-  private List<Section> sections;
+  private List<Page> pages;
   private Instant createdAt;
   private Instant updatedAt;
 
@@ -20,7 +22,7 @@ public class Chapter {
     private UUID id;
     private String description;
     private String title;
-    private List<Section> sections;
+    private List<Page> pages;
     private Instant createdAt;
 
     public Builder id(UUID id) {
@@ -38,8 +40,8 @@ public class Chapter {
       return this;
     }
 
-    public Builder sections(Section... sections) {
-      this.sections = Arrays.asList(sections);
+    public Builder pages(Page... pages) {
+      this.pages = List.of(pages);
       return this;
     }
 
@@ -48,22 +50,18 @@ public class Chapter {
       return this;
     }
 
-    public Chapter build() {
-      return new Chapter(this);
+    public Section build() {
+      return new Section(this);
     }
   }
 
-  private Chapter(Builder b) {
+  private Section(Builder b) {
     this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.description = b.description;
     this.title = b.title;
-    this.sections = b.sections == null ? new ArrayList<Section>() : new ArrayList<Section>(b.sections);
+    this.pages = b.pages == null ? new ArrayList<>() : new ArrayList<>(b.pages);
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
-  }
-
-  public void touch() {
-    this.updatedAt = Instant.now();
   }
 
   // Getters
@@ -79,19 +77,28 @@ public class Chapter {
     return title;
   }
 
-  public List<Section> getSections() {
-    return sections;
+  public int getPageQuantity() {
+    return pages.size();
   }
 
-  public Instant getCreatedAt() {
-    return createdAt;
+  public List<Page> getPages() {
+    return pages;
   }
 
   public Instant getUpdatedAt() {
     return updatedAt;
   }
 
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public void touch() {
+    this.updatedAt = Instant.now();
+  }
+
   // Setters
+
   public void setDescription(String newDescription) {
     this.description = newDescription;
     touch();
@@ -102,44 +109,45 @@ public class Chapter {
     touch();
   }
 
-  // Can either add one or more sections as once.
-  public void setSections(Section... newSection) {
-    if (newSection == null)
-      System.out.println("Cannot add a null or empty section");
-    else
-      for(Section s : newSection) this.sections.add(s);
+  public void setPage(Page newPage) {
+    this.pages.add(Objects.requireNonNull(newPage));
+    touch();
   }
 
-  // Fully replaces section list with new sections. 
-  public void setSectionList(Section... newSections) {
-    this.sections = new ArrayList<Section>();  // Wipes out old data
-    for (Section s : newSections)
-      this.sections.add(s);
+  public void setPageList(Page... newPages) {
+    this.pages = new ArrayList<Page>();
+    for (Page p : newPages) this.pages.add(p);
+    touch();
   }
 
   // Removers
-  public void removeSectionById(UUID id) {
-    for (Section s : this.sections) {
-      if (s.getId() == id) {
-        this.sections.remove(s);
-        System.out.println("Removed " + s + " from section list");
-      } else
-        System.out.println("No section was found in the list");
-      return;
+
+  public void removePageById(UUID id) {
+    if (pages.isEmpty() || pages == null)
+      System.out.println("No pages in this section.");
+    for (Page p : this.pages) {
+      if (p.getId().equals(id)) {
+        pages.remove(p);
+        System.out.println("Removed " + p.toString() + "\nfrom pages list");
+        return;
+      }
     }
+    touch();
   }
 
+  @Override
   public String toString() {
-    return "\nChapter{\n" +
+    return "\nSection{" +
         "id=" + id +
         ", description=" + description +
-        ", sectionsQuantity=" + sections.size() +
-        ", createdAt=" + createdAt +
+        ", title=" + title +
+        ", pageQuantity=" + pages.size() +
         ", updatedAt=" + updatedAt +
-        "\n}";
+        ", createdAt=" + createdAt +
+        '}';
   }
 
-  // Allows for simplicity when creating a new Chapter object
+  // Allows for simplicity when creating a new Section object
   public static Builder builder() {
     return new Builder();
   }

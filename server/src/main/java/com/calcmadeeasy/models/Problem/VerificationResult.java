@@ -1,4 +1,4 @@
-package models.Problem;
+package com.calcmadeeasy.models.Problem;
 
 public enum VerificationResult {
   CORRECT,

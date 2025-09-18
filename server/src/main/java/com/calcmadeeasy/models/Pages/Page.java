@@ -1,4 +1,4 @@
-package models.Pages;
+package com.calcmadeeasy.models.Pages;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.Problem;
 
 public class Page {
   private final UUID id;

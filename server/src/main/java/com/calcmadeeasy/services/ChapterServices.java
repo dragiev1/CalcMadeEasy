@@ -1,6 +1,6 @@
-package services;
+package com.calcmadeeasy.services;
 
-import models.Chapters.Chapter;
+import com.calcmadeeasy.models.Chapters.Chapter;
 
 public class ChapterServices {
   private final Chapter chapter;
