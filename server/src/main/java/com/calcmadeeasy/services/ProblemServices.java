@@ -1,12 +1,37 @@
 package com.calcmadeeasy.services;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.interfaces.IExpr;
 
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.repository.ProblemRepo;
 
+// TODO: TEST THIS!
 public class ProblemServices {
+
+  private final ProblemRepo repo;
+
+  public ProblemServices(ProblemRepo repo) {
+    this.repo = repo;
+  }
+
+  public Problem saveProblem(Problem problem) {
+    return repo.save(problem);
+  }
+
+  public List<Problem> getAllProblem() {
+    return repo.findAll();
+  }
+
+
+  public Problem getProblem(UUID id) {
+    return repo.findById(id).orElse(null);
+  }
+
 
   public boolean verifySolution(Problem problem, String userSolution) {
     ProblemSolutionType type = problem.getType();
