@@ -1,4 +1,6 @@
-package models.Users;
+package services;
+
+import models.Users.User;
 
 public class UserServices {
   private final User user;

@@ -1,4 +1,6 @@
-package models.Courses;
+package services;
+
+import models.Courses.Course;
 
 public class CourseServices {
   private final Course course;

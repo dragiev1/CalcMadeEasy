@@ -2,13 +2,13 @@ import models.Chapters.Chapter;
 import models.Courses.Course;
 import models.Pages.Page;
 import models.Problem.Problem;
-import models.Problem.ProblemServices;
 import models.Problem.ProblemSolutionType;
 import models.Sections.Section;
 import models.Users.User;
 import models.Users.UserProgress;
+import services.ProblemServices;
 
-class Main {
+class CalcMadeEasyApplication {
 
   public static void main(String[] args) {
     // Test to see if Page.java is working properly.

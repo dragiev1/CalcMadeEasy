@@ -1,4 +1,6 @@
-package models.Sections;
+package services;
+
+import models.Sections.Section;
 
 public class SectionServices {
   private final Section section;

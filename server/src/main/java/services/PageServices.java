@@ -1,4 +1,6 @@
-package models.Pages;
+package services;
+
+import models.Pages.Page;
 
 public class PageServices {
   private final Page page;

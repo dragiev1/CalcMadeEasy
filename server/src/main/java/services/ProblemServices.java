@@ -1,7 +1,10 @@
-package models.Problem;
+package services;
 
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.interfaces.IExpr;
+
+import models.Problem.Problem;
+import models.Problem.ProblemSolutionType;
 
 public class ProblemServices {
 

@@ -1,4 +1,6 @@
-package models.Chapters;
+package services;
+
+import models.Chapters.Chapter;
 
 public class ChapterServices {
   private final Chapter chapter;
