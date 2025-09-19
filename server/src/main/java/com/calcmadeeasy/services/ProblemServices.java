@@ -38,7 +38,7 @@ public class ProblemServices {
 
 
   public boolean verifySolution(Problem problem, String userSolution) {
-    ProblemSolutionType type = problem.getType();
+    ProblemSolutionType type = problem.getSolutionType();
 
     switch (type) {
       case NUMERICAL:

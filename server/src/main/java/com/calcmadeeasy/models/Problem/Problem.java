@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,15 +25,22 @@ public class Problem {
   private UUID id;
 
   private String description;
-
-  @Enumerated(EnumType.STRING)
-  private ProblemSolutionType type;
-  
-  private String solution;
-  private boolean isChallenge;
-  private List<String> topics;
   private int points;
+  private boolean isChallenge;
+  private String solution;
+
+  // NUMERICAL or EXPRESSION
+  @Enumerated(EnumType.STRING)
+  private ProblemSolutionType solutionType;
+
+  @ElementCollection
+  private List<String> topics;
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
 
   // No-argument constructor for JPA.
@@ -41,8 +53,8 @@ public class Problem {
   // Builder inner class
   public static class Builder {
     private String description;
-    private ProblemSolutionType type;
     private String solution;
+    private ProblemSolutionType solutionType;
     private boolean isChallenge;
     private List<String> topics;
     private int points;
@@ -53,13 +65,13 @@ public class Problem {
       return this;
     }
 
-    public Builder type(ProblemSolutionType type) {
-      this.type = type;
+    public Builder solution(String solution) {
+      this.solution = solution;
       return this;
     }
 
-    public Builder solution(String solution) {
-      this.solution = solution;
+    public Builder solutionType(ProblemSolutionType solutionType) {
+      this.solutionType = solutionType;
       return this;
     }
 
@@ -90,8 +102,8 @@ public class Problem {
 
   private Problem(Builder b) {
     this.description = b.description;
-    this.type = b.type;
     this.solution = b.solution;
+    this.solutionType = b.solutionType;
     this.isChallenge = b.isChallenge;
     this.topics = b.topics == null ? new ArrayList<>() : new ArrayList<>(b.topics);
     this.points = b.points;
@@ -108,12 +120,12 @@ public class Problem {
     return description;
   }
 
-  public ProblemSolutionType getType() {
-    return type;
-  }
-
   public String getSolution() {
     return solution;
+  }
+
+  public ProblemSolutionType getSolutionType() {
+    return solutionType;
   }
 
   public boolean getIsChallenge() {
@@ -147,12 +159,12 @@ public class Problem {
     touch();
   }
 
-  public void setType(ProblemSolutionType newType) {
-    this.type = Objects.requireNonNull(newType);
+  public void setSolution(String solution) {
+    this.solution = solution;
     touch();
   }
 
-  public void setDifficulty(boolean trueOrFalse) {
+  public void setIsChallenge(boolean trueOrFalse) {
     this.isChallenge = trueOrFalse;
     touch();
   }
@@ -169,13 +181,22 @@ public class Problem {
     touch();
   }
 
-  public void setSolution(String newPath) {
-    this.solution = Objects.requireNonNull(newPath);
+  public void setSolutionType(ProblemSolutionType newSolutionType) {
+    if(newSolutionType != ProblemSolutionType.NUMERICAL && newSolutionType != ProblemSolutionType.EXPRESSION) {
+      System.err.println("ERROR: Can only assign NUMERICAL or EXPRESSION solution types.");
+      return;
+    }
+    this.solutionType = Objects.requireNonNull(newSolutionType);
     touch();
   }
 
   public void setTopic(String newTopic) {
+    if(newTopic.equals("") || newTopic.equals(" ")) {
+      System.err.println("Error: Cannot input empty string.");
+      return;
+    }
     this.topics.add(newTopic);
+    touch();
   }
 
   // Removers
@@ -185,6 +206,7 @@ public class Problem {
 
     if (this.topics.contains(topic)) {
       this.topics.remove(topic);
+      touch();
       return;
     } else
       System.out.println(topic + " not found in list.");
@@ -195,8 +217,8 @@ public class Problem {
     return "\nProblem{\n" +
         "id=" + id +
         ", description=" + description +
-        ", solutionType=" + type +
         ", solution=" + solution +
+        ", solutionType=" + solutionType +
         ", isChallenge=" + isChallenge +
         ", points=" + points +
         ", topics=" + topics +

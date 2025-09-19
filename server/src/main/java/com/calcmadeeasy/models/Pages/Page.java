@@ -2,18 +2,17 @@ package com.calcmadeeasy.models.Pages;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.ProblemType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,9 +20,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Page {
@@ -33,21 +30,8 @@ public class Page {
   private String content; // Latex markdown text
   private int problemQuantity;
 
-  @ManyToMany
-  @JoinTable(
-    name = "page_exercises",
-    joinColumns = @JoinColumn(name = "page_id"),
-    inverseJoinColumns = @JoinColumn(name = "problem_id")
-  )
-  private List<Problem> exercises = new ArrayList<>();
-
-  @ManyToMany
-  @JoinTable(
-    name = "page_homework",
-    joinColumns = @JoinColumn(name = "page_id"),
-    inverseJoinColumns = @JoinColumn(name = "problem_id")
-  )
-  private List<Problem> homework = new ArrayList<>();
+  @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<PageProblem> problems;
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -57,34 +41,18 @@ public class Page {
   private Instant updatedAt;
 
   public Page() {
-    this.exercises = new ArrayList<>();
-    this.homework = new ArrayList<>();
+    this.problems = new ArrayList<>();
     this.createdAt = Instant.now();
     this.updatedAt = this.createdAt;
   }
 
   public static class Builder {
     private String content;
-    private List<Problem> exercises = new ArrayList<>();
-    private List<Problem> homework = new ArrayList<>();
+    private List<PageProblem> problems;
     private Instant createdAt;
 
     public Builder content(String content) {
       this.content = content;
-      return this;
-    }
-
-    public Builder problemQuantity(int problemQuantity) {
-      return this;
-    }
-
-    public Builder exercises(Problem... exercises) {
-      this.exercises = Arrays.asList(exercises);
-      return this;
-    }
-
-    public Builder homework(Problem... homework) {
-      this.homework = Arrays.asList(homework);
       return this;
     }
 
@@ -100,9 +68,8 @@ public class Page {
 
   private Page(Builder b) {
     this.content = b.content;
-    this.exercises = b.exercises;
-    this.homework = b.homework;
-    this.problemQuantity = b.exercises.size() + b.homework.size();
+    this.problems = b.problems == null ? new ArrayList<>() : new ArrayList<>(b.problems);
+    this.problemQuantity = 0;
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
   }
@@ -134,36 +101,43 @@ public class Page {
    */
   public <T> List<Problem> getProblemsBy(
       Function<Problem, T> attributeExtractor,
-      T value,
-      List<Problem> problems) {
+      T value) {
+
     return problems.stream()
-        .filter(problem -> Objects.equals(attributeExtractor.apply(problem), value))
-        .collect(Collectors.toList());
+        .map(PageProblem::getProblem)
+        .filter(p -> Objects.equals(attributeExtractor.apply(p), value))
+        .toList();
   }
 
-  /*
-   * Returns a list of problems by containing a certain value.
-   * 
-   * @params Function<Problem, Collection<T>> attributeExtractor = lamba
-   * expression that is sending an arbitrary type collection for data extraction
-   * within this generic method.
-   * T value = value using to search for problems to retrieve.
-   */
-  public <T> List<Problem> getProblemsContaining(
-      Function<Problem, Collection<T>> attributeExtractor,
-      T value,
-      List<Problem> problems) {
+  // /*
+  //  * Returns a list of problems by containing a certain value.
+  //  * 
+  //  * @params Function<Problem, Collection<T>> attributeExtractor = lamba
+  //  * expression that is sending an arbitrary type collection for data extraction
+  //  * within this generic method.
+  //  * T value = value using to search for problems to retrieve.
+  //  */
+  // public <T> List<Problem> getProblemsContaining(
+  //     Function<Problem, Collection<T>> attributeExtractor,
+  //     T value) {
+  //   return problems.stream()
+  //       .map(PageProblem::getProblem)
+  //       .filter(p -> attributeExtractor.apply(p).contains(value))
+  //       .toList();
+  // }
+
+  public List<Problem> getHomework() {
     return problems.stream()
-        .filter(problem -> attributeExtractor.apply(problem).contains(value))
-        .collect(Collectors.toList());
+        .filter(p -> p.getType() == ProblemType.HOMEWORK)
+        .map(PageProblem::getProblem)
+        .toList();
   }
 
   public List<Problem> getExercises() {
-    return exercises;
-  }
-
-  public List<Problem> getHomework() {
-    return homework;
+    return problems.stream()
+        .filter(p -> p.getType() == ProblemType.EXERCISE)
+        .map(PageProblem::getProblem)
+        .toList();
   }
 
   public Instant getCreatedAt() {
@@ -181,42 +155,21 @@ public class Page {
     touch();
   }
 
-  public void setExercise(Problem newExercise) {
-    this.exercises.add(newExercise);
+  public void setProblem(Problem problem, ProblemType type) {
+    PageProblem pp = new PageProblem(this, problem, type);
+    problems.add(pp);
     problemQuantity++;
-    touch();
-  }
-
-  public void setHW(Problem newHomework) {
-    this.homework.add(newHomework);
-    problemQuantity++;
-    touch();
-  }
-
-  // Replaces exercise list; writes over old list.
-  public void setExerciseList(List<Problem> newExercises) {
-    problemQuantity -= this.exercises.size(); // Subtract old quantity of problems
-    this.exercises = new ArrayList<Problem>(Objects.requireNonNull(newExercises));
-    problemQuantity += this.exercises.size(); // Add new quantity of problems
-    touch();
-  }
-
-  // Replaces homework list; writes over old list.
-  public void setHomeworkList(List<Problem> newHomeworks) {
-    problemQuantity -= this.homework.size(); // Subtract old quantity of problems
-    this.homework = new ArrayList<Problem>(Objects.requireNonNull(newHomeworks));
-    problemQuantity += this.homework.size(); // Add new quantity of problems
     touch();
   }
 
   // Removers
 
-  // Removes a problem from a list provided. (eg. exercises or homeworks)
-  public void removeProblem(List<Problem> problems, UUID id) {
-    for (Problem p : problems) {
-      if (p.getId().equals(id)) {
+  // Removes a problem from the page (eg. exercises or homeworks)
+  public void removeProblem(UUID problemId) {
+    for (PageProblem p : problems) {
+      if (p.getProblem().getId().equals(problemId)) {
         problems.remove(p);
-        System.out.println("Removed " + p.getId() + " from given list");
+        System.out.println("Removed " + p.getProblem().toString() + " from " + p.getType() + " set.");
         problemQuantity--;
         return;
       }
@@ -228,8 +181,7 @@ public class Page {
     return "\nPage{\n" +
         "id=" + id +
         ", content=" + content +
-        // ", homeworks=" + homework.toString() +
-        // ", exercises=" + exercises.toString() +
+        ", problems=" + problems.toString() +
         ", total problems=" + problemQuantity +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +

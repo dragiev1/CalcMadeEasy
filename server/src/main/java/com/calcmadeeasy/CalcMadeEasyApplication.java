@@ -1,32 +1,44 @@
 package com.calcmadeeasy;
 
-import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.calcmadeeasy.models.Pages.Page;
+import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Problem.ProblemType;
 
 @SpringBootApplication
 public class CalcMadeEasyApplication {
-
-    static {
-        // Load environment variables from .env file
-        try {
-            Dotenv dotenv = Dotenv.configure()
-                    .directory("./server/")
-                    .ignoreIfMalformed()
-                    .ignoreIfMissing()
-                    .load();
-            
-            // Set as system properties for Spring Boot to use
-            dotenv.entries().forEach(entry -> {
-                System.setProperty(entry.getKey(), entry.getValue());
-            });
-            
-        } catch (Exception e) {
-            System.err.println("Warning: Could not load .env file: " + e.getMessage());
-        }
-    }
-
     public static void main(String[] args) {
-        SpringApplication.run(CalcMadeEasyApplication.class, args);
+        // SpringApplication.run(CalcMadeEasyApplication.class, args);
+
+        Page page = Page.builder()
+                .content("Integration by Parts Intro")
+                .build();
+
+        // Create some problems
+        Problem p1 = Problem.builder()
+                .description("Compute ∫ x * e^x dx")
+                .solutionType(ProblemSolutionType.EXPRESSION)
+                .solution("xe^x + e^x + c")
+                .points(3)
+                .isChallenge(true)
+                .topics("Integral", "By Parts Method", "Indefinite Integral")
+                .build();
+
+        Problem p2 = Problem.builder()
+                .description("Solve ∫ cos^2(x) dx")
+                .solutionType(ProblemSolutionType.EXPRESSION)
+                .solution("xe^x + e^x + c")
+                .points(3)
+                .isChallenge(true)
+                .topics("Integral", "Trig Identity", "Indefinite Integral")
+                .build();
+
+        page.setProblem(p1, ProblemType.EXERCISE);
+        page.setProblem(p2, ProblemType.EXERCISE);
+
+        
+
     }
 }
