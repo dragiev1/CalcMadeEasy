@@ -6,10 +6,24 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Problem {
-  private final UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
+
   private String description;
+
+  @Enumerated(EnumType.STRING)
   private ProblemSolutionType type;
+  
   private String solution;
   private boolean isChallenge;
   private List<String> topics;
@@ -17,9 +31,15 @@ public class Problem {
   private Instant createdAt;
   private Instant updatedAt;
 
+  // No-argument constructor for JPA.
+  public Problem() {
+    this.topics = new ArrayList<>();
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
+
   // Builder inner class
   public static class Builder {
-    private UUID id;
     private String description;
     private ProblemSolutionType type;
     private String solution;
@@ -27,11 +47,6 @@ public class Problem {
     private List<String> topics;
     private int points;
     private Instant createdAt;
-
-    public Builder id(UUID id) {
-      this.id = id;
-      return this;
-    }
 
     public Builder description(String description) {
       this.description = description;
@@ -74,7 +89,6 @@ public class Problem {
   }
 
   private Problem(Builder b) {
-    this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.description = b.description;
     this.type = b.type;
     this.solution = b.solution;

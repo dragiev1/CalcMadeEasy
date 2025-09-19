@@ -5,22 +5,49 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.calcmadeeasy.models.Courses.Course;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity 
 public class User {
-  private final UUID id; // Unique identifier for user
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   private String firstName;
   private String lastName;
   private String email;
   private String profilePicUrl; // Will store url provided by Google
   private int numCourseTaking;
-  private List<Course> courses; // Stores courses the user is enrolled in
+  
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<Course> courses; // Courses the user is enrolled in
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
+
+  // No-argument constructor for JPA
+  public User() {
+    this.courses = new ArrayList<>();
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
 
   // Inner class for building the User object
   public static class Builder {
-    private UUID id;
     private String firstName;
     private String lastName;
     private String email;
@@ -29,11 +56,6 @@ public class User {
     private List<Course> courses = new ArrayList<>();
     private Instant createdAt;
     private Instant updatedAt;
-
-    public Builder id(UUID id) {
-      this.id = id;
-      return this;
-    }
 
     public Builder firstName(String firstName) {
       this.firstName = firstName;
@@ -82,7 +104,6 @@ public class User {
   }
 
   private User(Builder b) {
-    this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.firstName = b.firstName;
     this.lastName = b.lastName;
     this.email = b.email;

@@ -2,6 +2,10 @@ package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.models.Users.User;
 
+import org.springframework.stereotype.Service;
+
+
+@Service
 public class UserServices {
   private final User user;
 

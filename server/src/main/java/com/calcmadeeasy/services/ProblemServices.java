@@ -10,7 +10,11 @@ import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
 import com.calcmadeeasy.repository.ProblemRepo;
 
+import org.springframework.stereotype.Service;
+
+
 // TODO: TEST THIS!
+@Service
 public class ProblemServices {
 
   private final ProblemRepo repo;

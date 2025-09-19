@@ -10,28 +10,64 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.calcmadeeasy.models.Problem.Problem;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+
+@Entity
 public class Page {
-  private final UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   private String content; // Latex markdown text
   private int problemQuantity;
-  private List<Problem> exercises;
-  private List<Problem> homework;
+
+  @ManyToMany
+  @JoinTable(
+    name = "page_exercises",
+    joinColumns = @JoinColumn(name = "page_id"),
+    inverseJoinColumns = @JoinColumn(name = "problem_id")
+  )
+  private List<Problem> exercises = new ArrayList<>();
+
+  @ManyToMany
+  @JoinTable(
+    name = "page_homework",
+    joinColumns = @JoinColumn(name = "page_id"),
+    inverseJoinColumns = @JoinColumn(name = "problem_id")
+  )
+  private List<Problem> homework = new ArrayList<>();
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
 
+  public Page() {
+    this.exercises = new ArrayList<>();
+    this.homework = new ArrayList<>();
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
+
   public static class Builder {
-    private UUID id;
     private String content;
     private List<Problem> exercises = new ArrayList<>();
     private List<Problem> homework = new ArrayList<>();
     private Instant createdAt;
-
-    public Builder id(UUID id) {
-      this.id = id;
-      return this;
-    }
 
     public Builder content(String content) {
       this.content = content;
@@ -63,7 +99,6 @@ public class Page {
   }
 
   private Page(Builder b) {
-    this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.content = b.content;
     this.exercises = b.exercises;
     this.homework = b.homework;

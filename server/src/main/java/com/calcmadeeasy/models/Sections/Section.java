@@ -6,29 +6,49 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.calcmadeeasy.models.Pages.Page;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
-
+@Entity
 public class Section {
-  private final UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   private String description;
   private String title;
+
+  @OneToMany(cascade = CascadeType.ALL)
   private List<Page> pages;
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
 
+  // No-argument constructor for JPA
+  public Section() {
+    this.pages = new ArrayList<>();
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
+
   public static class Builder {
-    private UUID id;
     private String description;
     private String title;
     private List<Page> pages;
     private Instant createdAt;
-
-    public Builder id(UUID id) {
-      this.id = id;
-      return this;
-    }
 
     public Builder description(String description) {
       this.description = description;
@@ -56,7 +76,6 @@ public class Section {
   }
 
   private Section(Builder b) {
-    this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.description = b.description;
     this.title = b.title;
     this.pages = b.pages == null ? new ArrayList<>() : new ArrayList<>(b.pages);
@@ -116,7 +135,8 @@ public class Section {
 
   public void setPageList(Page... newPages) {
     this.pages = new ArrayList<Page>();
-    for (Page p : newPages) this.pages.add(p);
+    for (Page p : newPages)
+      this.pages.add(p);
     touch();
   }
 

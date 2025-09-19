@@ -3,30 +3,60 @@ package com.calcmadeeasy.models.Users;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.calcmadeeasy.models.Problem.Problem;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 /*
  * An object for storing progress with a many-to-many relationship including unique users and problems.  
  * Supports for calculation of specific parts of a course's progress or total progress without bloating 
  * other classes.
 */
+@Entity
 public class UserProgress {
-  private final UUID id;
-  private final UUID userId;
-  private final UUID problemId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
+
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
+
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "problem_id", nullable = false)
+  private Problem problem;
 
   private int attempts;
   private int pointsEarned;
   private boolean solved;
-
   private Instant lastAttempted;
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
 
-  public UserProgress(UUID userId, UUID problemId) {
-    this.id = UUID.randomUUID();
-    this.userId = userId;
-    this.problemId = problemId;
+  // No-args constructor for JPA
+  public UserProgress() {
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
+
+  public UserProgress(User user, Problem problem) {
+    this.user = user;
+    this.problem = problem;
     this.attempts = 0;
     this.solved = false;
     this.pointsEarned = 0;
@@ -38,17 +68,12 @@ public class UserProgress {
     this.updatedAt = Instant.now();
   }
 
-  // Getters
-  public UUID getId() {
-    return id;
+  public User getUser() {
+    return user;
   }
 
-  public UUID getUserId() {
-    return userId;
-  }
-
-  public UUID getProblemId() {
-    return problemId;
+  public Problem getProblemId() {
+    return problem;
   }
 
   public int getAttempts() {
@@ -90,8 +115,8 @@ public class UserProgress {
   public String toString() {
     return "\nUserProgress{\n" +
         "id=" + id +
-        ", UserId=" + userId +
-        ", ProblemId=" + problemId +
+        ", UserId=" + user.toString() +
+        ", ProblemId=" + problem.toString() +
         ", pointsGiven=" + pointsEarned +
         ", solved=" + solved +
         ", attempts=" + attempts +

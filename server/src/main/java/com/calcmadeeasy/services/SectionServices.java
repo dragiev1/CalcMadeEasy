@@ -2,6 +2,10 @@ package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.models.Sections.Section;
 
+import org.springframework.stereotype.Service;
+
+
+@Service
 public class SectionServices {
   private final Section section;
 

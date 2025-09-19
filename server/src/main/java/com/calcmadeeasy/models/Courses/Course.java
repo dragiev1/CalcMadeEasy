@@ -6,27 +6,48 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.calcmadeeasy.models.Chapters.Chapter;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
 public class Course {
-  private final UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   private String title;
   private String description;
+
+  @OneToMany(cascade = CascadeType.ALL)
   private List<Chapter> chapters;
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
 
+  public Course() {
+    this.chapters = new ArrayList<>();
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
+
   public static class Builder {
-    private UUID id;
     private String title;
     private String description;
     private List<Chapter> chapters = new ArrayList<>();
     private Instant createdAt;
-
-    public Builder id(UUID id) {
-      this.id = id;
-      return this;
-    }
 
     public Builder title(String title) {
       this.title = title;
@@ -54,7 +75,6 @@ public class Course {
   }
 
   private Course(Builder b) {
-    this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.title = b.title;
     this.description = b.description;
     this.chapters = b.chapters == null ? new ArrayList<>() : new ArrayList<>(b.chapters);
@@ -137,7 +157,7 @@ public class Course {
         ", chaptersQuantity=" + chapters.size() +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
-        "\n}"; 
+        "\n}";
   }
 
   // Allows for simplicity when creating a new Course object

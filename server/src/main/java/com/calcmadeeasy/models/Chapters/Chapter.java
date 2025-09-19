@@ -6,29 +6,48 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.calcmadeeasy.models.Sections.Section;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
-
+@Entity
 public class Chapter {
-  private final UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   private String description;
   private String title;
+
+  @OneToMany(cascade = CascadeType.ALL)
   private List<Section> sections;
+
+  @CreationTimestamp
+  @Column(updatable = false)
   private Instant createdAt;
+
+  @UpdateTimestamp
   private Instant updatedAt;
 
+  public Chapter() {
+    this.sections = new ArrayList<>();
+    this.createdAt = Instant.now();
+    this.updatedAt = this.createdAt;
+  }
+
   public static class Builder {
-    private UUID id;
     private String description;
     private String title;
     private List<Section> sections;
     private Instant createdAt;
-
-    public Builder id(UUID id) {
-      this.id = id;
-      return this;
-    }
 
     public Builder description(String description) {
       this.description = description;
@@ -56,7 +75,6 @@ public class Chapter {
   }
 
   private Chapter(Builder b) {
-    this.id = b.id == null ? UUID.randomUUID() : b.id;
     this.description = b.description;
     this.title = b.title;
     this.sections = b.sections == null ? new ArrayList<Section>() : new ArrayList<Section>(b.sections);
@@ -109,12 +127,13 @@ public class Chapter {
     if (newSection == null)
       System.out.println("Cannot add a null or empty section");
     else
-      for(Section s : newSection) this.sections.add(s);
+      for (Section s : newSection)
+        this.sections.add(s);
   }
 
-  // Fully replaces section list with new sections. 
+  // Fully replaces section list with new sections.
   public void setSectionList(Section... newSections) {
-    this.sections = new ArrayList<Section>();  // Wipes out old data
+    this.sections = new ArrayList<Section>(); // Wipes out old data
     for (Section s : newSections)
       this.sections.add(s);
   }
