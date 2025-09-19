@@ -14,6 +14,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+
+// Makes the association of different problem types easier to 
+// store and retrieve in a database perspective.
 @Entity
 public class PageProblem {
   @Id

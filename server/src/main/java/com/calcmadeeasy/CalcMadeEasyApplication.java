@@ -6,6 +6,7 @@ import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
 import com.calcmadeeasy.models.Problem.ProblemType;
+import com.calcmadeeasy.models.Tags.Tag;
 
 @SpringBootApplication
 public class CalcMadeEasyApplication {
@@ -16,6 +17,11 @@ public class CalcMadeEasyApplication {
                 .content("Integration by Parts Intro")
                 .build();
 
+        Tag tag1 = new Tag("Integral", 0.5);
+        Tag tag2 = new Tag("By Parts Method", 0.7);
+        Tag tag3 = new Tag("Trig Identity", 0.4);
+        Tag tag4 = new Tag("Indefinite Integral", 0.6);
+
         // Create some problems
         Problem p1 = Problem.builder()
                 .description("Compute ∫ x * e^x dx")
@@ -23,7 +29,7 @@ public class CalcMadeEasyApplication {
                 .solution("xe^x + e^x + c")
                 .points(3)
                 .isChallenge(true)
-                .topics("Integral", "By Parts Method", "Indefinite Integral")
+                .tags(tag1, tag2, tag3)
                 .build();
 
         Problem p2 = Problem.builder()
@@ -32,13 +38,23 @@ public class CalcMadeEasyApplication {
                 .solution("xe^x + e^x + c")
                 .points(3)
                 .isChallenge(true)
-                .topics("Integral", "Trig Identity", "Indefinite Integral")
+                .tags(tag1,tag2,tag4)
                 .build();
 
         page.setProblem(p1, ProblemType.EXERCISE);
         page.setProblem(p2, ProblemType.EXERCISE);
 
-        
 
+        System.out.println(p1.toString());
+        System.out.println(p2.toString());
+
+        tag1.setTag("CHANGED 1");
+        tag2.setTag("CHANGED 2");
+        tag3.setTag("CHANGED 3");
+        tag4.setTag("CHANGED 3");
+
+        System.out.println(p1.getTags());
+        System.out.println(p2.getTags());
+        
     }
 }

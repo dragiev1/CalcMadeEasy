@@ -1,0 +1,68 @@
+package com.calcmadeeasy.models.Tags;
+
+import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tags")
+public class Tag {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
+
+  @Column(unique = true)
+  private String tag;
+  private double difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
+
+  // No-args constructor for JPA.
+  public Tag() {
+  }
+
+  public Tag(String tag, double difficulty) {
+    this.tag = tag;
+    this.difficulty = difficulty;
+  }
+
+  // Getters
+
+  public UUID getId() {
+    return id;
+  }
+
+  public String getTag() {
+    return tag;
+  }
+
+  public double getDifficulty() {
+    return difficulty;
+  }
+
+  // Setters
+
+  public void setTag(String tag) {
+    if(tag.equals("") || tag.equals(" ")) throw new IllegalArgumentException("ERROR: Cannot make empty tag");
+    this.tag = tag;
+  }
+
+  public void setDifficulty(double difficulty) {
+    if (difficulty < 0 || difficulty > 1) {
+      throw new IllegalArgumentException("ERROR: Difficulty must be between 0 and 1");
+    }
+    this.difficulty = difficulty;
+  }
+
+  @Override
+  public String toString() {
+    return "\nTag{\n" +
+        "id=" + id +
+        ", tag=" + tag +
+        ", difficulty=" + difficulty +
+        "\n}";
+  }
+}

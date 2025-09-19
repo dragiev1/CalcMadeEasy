@@ -27,7 +27,7 @@ public class Chapter {
   private String description;
   private String title;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
   private List<Section> sections;
 
   @CreationTimestamp

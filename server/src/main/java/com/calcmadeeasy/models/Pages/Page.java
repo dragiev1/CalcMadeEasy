@@ -2,7 +2,6 @@ package com.calcmadeeasy.models.Pages;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,13 +12,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemType;
+import com.calcmadeeasy.models.Sections.Section;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -30,7 +33,11 @@ public class Page {
   private String content; // Latex markdown text
   private int problemQuantity;
 
-  @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ManyToOne(fetch = FetchType.LAZY) // Many pages belong to one section
+  @JoinColumn(name = "section_id")
+  private Section section;
+
+  @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
   private List<PageProblem> problems;
 
   @CreationTimestamp
