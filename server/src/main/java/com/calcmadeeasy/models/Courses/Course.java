@@ -27,7 +27,7 @@ public class Course {
   private String title;
   private String description;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL) // Many chapters in one course.
   private List<Chapter> chapters;
 
   @CreationTimestamp
@@ -60,7 +60,7 @@ public class Course {
     }
 
     public Builder chapters(Chapter... chapters) {
-      this.chapters = Arrays.asList(chapters);
+      this.chapters = new ArrayList<>(Arrays.asList(chapters));
       return this;
     }
 
@@ -70,7 +70,12 @@ public class Course {
     }
 
     public Course build() {
-      return new Course(this);
+      Course c = new Course(this);
+      if (c.chapters != null) {
+        for (Chapter chapter : c.chapters)
+          chapter.setCourse(c);
+      }
+      return c;
     }
   }
 

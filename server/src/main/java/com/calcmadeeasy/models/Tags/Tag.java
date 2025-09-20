@@ -1,12 +1,17 @@
 package com.calcmadeeasy.models.Tags;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+
+import com.calcmadeeasy.models.Problem.Problem;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,9 +21,12 @@ public class Tag {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private String tag;
   private double difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
+
+  @ManyToMany(mappedBy = "tags")
+  private Set<Problem> problems = new HashSet<>();
 
   // No-args constructor for JPA.
   public Tag() {

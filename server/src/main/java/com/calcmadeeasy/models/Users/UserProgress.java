@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problem.Problem;
 
 import jakarta.persistence.Column;
@@ -36,6 +37,10 @@ public class UserProgress {
   @JoinColumn(name = "problem_id", nullable = false)
   private Problem problem;
 
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "page_id", nullable = false)
+  private Page page;
+
   private int attempts;
   private int pointsEarned;
   private boolean solved;
@@ -54,8 +59,9 @@ public class UserProgress {
     this.updatedAt = this.createdAt;
   }
 
-  public UserProgress(User user, Problem problem) {
+  public UserProgress(User user, Page page, Problem problem) {
     this.user = user;
+    this.page = page;
     this.problem = problem;
     this.attempts = 0;
     this.solved = false;
@@ -72,8 +78,12 @@ public class UserProgress {
     return user;
   }
 
-  public Problem getProblemId() {
+  public Problem getProblem() {
     return problem;
+  }
+
+  public Page getPage() {
+    return page;
   }
 
   public int getAttempts() {
@@ -117,6 +127,7 @@ public class UserProgress {
         "id=" + id +
         ", UserId=" + user.toString() +
         ", ProblemId=" + problem.toString() +
+        ", PageId=" + page.toString() +
         ", pointsGiven=" + pointsEarned +
         ", solved=" + solved +
         ", attempts=" + attempts +

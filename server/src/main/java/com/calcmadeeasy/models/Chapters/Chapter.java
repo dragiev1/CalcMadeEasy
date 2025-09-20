@@ -9,14 +9,18 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -26,6 +30,10 @@ public class Chapter {
   private UUID id;
   private String description;
   private String title;
+
+  @ManyToOne(fetch = FetchType.LAZY) // Many Chapters in a one course.
+  @JoinColumn(name = "course_id", nullable = false)
+  private Course course;
 
   @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
   private List<Section> sections;
@@ -60,7 +68,7 @@ public class Chapter {
     }
 
     public Builder sections(Section... sections) {
-      this.sections = Arrays.asList(sections);
+      this.sections = new ArrayList<>(Arrays.asList(sections));
       return this;
     }
 
@@ -70,7 +78,12 @@ public class Chapter {
     }
 
     public Chapter build() {
-      return new Chapter(this);
+      Chapter c = new Chapter(this);
+      if (c.sections != null) {
+        for (Section s : c.sections)
+          s.setChapter(c);
+      }
+      return c;
     }
   }
 
@@ -123,8 +136,8 @@ public class Chapter {
   }
 
   // Can either add one or more sections as once.
-  public void setSections(Section... newSection) {
-    if (newSection == null)
+  public void setSections(List<Section> newSection) {
+    if (newSection == null || sections.isEmpty())
       System.out.println("Cannot add a null or empty section");
     else
       for (Section s : newSection)
@@ -136,6 +149,10 @@ public class Chapter {
     this.sections = new ArrayList<Section>(); // Wipes out old data
     for (Section s : newSections)
       this.sections.add(s);
+  }
+
+  public void setCourse(Course course) {
+    this.course = course;
   }
 
   // Removers

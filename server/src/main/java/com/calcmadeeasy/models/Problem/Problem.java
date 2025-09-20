@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Tags.Tag;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,8 +39,10 @@ public class Problem {
   @Enumerated(EnumType.STRING)
   private ProblemSolutionType solutionType;
 
-  @ManyToMany
-  @JoinTable(name = "problem_tag", joinColumns = @JoinColumn(name = "problem_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+  @ManyToMany(cascade = CascadeType.MERGE)
+  @JoinTable(name = "problem_tag", 
+            joinColumns = @JoinColumn(name = "problem_id"), 
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
   private Set<Tag> tags;
 
   @CreationTimestamp

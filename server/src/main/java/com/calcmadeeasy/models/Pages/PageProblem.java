@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,7 +28,7 @@ public class PageProblem {
   @JoinColumn(name = "page_id")
   private Page page;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "problem_id")
   private Problem problem;
 
@@ -47,6 +48,10 @@ public class PageProblem {
 
   public Problem getProblem() {
     return problem;
+  }
+
+  public Page getPage() {
+    return page;
   }
 
   public ProblemType getType() {

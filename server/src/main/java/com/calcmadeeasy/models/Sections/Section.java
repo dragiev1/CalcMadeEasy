@@ -2,6 +2,7 @@ package com.calcmadeeasy.models.Sections;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class Section {
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY)  // Many Sections in a one chapter.
-  @JoinColumn(name = "chapter_id")
+  @JoinColumn(name = "chapter_id", nullable = false)
   private Chapter chapter;
 
   @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
@@ -69,7 +70,7 @@ public class Section {
     }
 
     public Builder pages(Page... pages) {
-      this.pages = List.of(pages);
+      this.pages = new ArrayList<>(Arrays.asList(pages));
       return this;
     }
 
@@ -79,7 +80,11 @@ public class Section {
     }
 
     public Section build() {
-      return new Section(this);
+      Section s = new Section(this);
+      if(pages != null) {
+        for(Page p : pages) p.setSection(s);
+      }
+      return s;
     }
   }
 
@@ -146,6 +151,10 @@ public class Section {
     for (Page p : newPages)
       this.pages.add(p);
     touch();
+  }
+
+  public void setChapter(Chapter chapter) {
+    this.chapter = chapter;
   }
 
   // Removers

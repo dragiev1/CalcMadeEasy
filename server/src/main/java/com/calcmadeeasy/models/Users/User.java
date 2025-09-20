@@ -2,13 +2,17 @@ package com.calcmadeeasy.models.Users;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.models.Pages.Page;
+import com.calcmadeeasy.models.Problem.Problem;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,6 +38,9 @@ public class User {
   @OneToMany(cascade = CascadeType.ALL)
   private List<Course> courses; // Courses the user is enrolled in
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<UserProgress> userProgress;
+
   @CreationTimestamp
   @Column(updatable = false)
   private Instant createdAt;
@@ -43,6 +50,7 @@ public class User {
 
   // No-argument constructor for JPA
   public User() {
+    this.userProgress = new HashSet<>();
     this.courses = new ArrayList<>();
     this.createdAt = Instant.now();
     this.updatedAt = this.createdAt;
@@ -145,6 +153,10 @@ public class User {
     return courses;
   }
 
+  public Set<UserProgress> getUserProgress() {
+    return userProgress;
+  }
+
   public Instant getCreatedAt() {
     return createdAt;
   }
@@ -175,6 +187,11 @@ public class User {
   public void setProfilePicUrl(String newUrl) {
     this.profilePicUrl = newUrl;
     touch();
+  }
+
+  public void setUserProgress(Page page, Problem problem) {
+    UserProgress newProgress = new UserProgress(this, page, problem);
+    userProgress.add(newProgress);
   }
 
   public String toString() {

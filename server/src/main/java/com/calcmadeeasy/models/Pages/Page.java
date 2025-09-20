@@ -169,6 +169,10 @@ public class Page {
     touch();
   }
 
+  public void setSection(Section section) {
+    this.section = section;
+  }
+
   // Removers
 
   // Removes a problem from the page (eg. exercises or homeworks)
