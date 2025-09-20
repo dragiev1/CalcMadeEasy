@@ -1,18 +1,16 @@
 package com.calcmadeeasy.services;
 
-import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.repository.UserRepo;
 
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class UserServices {
-  private final User user;
+  private final UserRepo repo;
 
-  public UserServices(User user) {
-    this.user = user;
+  public UserServices(UserRepo repo) {
+    this.repo = repo;
   }
 
   // More complex methods here. i.e. getProgress
-
 }

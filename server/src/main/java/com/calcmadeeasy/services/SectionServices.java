@@ -1,16 +1,15 @@
 package com.calcmadeeasy.services;
 
-import com.calcmadeeasy.models.Sections.Section;
-
 import org.springframework.stereotype.Service;
 
+import com.calcmadeeasy.repository.SectionRepo;
 
 @Service
 public class SectionServices {
-  private final Section section;
+  private final SectionRepo repo;
 
-  public SectionServices(Section section) {
-    this.section = section;
+  public SectionServices(SectionRepo repo) {
+    this.repo = repo;
   }
 
   // More complex methods here.

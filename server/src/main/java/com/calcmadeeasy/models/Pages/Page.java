@@ -26,7 +26,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Page {
+public class Page { 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
@@ -37,7 +37,7 @@ public class Page {
   @JoinColumn(name = "section_id")
   private Section section;
 
-  @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<PageProblem> problems;
 
   @CreationTimestamp

@@ -1,16 +1,16 @@
 package com.calcmadeeasy.services;
 
-import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.repository.CourseRepo;
 
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class CourseServices {
-  private final Course course;
+  private final CourseRepo repo;
 
-  public CourseServices(Course course) {
-    this.course = course;
+  public CourseServices(CourseRepo repo) {
+    this.repo = repo;
   }
 
   // More complex methods here.
