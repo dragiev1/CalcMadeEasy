@@ -90,10 +90,10 @@ public class CalcMadeEasyApplication {
                                         .build();
 
                         
-                        //user.setUserProgress(page, p1);
+                        user.setUserProgress(page, p1);
 
                         courseRepo.save(course);
-                        //userRepo.save(user);
+                        userRepo.save(user);
 
                 };
         }

@@ -27,7 +27,7 @@ public class Course {
   private String title;
   private String description;
 
-  @OneToMany(cascade = CascadeType.ALL) // Many chapters in one course.
+  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL) // Many chapters in one course.
   private List<Chapter> chapters;
 
   @CreationTimestamp

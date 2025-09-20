@@ -39,7 +39,7 @@ public class User {
   private List<Course> courses; // Courses the user is enrolled in
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<UserProgress> userProgress;
+  private Set<UserProgress> userProgress = new HashSet<>();
 
   @CreationTimestamp
   @Column(updatable = false)
