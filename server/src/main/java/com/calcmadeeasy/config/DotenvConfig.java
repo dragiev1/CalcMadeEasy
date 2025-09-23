@@ -15,6 +15,10 @@ public class DotenvConfig {
                             .load();
 
       dotenv.entries().forEach(entry -> {
+        System.out.println(entry.getKey() + ", " + entry.getValue());
+      });
+      
+      dotenv.entries().forEach(entry -> {
         System.setProperty(entry.getKey(), entry.getValue());
       });
 

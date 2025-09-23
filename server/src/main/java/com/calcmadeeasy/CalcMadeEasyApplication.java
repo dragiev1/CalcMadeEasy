@@ -13,7 +13,6 @@ import com.calcmadeeasy.models.Problem.ProblemType;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.models.Users.User;
-import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.TagRepo;
 import com.calcmadeeasy.repository.UserRepo;
@@ -89,10 +88,11 @@ public class CalcMadeEasyApplication {
                                         .profilePicUrl("./server/")
                                         .build();
 
+                                        
+                        courseRepo.save(course);
                         
                         user.setUserProgress(page, p1);
 
-                        courseRepo.save(course);
                         userRepo.save(user);
 
                 };

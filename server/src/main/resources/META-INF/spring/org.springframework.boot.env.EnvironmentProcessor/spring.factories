@@ -1,1 +1,2 @@
-com.calcmadeeasy.DotenvEnvironmentPostProcessor
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.calcmadeeasy.config.DotenvConfig

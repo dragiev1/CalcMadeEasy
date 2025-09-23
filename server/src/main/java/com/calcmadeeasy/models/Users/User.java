@@ -20,11 +20,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity 
-@Table(name = "app_user")  // Because apparently user is not allowed as a table name.
+@Entity
+@Table(name = "app_user") // Because apparently user is not allowed as a table name.
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,9 +37,10 @@ public class User {
   private String email;
   private String profilePicUrl; // Will store url provided by Google
   private int numCourseTaking;
-  
-  @OneToMany(cascade = CascadeType.ALL)
-  private List<Course> courses; // Courses the user is enrolled in
+
+  @ManyToMany
+  @JoinTable(name = "app_user_courses", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+  private List<Course> courses = new ArrayList<>(); // Courses the user is enrolled in
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<UserProgress> userProgress = new HashSet<>();
@@ -93,8 +97,8 @@ public class User {
     }
 
     public Builder courses(Course... courses) {
-      if(courses == null || courses.length == 0)
-      this.courses = List.of(courses);
+      if (courses != null && courses.length > 0)
+        this.courses = new ArrayList<>(List.of(courses));
       return this;
     }
 
