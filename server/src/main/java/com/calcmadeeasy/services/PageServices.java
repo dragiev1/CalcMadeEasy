@@ -1,6 +1,10 @@
 package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.repository.PageRepo;
+import com.calcmadeeasy.models.Pages.Page;
+
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -12,5 +16,54 @@ public class PageServices {
     this.repo = repo;
   }
 
-  // More complex methods here.
+  // Post
+  public Page createPage(Page page) {
+    return repo.save(page);
+  }
+
+
+  // Retrieval 
+  public List<Page> getAllPages() {
+    return repo.findAll();
+  }
+
+  public Page getPageById(UUID pageId) {
+    return repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found!"));
+  }
+
+  // TODO: MAKE A NEW PageProblemRepo.java TO CREATE THESE METHODS EITHER 
+  //       ProblemServices.java OR PageServices.java
+
+  // public List<Problem> getAllProblems() {
+  //   return repo.findAllProblems();
+  // }
+
+  // public int getProblemCount(UUID pageId) {
+  //   return repo.countProblems(pageId);
+  // }
+
+  public List<Page> getPagesBySection(UUID sectionId) {
+    return repo.findBySectionId(sectionId);
+  }
+
+
+  // Patching
+  public void updateContent(UUID pageId, String newContent) {
+    Page page = getPageById(pageId);
+    page.setContent(newContent);
+    repo.save(page);
+  }
+
+
+  // Removal
+  public void deletePage(UUID pageId) {
+    repo.deleteById(pageId);
+  }
+
+  public void deleteProblemFromPage(UUID pageId, UUID problemId) {
+    Page page = getPageById(pageId);
+    page.removeProblem(problemId);
+    repo.save(page);
+  }
+  
 }

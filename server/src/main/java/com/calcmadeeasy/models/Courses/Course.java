@@ -10,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
-import com.calcmadeeasy.models.Users.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
