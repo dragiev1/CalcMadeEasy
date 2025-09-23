@@ -66,7 +66,6 @@ public class User {
     private String lastName;
     private String email;
     private String profilePicUrl;
-    private int numCourseTaking;
     private List<Course> courses = new ArrayList<>();
     private Instant createdAt;
     private Instant updatedAt;
@@ -88,11 +87,6 @@ public class User {
 
     public Builder profilePicUrl(String profilePicUrl) {
       this.profilePicUrl = profilePicUrl;
-      return this;
-    }
-
-    public Builder numCoursesTaking(int numCoursesTaking) {
-      this.numCourseTaking = numCoursesTaking;
       return this;
     }
 
@@ -122,8 +116,8 @@ public class User {
     this.lastName = b.lastName;
     this.email = b.email;
     this.profilePicUrl = b.profilePicUrl;
-    this.numCourseTaking = b.numCourseTaking;
     this.courses = b.courses == null ? new ArrayList<>() : new ArrayList<>(b.courses);
+    this.numCourseTaking = b.courses.size();
     this.createdAt = b.createdAt;
     this.updatedAt = b.updatedAt;
   }
