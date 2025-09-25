@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class PageServices {
   private final PageRepo repo;
@@ -21,8 +22,7 @@ public class PageServices {
     return repo.save(page);
   }
 
-
-  // Retrieval 
+  // Retrieval
   public List<Page> getAllPages() {
     return repo.findAll();
   }
@@ -31,21 +31,13 @@ public class PageServices {
     return repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found!"));
   }
 
-  // TODO: MAKE A NEW PageProblemRepo.java TO CREATE THESE METHODS EITHER 
-  //       ProblemServices.java OR PageServices.java
-
-  // public List<Problem> getAllProblems() {
-  //   return repo.findAllProblems();
-  // }
-
-  // public int getProblemCount(UUID pageId) {
-  //   return repo.countProblems(pageId);
-  // }
+  public int getProblemCount(UUID pageId) {
+  return repo.findProblemQuantity(pageId);
+  }
 
   public List<Page> getPagesBySection(UUID sectionId) {
     return repo.findBySectionId(sectionId);
   }
-
 
   // Patching
   public void updateContent(UUID pageId, String newContent) {
@@ -53,7 +45,6 @@ public class PageServices {
     page.setContent(newContent);
     repo.save(page);
   }
-
 
   // Removal
   public void deletePage(UUID pageId) {
@@ -65,5 +56,5 @@ public class PageServices {
     page.removeProblem(problemId);
     repo.save(page);
   }
-  
+
 }

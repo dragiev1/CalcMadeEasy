@@ -8,16 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.calcmadeeasy.models.Pages.PageProblem;
 import com.calcmadeeasy.models.Problem.Problem;
 
 @Repository
-public interface ProblemRepo extends JpaRepository<Problem, UUID> {
-  
+public interface PageProblemRepo extends JpaRepository<UUID, PageProblem> {
   @Query("""
-    SELECT p
-    FROM Problem p
-    JOIN PageProblem pp ON pp.problem.id = p.id
-    WHERE pp.page.id = :pageId
-  """)
+        SELECT p
+        FROM Problem p
+        JOIN PageProblem pp ON pp.problem.id = p.id
+        WHERE pp.page.id = :pageId
+      """)
   List<Problem> findByPageProblemByPageId(@Param("pageId") UUID pageId);
 }

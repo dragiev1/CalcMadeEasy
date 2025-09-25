@@ -13,4 +13,6 @@ public interface PageRepo extends JpaRepository<Page, UUID> {
 
   List<Page> findBySectionId(UUID sectionId);
 
+  int findProblemQuantity(UUID pageId);
+
 }
