@@ -12,7 +12,7 @@ import com.calcmadeeasy.models.Pages.PageProblem;
 import com.calcmadeeasy.models.Problem.Problem;
 
 @Repository
-public interface PageProblemRepo extends JpaRepository<UUID, PageProblem> {
+public interface PageProblemRepo extends JpaRepository<PageProblem, UUID> {
   @Query("""
         SELECT p
         FROM Problem p
@@ -20,4 +20,5 @@ public interface PageProblemRepo extends JpaRepository<UUID, PageProblem> {
         WHERE pp.page.id = :pageId
       """)
   List<Problem> findByPageProblemByPageId(@Param("pageId") UUID pageId);
+
 }

@@ -19,5 +19,5 @@ public interface ProblemRepo extends JpaRepository<Problem, UUID> {
     JOIN PageProblem pp ON pp.problem.id = p.id
     WHERE pp.page.id = :pageId
   """)
-  List<Problem> findByPageProblemByPageId(@Param("pageId") UUID pageId);
+  List<Problem> findByProblemsByPageId(@Param("pageId") UUID pageId);
 }
