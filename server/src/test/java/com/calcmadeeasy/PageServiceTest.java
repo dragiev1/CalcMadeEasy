@@ -39,10 +39,9 @@ public class PageServiceTest {
         List<Page> pages = pageServices.getAllPages();
 
         // Assert
-        assertNotNull(pages);
         assertEquals(1, pages.size());
         System.out.println("Found " + pages.size() + " pages");
-        // pages.forEach(page -> System.out.println(page));  // Debugging.
+        // pages.forEach(page -> System.out.println(page)); // Debugging.
     }
 
     @Test
@@ -58,7 +57,6 @@ public class PageServiceTest {
         Page found = pageServices.getPageById(saved.getId());
 
         // Assert
-        assertNotNull(found);
         assertEquals(saved, found);
         assertEquals("Test content (getPageById)", found.getContent());
         System.out.println("Found page ID:\t" + found.getId());
@@ -110,7 +108,6 @@ public class PageServiceTest {
         Page found = pageServices.getPageById(page.getId());
 
         // Assert
-        assertNotNull(found);
         assertEquals(saved.getContent(), found.getContent());
         System.out.println("Successfully changed content, " + ogContent + "\t--->\t" + found.getContent());
 

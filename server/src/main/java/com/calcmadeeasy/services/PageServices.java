@@ -16,49 +16,67 @@ public class PageServices {
     this.repo = repo;
   }
 
-  // Post
+  // ==================== CREATE ====================
+
   public Page createPage(Page page) {
     return repo.save(page);
   }
 
-  // Retrieval
-  // Page Specfic
+  // ==================== READ ====================
+
   public List<Page> getAllPages() {
     return repo.findAll();
   }
 
   public Page getPageById(UUID pageId) {
-    return repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found!"));
+    return repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found with id: " + pageId));
   }
 
   public int getProblemCount(UUID pageId) {
     return repo.findById(pageId)
-    .map(Page::getProblemQuantity)
-    .orElseThrow(() -> new RuntimeException("Page not found!"));
+        .map(Page::getProblemQuantity)
+        .orElseThrow(() -> new RuntimeException("Page not found with id: " + pageId));
   }
 
   public List<Page> getPagesBySection(UUID sectionId) {
-    return repo.findBySectionId(sectionId);
+    List<Page> pages = repo.findBySectionId(sectionId);
+    if (pages.isEmpty())
+      throw new RuntimeException("Section id " + sectionId + " either does not exist or has no pages");
+    return pages;
   }
 
-  // TODO: PageProblem Specfic
+  public boolean exists(UUID pageId) {
+    return repo.existsById(pageId);
+  }
 
-  // Patching
+  // ==================== UPDATE ====================
+
   public void updateContent(UUID pageId, String newContent) {
     Page page = getPageById(pageId);
     page.setContent(newContent);
     repo.save(page);
   }
 
-  // Removal
+  
+
+  // ==================== DELETE ====================
+
+  // DELETES the page from pages table.
   public void deletePage(UUID pageId) {
+    if (!repo.existsById(pageId)) {
+      throw new RuntimeException("Cannot delete - page not found with id: " + pageId);
+    }
     repo.deleteById(pageId);
+
   }
 
-  public void deleteProblemFromPage(UUID pageId, UUID problemId) {
-    Page page = getPageById(pageId);
-    page.removeProblem(problemId);
-    repo.save(page);
+  /*
+   * REMOVES ALL PAGES IN SECTION!
+   * Does NOT delete the pages from the pages table.
+   */
+  public void removeAllPagesInSection(UUID sectionId) {
+    List<Page> pages = repo.findBySectionId(sectionId);
+    repo.deleteAll(pages);
   }
 
 }
