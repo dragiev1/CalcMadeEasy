@@ -1,6 +1,5 @@
 package com.calcmadeeasy.services;
 
-import com.calcmadeeasy.repository.PageProblemRepo;
 import com.calcmadeeasy.repository.PageRepo;
 import com.calcmadeeasy.models.Pages.Page;
 
@@ -9,15 +8,12 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class PageServices {
   private final PageRepo repo;
-  private final PageProblemRepo pageProblemRepo;
 
-  public PageServices(PageRepo repo, PageProblemRepo pageProblemRepo) {
+  public PageServices(PageRepo repo) {
     this.repo = repo;
-    this.pageProblemRepo = pageProblemRepo;
   }
 
   // Post
@@ -36,16 +32,16 @@ public class PageServices {
   }
 
   public int getProblemCount(UUID pageId) {
-  return repo.findProblemQuantityById(pageId);
+    return repo.findById(pageId)
+    .map(Page::getProblemQuantity)
+    .orElseThrow(() -> new RuntimeException("Page not found!"));
   }
 
   public List<Page> getPagesBySection(UUID sectionId) {
     return repo.findBySectionId(sectionId);
   }
 
-  // PageProblem Specfic
-
-
+  // TODO: PageProblem Specfic
 
   // Patching
   public void updateContent(UUID pageId, String newContent) {
@@ -64,8 +60,5 @@ public class PageServices {
     page.removeProblem(problemId);
     repo.save(page);
   }
-
-
-
 
 }
