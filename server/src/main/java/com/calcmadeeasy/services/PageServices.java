@@ -3,6 +3,7 @@ package com.calcmadeeasy.services;
 import com.calcmadeeasy.repository.PageRepo;
 import com.calcmadeeasy.models.Pages.Page;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,14 @@ public class PageServices {
 
   public Page createPage(Page page) {
     return repo.save(page);
+  }
+
+  public List<Page> createPages(List<Page> pages) {
+    return repo.saveAll(pages);
+  }
+
+  public List<Page> createPages(Page... pages) {
+    return repo.saveAll(Arrays.asList(pages));
   }
 
   // ==================== READ ====================
