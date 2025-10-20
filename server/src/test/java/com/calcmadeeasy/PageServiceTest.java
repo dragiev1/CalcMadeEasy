@@ -174,7 +174,7 @@ public class PageServiceTest {
         boolean exists = pageServices.exists(page.getId());
 
         // Assert
-        assertNotEquals(exists, false);
+        assertEquals(exists, false);
         System.out.println("Successfully deleted page: " + page);
     }
 
