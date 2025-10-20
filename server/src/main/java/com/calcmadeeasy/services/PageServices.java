@@ -73,7 +73,7 @@ public class PageServices {
   // DELETES the page from pages table.
   public void deletePage(UUID pageId) {
     if (!repo.existsById(pageId)) {
-      throw new RuntimeException("Cannot delete - page not found with id: " + pageId);
+      throw new RuntimeException("CANNOT DELETE - page not found with id: " + pageId);
     }
     repo.deleteById(pageId);
 

@@ -22,7 +22,7 @@ public class Tag {
   private UUID id;
 
   @Column(unique = true, nullable = false)
-  private String tag;
+  private String name;
   private double difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
 
   @ManyToMany(mappedBy = "tags")
@@ -32,8 +32,8 @@ public class Tag {
   public Tag() {
   }
 
-  public Tag(String tag, double difficulty) {
-    this.tag = tag;
+  public Tag(String name, double difficulty) {
+    this.name = name;
     this.difficulty = difficulty;
   }
 
@@ -43,8 +43,8 @@ public class Tag {
     return id;
   }
 
-  public String getTag() {
-    return tag;
+  public String getTagName() {
+    return name;
   }
 
   public double getDifficulty() {
@@ -53,9 +53,10 @@ public class Tag {
 
   // Setters
 
-  public void setTag(String tag) {
-    if(tag.equals("") || tag.equals(" ")) throw new IllegalArgumentException("ERROR: Cannot make empty tag");
-    this.tag = tag;
+  public void setTagName(String name) {
+    if (name.equals("") || name.equals(" "))
+      throw new IllegalArgumentException("ERROR: Cannot make empty tag");
+    this.name = name;
   }
 
   public void setDifficulty(double difficulty) {
@@ -69,7 +70,7 @@ public class Tag {
   public String toString() {
     return "\nTag{\n" +
         "id=" + id +
-        ", tag=" + tag +
+        ", tagName=" + name +
         ", difficulty=" + difficulty +
         "\n}";
   }
