@@ -8,10 +8,10 @@ import org.matheclipse.core.interfaces.IExpr;
 
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Problem.ProblemType;
 import com.calcmadeeasy.repository.ProblemRepo;
 
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class ProblemServices {
@@ -22,19 +22,29 @@ public class ProblemServices {
     this.repo = repo;
   }
 
-  public Problem saveProblem(Problem problem) {
+  // ==================== CREATE ====================
+
+  public Problem createProblem(Problem problem) {
     return repo.save(problem);
   }
 
-  public List<Problem> getAllProblem() {
+  public List<Problem> createProblems(Problem... problems) {
+    return repo.saveAll(List.of(problems));
+  }
+
+  public List<Problem> createProblems(List<Problem> problems) {
+    return repo.saveAll(problems);
+  }
+
+  // ==================== READ ====================
+
+  public List<Problem> getAllProblems() {
     return repo.findAll();
   }
 
-
-  public Problem getProblem(UUID id) {
+  public Problem getProblemById(UUID id) {
     return repo.findById(id).orElse(null);
   }
-
 
   public boolean verifySolution(Problem problem, String userSolution) {
     ProblemSolutionType type = problem.getSolutionType();
@@ -79,5 +89,39 @@ public class ProblemServices {
       e.printStackTrace();
       return false;
     }
+  }
+
+  // ==================== UPDATE ====================
+
+  public void updateDescriptionById(UUID problemId, String newDescription) {
+    Problem problem = getProblemById(problemId);
+    problem.setDescription(newDescription);
+    repo.save(problem);
+  }
+
+  public void updateSolutionById(UUID problemId, String newSolution) {
+    Problem problem = getProblemById(problemId);
+    problem.setSolution(newSolution);
+    repo.save(problem);
+  }
+
+  public void updateSolutionType(UUID problemId, ProblemSolutionType type) {
+    if (type != ProblemSolutionType.NUMERICAL && type != ProblemSolutionType.EXPRESSION)
+      throw new IllegalArgumentException("Type " + type + " does not exist as a ProblemSolutionType enum");
+    Problem problem = getProblemById(problemId);
+    problem.setSolutionType(type);
+    repo.save(problem);
+  }
+
+  public void updateIsChallenge(UUID problemId, boolean isChallenge) {
+    Problem problem = getProblemById(problemId);
+    problem.setIsChallenge(isChallenge);
+    repo.save(problem);
+  }
+
+  public void updatePoints(UUID problemId, int newPoints) {
+    Problem problem = getProblemById(problemId);
+    problem.setPoints(newPoints);
+    repo.save(problem);
   }
 }
