@@ -22,15 +22,19 @@ public class TagServices {
   // ==================== CREATE ====================
 
   @Transactional
-  public Tag getOrCreateTag(String tag, double difficulty) {
-    return repo.findByTag(tag).orElseGet(() -> repo.save(new Tag(tag, difficulty)));
+  public Tag getOrCreateTag(String name, double difficulty) {
+    return repo.findByName(name).orElseGet(() -> repo.save(new Tag(name, difficulty)));
   }
 
   public Tag createTag(Tag tag) {
     return repo.save(tag);
   }
 
-  public List<Tag> createTag(Tag... tags) {
+  public List<Tag> createTags(List<Tag> tags) {
+    return repo.saveAll(tags);
+  }
+
+  public List<Tag> createTags(Tag... tags) {
     return repo.saveAll(Arrays.asList(tags));
   }
 
@@ -51,6 +55,10 @@ public class TagServices {
     return repo.findAll().stream()
         .filter(t -> t.getDifficulty() >= lowerBound && t.getDifficulty() <= upperBound)
         .toList();
+  }
+
+  public boolean exists(UUID tagId) {
+    return repo.existsById(tagId);
   }
 
   // ==================== UPDATE ====================

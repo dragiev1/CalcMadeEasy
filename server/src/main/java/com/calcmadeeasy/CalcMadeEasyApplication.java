@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.PageRepo;
 import com.calcmadeeasy.repository.ProblemRepo;
+import com.calcmadeeasy.repository.TagRepo;
 import com.calcmadeeasy.repository.UserRepo;
 
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +21,7 @@ public class CalcMadeEasyApplication {
         }
 
         @Bean
-        CommandLineRunner testSave(UserRepo userRepo, CourseRepo courseRepo, PageRepo pageRepo, ProblemRepo problemRepo) {
+        CommandLineRunner testSave(UserRepo userRepo, CourseRepo courseRepo, PageRepo pageRepo, ProblemRepo problemRepo, TagRepo tagRepo) {
                 return args -> {
                  
                 };
