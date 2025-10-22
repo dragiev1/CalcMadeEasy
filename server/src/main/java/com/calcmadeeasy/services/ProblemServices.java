@@ -1,6 +1,7 @@
 package com.calcmadeeasy.services;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.matheclipse.core.eval.ExprEvaluator;
@@ -9,6 +10,7 @@ import org.matheclipse.core.interfaces.IExpr;
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
 import com.calcmadeeasy.models.Problem.ProblemType;
+import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.ProblemRepo;
 
 import org.springframework.stereotype.Service;
@@ -34,6 +36,11 @@ public class ProblemServices {
 
   public List<Problem> createProblems(List<Problem> problems) {
     return repo.saveAll(problems);
+  }
+
+  public Problem addTag(Problem problem, Tag tag) {
+    problem.getTags().add(tag);
+    return repo.save(problem);
   }
 
   // ==================== READ ====================
@@ -91,6 +98,10 @@ public class ProblemServices {
     }
   }
 
+  public boolean exists(UUID problemId) {
+    return repo.existsById(problemId);
+  }
+
   // ==================== UPDATE ====================
 
   public void updateDescriptionById(UUID problemId, String newDescription) {
@@ -124,4 +135,22 @@ public class ProblemServices {
     problem.setPoints(newPoints);
     repo.save(problem);
   }
+
+  // ==================== UPDATE ====================
+
+  public void deleteProblem(UUID problemId) {
+    if (exists(problemId))
+      throw new IllegalArgumentException("Problem to be deleted does not exist");
+    repo.deleteById(problemId);
+  }
+
+  public void deleteTagFromProblem(UUID tagId, UUID problemId) {
+    if (!exists(problemId))
+      throw new IllegalArgumentException("Problem to be deleted does not exist");
+    Problem p = getProblemById(problemId);
+    boolean removed = p.getTags().removeIf(t -> t.getId().equals(tagId));
+    if (!removed)
+      throw new IllegalArgumentException("Problem was found but tag was not removed");
+  }
+
 }
