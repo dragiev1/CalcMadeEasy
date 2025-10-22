@@ -9,7 +9,9 @@ import com.calcmadeeasy.services.ProblemServices;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +51,7 @@ public class ProblemServiceTest {
         .isChallenge(true)
         .points(1)
         .solutionType(ProblemSolutionType.NUMERICAL)
-        .solution("solution2 (getAllProblems)")
+        .solution("25")
         .tags(tag2)
         .build();
   }
@@ -98,4 +100,96 @@ public class ProblemServiceTest {
   }
 
   // RETRIEVAL
+
+  @Test
+  public void testGetProblemById() {
+    problemService.createProblem(problem1);
+    boolean exists = problemService.exists(problem1.getId());
+    Problem retrieved = problemService.getProblemById(problem1.getId());
+
+    assertEquals(true, exists, "Error: problem was not saved properly");
+    assertEquals(retrieved, problem1, "Error: original problem and retrieved problem do not match");
+    System.out.println("Successfully retrieved problem");
+  }
+
+  @Test
+  public void testGetAllProblems() {
+    problemService.createProblems(problem1, problem2);
+    int correctQuantity = 2;
+
+    int retrievedQuantity = problemService.getAllProblems().size();
+    List<Problem> retrieved = problemService.getAllProblems();
+
+    assertEquals(retrieved.get(0).getId(), problem1.getId(), "Error: problem1 was not saved properly");
+    assertEquals(retrieved.get(1).getId(), problem2.getId(), "Error: problem2 was not saved properly");
+    assertEquals(correctQuantity, retrievedQuantity, "Error: quantity of problems do not match");
+    System.out.println("Successfully retrieved all problems");
+  }
+
+  @Test
+  public void testUpdateDescription() {
+    String ogDescription = problem1.getDescription();
+    problemService.createProblem(problem1);
+    problem1.setDescription("CHANGED");
+
+    String retrieved = problemService.getProblemById(problem1.getId()).getDescription();
+
+    assertNotEquals(ogDescription, retrieved, "Error: description was not updated or saved");
+    assertEquals("CHANGED", retrieved);
+    System.out.println("Successfully updated problem description");
+  }
+
+  @Test
+  public void testUpdateSolution() {
+    String ogSolution = problem1.getSolution();
+    problemService.createProblem(problem1);
+
+    problemService.updateSolution(problem1.getId(), "CHANGED SOLUTION");
+    String newSolution = problemService.getProblemById(problem1.getId()).getSolution();
+
+    assertEquals("CHANGED SOLUTION", newSolution, "Error: new solution does not match with expected");
+    assertNotEquals(ogSolution, newSolution, "Error: new solution matches old solution, did not update");
+    System.out.println("Successfully updated problem solution");
+  }
+
+  @Test
+  public void testUpdateSolutionType() {
+    ProblemSolutionType ogSolutionType = problem1.getSolutionType();
+    problemService.createProblem(problem1);
+
+    problemService.updateSolutionType(problem1.getId(), ProblemSolutionType.NUMERICAL);
+    ProblemSolutionType newSolutionType = problemService.getProblemById(problem1.getId()).getSolutionType();
+
+    String error_msg = "Error: solution type did not update";
+    assertEquals(ProblemSolutionType.NUMERICAL, newSolutionType, error_msg);
+    assertNotEquals(ogSolutionType, newSolutionType, error_msg);
+    System.out.println("Successfully updated solution type");
+
+  }
+
+  @Test
+  public void testUpdateIsChallenge() {
+    boolean og = problem1.getIsChallenge();
+    problemService.createProblem(problem1);
+
+    problemService.updateIsChallenge(problem1.getId(), !og);
+    boolean inverse = problemService.getProblemById(problem1.getId()).getIsChallenge();
+
+    String error_msg = "Error: challenge boolean was not updated properly";
+    assertNotEquals(og, inverse, error_msg);
+    System.out.println("Successfully updated problem to challenge problem");
+  }
+
+  @Test
+  public void testUpdatePoints() {
+    int ogPoints = problem1.getPoints();
+    problemService.createProblem(problem1);
+
+    problemService.updatePoints(problem1.getId(), 10);
+    int newPoints = problemService.getProblemById(problem1.getId()).getPoints();
+
+    assertNotEquals(ogPoints, newPoints);
+    assertEquals(10, newPoints);
+    System.out.println("Successfully updated points");
+  }
 }

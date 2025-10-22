@@ -104,13 +104,13 @@ public class ProblemServices {
 
   // ==================== UPDATE ====================
 
-  public void updateDescriptionById(UUID problemId, String newDescription) {
+  public void updateDescription(UUID problemId, String newDescription) {
     Problem problem = getProblemById(problemId);
     problem.setDescription(newDescription);
     repo.save(problem);
   }
 
-  public void updateSolutionById(UUID problemId, String newSolution) {
+  public void updateSolution(UUID problemId, String newSolution) {
     Problem problem = getProblemById(problemId);
     problem.setSolution(newSolution);
     repo.save(problem);
