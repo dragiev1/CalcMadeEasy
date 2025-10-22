@@ -3,6 +3,7 @@ package com.calcmadeeasy.models.Tags;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Objects;
 
 import com.calcmadeeasy.models.Problem.Problem;
 
@@ -64,6 +65,23 @@ public class Tag {
       throw new IllegalArgumentException("ERROR: Difficulty must be between 0 and 1");
     }
     this.difficulty = difficulty;
+  }
+
+  // Helper Methods
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Tag))
+      return false;
+    Tag tag = (Tag) o;
+    return Objects.equals(id, tag.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
   @Override
