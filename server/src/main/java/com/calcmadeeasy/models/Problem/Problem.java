@@ -39,11 +39,11 @@ public class Problem {
   @Enumerated(EnumType.STRING)
   private ProblemSolutionType solutionType;
 
-  @ManyToMany(cascade = CascadeType.MERGE)
+  @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinTable(name = "problem_tag", 
             joinColumns = @JoinColumn(name = "problem_id"), 
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-  private Set<Tag> tags;
+  private Set<Tag> tags = new HashSet<>();
 
   @CreationTimestamp
   @Column(updatable = false)

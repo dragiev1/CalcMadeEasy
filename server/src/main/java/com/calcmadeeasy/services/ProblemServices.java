@@ -1,15 +1,15 @@
 package com.calcmadeeasy.services;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
+import java.util.Arrays;
+
 
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.interfaces.IExpr;
 
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
-import com.calcmadeeasy.models.Problem.ProblemType;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.ProblemRepo;
 
@@ -31,7 +31,7 @@ public class ProblemServices {
   }
 
   public List<Problem> createProblems(Problem... problems) {
-    return repo.saveAll(List.of(problems));
+    return repo.saveAll(Arrays.asList(problems));
   }
 
   public List<Problem> createProblems(List<Problem> problems) {
