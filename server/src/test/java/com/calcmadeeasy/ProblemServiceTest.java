@@ -1,7 +1,6 @@
 package com.calcmadeeasy;
 
 import com.calcmadeeasy.models.Problem.Problem;
-import com.calcmadeeasy.models.Problem.ProblemType;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.models.Problem.ProblemSolutionType;
 import com.calcmadeeasy.services.ProblemServices;
@@ -9,10 +8,10 @@ import com.calcmadeeasy.services.ProblemServices;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -126,6 +125,8 @@ public class ProblemServiceTest {
     System.out.println("Successfully retrieved all problems");
   }
 
+  // UPDATE
+
   @Test
   public void testUpdateDescription() {
     String ogDescription = problem1.getDescription();
@@ -191,5 +192,36 @@ public class ProblemServiceTest {
     assertNotEquals(ogPoints, newPoints);
     assertEquals(10, newPoints);
     System.out.println("Successfully updated points");
+  }
+
+  // DELETION
+
+  @Test
+  public void testDeleteProblem() {
+    problemService.createProblem(problem1);
+    UUID pId = problem1.getId();
+
+    problemService.deleteProblem(pId);
+    boolean retrieved = problemService.exists(pId);
+
+    assertEquals(false, retrieved, "Error: problem still exists after deletion");
+    System.out.println("Successfully deleted a problem");
+  }
+
+  @Test
+  public void testDeleteTagFromProblem() {
+    // Arrange
+    Tag extraTag = new Tag("extra tag (addTag)", 0.5);
+    problemService.createProblem(problem1);
+
+    // Act
+    problemService.addTag(problem1, extraTag);
+    Set<Tag> retrieved = problemService.getProblemById(problem1.getId()).getTags();
+    assertEquals(true, retrieved.contains(extraTag), "Error: Tag never appended to the problem's tag set");
+    retrieved.remove(extraTag);
+
+    // Assert
+    assertEquals(false, retrieved.contains(extraTag), "Error: Tag exists after deletion");
+    System.out.println("Successfully removed Tag from Problem");
   }
 }

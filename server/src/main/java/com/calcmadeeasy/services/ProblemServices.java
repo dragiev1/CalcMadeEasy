@@ -136,10 +136,10 @@ public class ProblemServices {
     repo.save(problem);
   }
 
-  // ==================== UPDATE ====================
+  // ==================== DELETE ====================
 
   public void deleteProblem(UUID problemId) {
-    if (exists(problemId))
+    if (!exists(problemId))
       throw new IllegalArgumentException("Problem to be deleted does not exist");
     repo.deleteById(problemId);
   }
