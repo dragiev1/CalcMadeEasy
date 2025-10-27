@@ -103,6 +103,13 @@ public class Course {
     return chapters;
   }
 
+  public Chapter getChapterById(UUID chapterId) {
+    return chapters.stream()
+        .filter(c -> c.getId().equals(chapterId))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Chapter not found within Course object"));
+  }
+
   public int getChapterQuantity() {
     return chapters.size();
   }

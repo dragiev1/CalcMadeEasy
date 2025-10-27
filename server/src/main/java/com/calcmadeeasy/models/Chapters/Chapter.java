@@ -32,7 +32,7 @@ public class Chapter {
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Chapters in a one course.
-  @JoinColumn(name = "course_id", nullable = false)
+  @JoinColumn(name = "course_id", nullable = true)
   private Course course;
 
   @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
