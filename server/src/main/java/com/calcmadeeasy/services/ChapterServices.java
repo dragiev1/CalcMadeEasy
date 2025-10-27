@@ -1,9 +1,9 @@
 package com.calcmadeeasy.services;
 
+import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.repository.ChapterRepo;
 
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class ChapterServices {
@@ -13,6 +13,8 @@ public class ChapterServices {
     this.repo = repo;
   }
 
-  // More complex methods here.
+  public Chapter createChapter(Chapter chapter) {
+    return repo.save(chapter);
+  }
 
 }
