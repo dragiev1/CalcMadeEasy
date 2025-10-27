@@ -61,9 +61,9 @@ public class SectionServices {
   }
 
   public void updateTitle(UUID sectionId, String newTitle) {
-    Section section = getSectionById(sectionId);
-    section.setTitle(newTitle);
-    repo.save(section);
+    Section section = getSectionById(sectionId); // Get section
+    section.setTitle(newTitle); // Set title
+    repo.save(section); // Save section
   }
 
   // ==================== REMOVE ====================
