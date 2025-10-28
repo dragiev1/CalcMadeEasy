@@ -157,16 +157,15 @@ public class PageServiceTest {
 
     }
 
-
     // Delete
 
     @Test
     public void testDeletePage() {
-        
+
         // Arrange
         Page page = Page.builder()
-                    .content("Test content (deletePage)")
-                    .build();
+                .content("Test content (deletePage)")
+                .build();
         pageServices.createPage(page);
 
         // Act
@@ -177,6 +176,5 @@ public class PageServiceTest {
         assertEquals(exists, false);
         System.out.println("Successfully deleted page: " + page);
     }
-
 
 }

@@ -66,9 +66,15 @@ public class CourseServices {
     return repo.save(c);
   }
 
+  public Course addChapters(UUID courseId, Chapter... chapters) {
+    Course c = getCourse(courseId);
+    c.setChapters(chapters);
+    return repo.save(c);
+  }
+
   // ==================== REMOVE ====================
 
-  public void removeChapter(UUID courseId) {
+  public void removeCourse(UUID courseId) {
     boolean exists = exists(courseId);
     if (!exists)
       throw new IllegalArgumentException("Course does not exist with id: " + courseId);

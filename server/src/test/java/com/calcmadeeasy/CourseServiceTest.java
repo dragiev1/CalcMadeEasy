@@ -1,14 +1,17 @@
 package com.calcmadeeasy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
@@ -17,11 +20,11 @@ import com.calcmadeeasy.services.CourseServices;
 
 import jakarta.transaction.Transactional;
 
-@SpringBootApplication
+@SpringBootTest
 @Transactional
 @ActiveProfiles("test")
 public class CourseServiceTest {
-  
+
   @Autowired
   private CourseServices courseService;
 
@@ -45,16 +48,6 @@ public class CourseServiceTest {
     assertEquals(true, exists, "Error: could not save Course");
   }
 
-  @Test
-  public void testAddCourse() {
-    courseService.createCourse(course);
-    courseService.addChapter(course.getId(), chapter2);
-    List<Chapter> chapters = courseService.getCourse(course.getId()).getChapters();
-    String err = "Error: chapter did not append to the course correctly";
-    assertEquals(true, chapters.contains(chapter2), err);
-    System.out.println("Successfully appended new chapter to course");
-  }
-
   // Retrieval
 
   @Test
@@ -69,4 +62,76 @@ public class CourseServiceTest {
     System.out.println("Successfully retrieved course");
   }
 
+  // Update
+
+  @Test
+  public void testUpdateTitle() {
+    String ogTitle = course.getTitle();
+    String changed = "CHANGED";
+    courseService.createCourse(course);
+    courseService.updateTitle(course.getId(), changed);
+
+    String err = "Error: title did not update correctly";
+    assertNotEquals(ogTitle, courseService.getCourse(course.getId()).getTitle(), err);
+    assertEquals(changed, courseService.getCourse(course.getId()).getTitle(), err);
+    System.out.println("Successfully updated title");
+  }
+
+  @Test
+  public void testUpdateDescription() {
+    String ogDesc = course.getDescription();
+    String changed = "CHANGED";
+    courseService.createCourse(course);
+    courseService.updateDescription(course.getId(), changed);
+
+    String err = "Error: description did not update correctly";
+    assertEquals(changed, courseService.getCourse(course.getId()).getDescription(), err);
+    assertNotEquals(ogDesc, courseService.getCourse(course.getId()).getDescription(), err);
+  }
+
+  @Test
+  public void testAddChapter() {
+    List<Chapter> og = new ArrayList<>();
+    og.add(chapter1);
+
+    Course savedCourse = courseService.createCourse(course);
+    courseService.addChapter(savedCourse.getId(), chapter2);
+
+    Course updated = courseService.getCourse(savedCourse.getId());
+    boolean retrieved = updated.getChapters().contains(chapter2);
+
+    String err = "Error: chapter was not appended to course correctly";
+    assertTrue(retrieved, err);
+    assertNotEquals(og, updated.getChapters(), err);
+
+    System.out.println("Successfully appended new chapter to course");
+  }
+
+  // Remove
+
+  @Test
+  public void testRemoveCourse() {
+    courseService.createCourse(course);
+    UUID ogId = course.getId();
+
+    courseService.removeCourse(ogId);
+    boolean exist = courseService.exists(ogId);
+
+    assertEquals(false, exist, "Error: course did not delete successfully");
+    System.out.println("Successfully removed course");
+  }
+
+  @Test
+  public void testRemoveChapter() {
+    List<Chapter> og = new ArrayList<>();
+    og.add(chapter1);
+    courseService.createCourse(course);
+    courseService.removeChapter(course.getId(), chapter1.getId());
+    boolean isEmpty = courseService.getCourse(course.getId()).getChapters().isEmpty();
+
+    String err = "Error: chapter was not removed from course properly";
+    assertEquals(true, isEmpty, err);
+    assertNotEquals(og, courseService.getCourse(course.getId()).getChapters(), err);
+    System.out.println("Successfully removed chapter from course");
+  }
 }
