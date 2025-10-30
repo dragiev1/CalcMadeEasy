@@ -138,14 +138,26 @@ public class Course {
     touch();
   }
 
-  public void setChapters(Chapter... chapters) {
-    if (chapters.length == 0 || chapters == null) {
+  public void addChapter(Chapter chapter) {
+    if (this.chapters == null)
+      this.chapters = new ArrayList<>();
+    this.chapters.add(chapter);
+    chapter.setCourse(this);
+  }
+
+  public void addChapters(Chapter... chapters) {
+    if (chapters == null || chapters.length == 0) {
       System.out.println("Cannot add null or empty chapters.");
       return;
     }
+
+    if (this.chapters == null)
+      this.chapters = new ArrayList<>();
+
     for (Chapter c : chapters)
       this.chapters.add(c);
-    System.out.println("Added chapter(s) succesfully");
+
+    System.out.println("Added chapter(s) successfully");
   }
 
   // Removers

@@ -61,14 +61,18 @@ public class CourseServices {
   }
 
   public Course addChapter(UUID courseId, Chapter chapter) {
+    if(chapter == null) throw new IllegalArgumentException("Cannot append null chapter");
     Course c = getCourse(courseId);
-    c.setChapters(chapter);
+    chapter.setCourse(c);
+    c.addChapter(chapter);
     return repo.save(c);
   }
 
   public Course addChapters(UUID courseId, Chapter... chapters) {
+    if(chapters == null) throw new IllegalArgumentException("Cannot append null chapters");
     Course c = getCourse(courseId);
-    c.setChapters(chapters);
+    for(Chapter ch : chapters) ch.setCourse(c);
+    c.addChapters(chapters);
     return repo.save(c);
   }
 
