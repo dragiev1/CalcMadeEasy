@@ -32,7 +32,7 @@ public class Section {
   private String description;
   private String title;
 
-  @ManyToOne(fetch = FetchType.LAZY)  // Many Sections in a one chapter.
+  @ManyToOne(fetch = FetchType.LAZY) // Many Sections in a one chapter.
   @JoinColumn(name = "chapter_id", nullable = true)
   private Chapter chapter;
 
@@ -81,8 +81,9 @@ public class Section {
 
     public Section build() {
       Section s = new Section(this);
-      if(pages != null) {
-        for(Page p : pages) p.setSection(s);
+      if (pages != null) {
+        for (Page p : pages)
+          p.setSection(s);
       }
       return s;
     }
@@ -170,6 +171,23 @@ public class Section {
       }
     }
     touch();
+  }
+
+  // Helper Method
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (!(o instanceof Section))
+      return false;
+    Section that = (Section) o;
+    return id != null && id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
   @Override

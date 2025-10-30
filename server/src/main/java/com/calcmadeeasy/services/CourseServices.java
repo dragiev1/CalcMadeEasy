@@ -88,7 +88,7 @@ public class CourseServices {
 
   public void removeChapter(UUID courseId, UUID chapterId) {
     Course c = getCourse(courseId);
-    boolean removed = c.getChapters().removeIf(x -> x.getId().equals(chapterId));  
+    boolean removed = c.getChapters().removeIf(ch -> ch.getId().equals(chapterId));  
     if(!removed) throw new IllegalArgumentException("Chapter does not exist in course, could not delete");
     repo.save(c);  
   }

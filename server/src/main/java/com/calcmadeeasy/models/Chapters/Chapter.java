@@ -136,13 +136,19 @@ public class Chapter {
     touch();
   }
 
-  // Can either add one or more sections as once.
-  public void setSections(List<Section> newSection) {
-    if (newSection == null || sections.isEmpty())
+  // Add one section to the sections list.
+  public void addSection(Section section) {
+    if (section == null || sections.isEmpty())
       System.out.println("Cannot add a null or empty section");
-    else
-      for (Section s : newSection)
-        this.sections.add(s);
+
+  }
+
+  // Can either add one or more sections as once.
+  public void addSections(List<Section> newSections) {
+    if (newSections == null || sections.isEmpty())
+      throw new IllegalArgumentException("Cannot add a null or empty section");
+    for (Section s : newSections)
+      this.sections.add(s);
   }
 
   // Fully replaces section list with new sections.
@@ -168,19 +174,21 @@ public class Chapter {
     }
   }
 
-  // Helper Method
+  // Helper Methods
 
   @Override
   public boolean equals(Object o) {
-    if(this == o) return true;
-    if(!(o instanceof Chapter)) return false;
+    if (this == o)
+      return true;
+    if (!(o instanceof Chapter))
+      return false;
     Chapter that = (Chapter) o;
     return id != null && id.equals(that.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id) ;
+    return Objects.hash(id);
   }
 
   public String toString() {
