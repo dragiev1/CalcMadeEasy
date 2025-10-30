@@ -1,5 +1,9 @@
 package com.calcmadeeasy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,7 @@ public class ChapterServiceTest {
   private ChapterServices chapterService;
 
   private Chapter chapter;
+  private Chapter chapter2;
   private Section section1;
   private Section section2;
 
@@ -38,11 +43,62 @@ public class ChapterServiceTest {
       .title("title")
       .sections(section1)
       .build();
+    chapter2 = Chapter.builder()
+      .description("description2")
+      .title("title2")
+      .sections(section1, section2)
+      .build();
     chapterService.createChapter(chapter);
   }
 
+  // Create
+
   @Test
   public void testCreateChapter() {
+    boolean exists = chapterService.exists(chapter.getId());
+    assertTrue(exists);
+  }
 
+  // Retrieve
+
+  @Test
+  public void testGetChapter() {
+    Chapter c = chapterService.getChapter(chapter.getId());
+    assertEquals(c, chapter);
+    System.out.println("Successfully retrieved chapter");
+  }
+
+  @Test
+  public void testGetAllChapters() {
+    chapterService.createChapter(chapter2);
+    int size = chapterService.getAllChapters().size();
+
+    String err = "Error: number of chapters retrieved does not match expected";
+    assertEquals(2, size, err);
+    System.out.println("Successfully retrieved all chapters");
+  }
+
+  // Update
+
+  @Test
+  public void testUpdateDescription() {
+    String changed = "CHANGED";
+    chapterService.updateDescription(chapter.getId(), changed);
+    String newDesc = chapterService.getChapter(chapter.getId()).getDescription();
+
+    assertNotEquals("description", newDesc);
+    assertEquals(changed, newDesc);
+    System.out.println("Successfully updated the description");
+  }
+
+  @Test
+  public void testUpdateTitle() {
+    String changed = "CHANGED";
+    chapterService.updateTitle(chapter.getId(), changed);
+    String newTitle = chapterService.getChapter(chapter.getId()).getTitle();
+
+    assertEquals(changed, newTitle);
+    assertNotEquals("title", newTitle);
+    System.out.println("Successfully updated title");
   }
 }
