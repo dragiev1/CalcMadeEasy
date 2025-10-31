@@ -45,7 +45,7 @@ public class CourseServiceTest {
   public void testCreateCourse() {
     courseService.createCourse(course);
     boolean exists = courseService.exists(course.getId());
-    assertEquals(true, exists, "Error: could not save Course");
+    assertTrue(exists, "Error: could not save Course");
   }
 
   // Retrieval
@@ -98,10 +98,10 @@ public class CourseServiceTest {
     courseService.addChapter(savedCourse.getId(), chapter2);
 
     Course updated = courseService.getCourse(savedCourse.getId());
-    boolean retrieved = updated.getChapters().contains(chapter2);
+    boolean added = updated.getChapters().contains(chapter2);
 
     String err = "Error: chapter was not appended to course correctly";
-    assertTrue(retrieved, err);
+    assertTrue(added, err);
     assertNotEquals(og, updated.getChapters(), err);
 
     System.out.println("Successfully appended new chapter to course");
