@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
-import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.services.ChapterServices;
 
@@ -52,9 +49,10 @@ public class ChapterServiceTest {
     chapter2 = Chapter.builder()
         .description("description2")
         .title("title2")
-        .sections(section1, section2)
         .build();
+
     chapterService.createChapter(chapter);
+    chapterService.createChapter(chapter2);
   }
 
   // Create
@@ -77,7 +75,6 @@ public class ChapterServiceTest {
 
   @Test
   public void testGetAllChapters() {
-    chapterService.createChapter(chapter2);
     int size = chapterService.getAllChapters().size();
 
     String err = "Error: number of chapters retrieved does not match expected";
@@ -111,16 +108,13 @@ public class ChapterServiceTest {
 
   @Test
   public void testAddSection() {
-    List<Section> og = new ArrayList<>();
-    og.add(section1);
-
     chapterService.addSection(chapter.getId(), section2);
     Chapter updated = chapterService.getChapter(chapter.getId());
     boolean added = updated.getSections().contains(section2);
 
     String err = "Error: section did not append to chapter properly";
     assertTrue(added, err);
-    assertNotEquals(og, updated.getSections(), err);
+    assertNotEquals(section2, updated.getSections().get(0), err);
     System.out.println("Successfully added new section");
   }
 

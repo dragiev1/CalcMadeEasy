@@ -33,7 +33,7 @@ public class Section {
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Sections in a one chapter.
-  @JoinColumn(name = "chapter_id", nullable = true)
+  @JoinColumn(name = "chapter_id")
   private Chapter chapter;
 
   @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)

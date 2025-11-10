@@ -33,11 +33,11 @@ public class Chapter {
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Chapters in a one course.
-  @JoinColumn(name = "course_id", nullable = true)
+  @JoinColumn(name = "course_id")
   private Course course;
 
-  @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
-  private List<Section> sections;
+  @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Section> sections = new ArrayList<>();
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -138,24 +138,32 @@ public class Chapter {
 
   // Add one section to the sections list.
   public void addSection(Section section) {
-    if (section == null || sections.isEmpty())
-      System.out.println("Cannot add a null or empty section");
-
+    if (section == null)
+      throw new IllegalArgumentException("Cannot add a null section");
+    if (sections == null)
+      sections = new ArrayList<>();
+    sections.add(section);
+    section.setChapter(this);
   }
 
   // Can either add one or more sections as once.
   public void addSections(List<Section> newSections) {
-    if (newSections == null || sections.isEmpty())
-      throw new IllegalArgumentException("Cannot add a null or empty section");
+    if (newSections == null || newSections.isEmpty())
+      throw new IllegalArgumentException("Cannot add a null or no sections");
+    if (sections == null)
+      sections = new ArrayList<>();
     for (Section s : newSections)
-      this.sections.add(s);
+      addSection(s);
   }
 
   // Fully replaces section list with new sections.
   public void setSectionList(Section... newSections) {
-    this.sections = new ArrayList<Section>(); // Wipes out old data
+    if (newSections == null || newSections.length == 0)
+      throw new IllegalArgumentException("Cannot add a null or no sections");
+    if (sections == null)
+      sections = new ArrayList<>();
     for (Section s : newSections)
-      this.sections.add(s);
+      addSection(s);
   }
 
   public void setCourse(Course course) {
