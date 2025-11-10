@@ -17,6 +17,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 /*
  * An object for storing progress with a many-to-many relationship including unique users and problems.  
@@ -24,6 +26,7 @@ import jakarta.persistence.ManyToOne;
  * other classes.
 */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "page_id", "problem_id" }))
 public class UserProgress {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

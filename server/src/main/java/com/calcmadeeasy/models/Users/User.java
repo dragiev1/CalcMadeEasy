@@ -116,7 +116,7 @@ public class User {
     this.lastName = b.lastName;
     this.email = b.email;
     this.profilePicUrl = b.profilePicUrl;
-    this.courses = b.courses == null ? new ArrayList<>() : new ArrayList<>(b.courses);
+    this.courses = b.courses;
     this.numCourseTaking = b.courses.size();
     this.createdAt = b.createdAt;
     this.updatedAt = b.updatedAt;
@@ -176,7 +176,7 @@ public class User {
     if (courses == null)
       courses = new ArrayList<>();
     else
-      setCourseQuantity(getNumCoursesTaking() + 1);
+      numCourseTaking++;
 
     this.courses.add(newCourse);
     touch();
@@ -190,6 +190,14 @@ public class User {
   public void setUserProgress(Page page, Problem problem) {
     UserProgress newProgress = new UserProgress(this, page, problem);
     userProgress.add(newProgress);
+  }
+
+  public void unenrollCourse(UUID courseId) {
+    if(courses == null || courses.isEmpty()) throw new IllegalStateException("User is not enrolled in any courses");
+
+    boolean removed = courses.removeIf(c -> c.getId().equals(courseId));
+
+    if(!removed) throw new IllegalArgumentException("No course was found with id: " + courseId);
   }
 
   public String toString() {
