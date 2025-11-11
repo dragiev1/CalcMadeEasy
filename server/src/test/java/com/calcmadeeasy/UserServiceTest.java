@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.models.Pages.Page;
+import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.models.Users.UserProgress;
+import com.calcmadeeasy.services.ChapterServices;
 import com.calcmadeeasy.services.CourseServices;
+import com.calcmadeeasy.services.PageServices;
+import com.calcmadeeasy.services.ProblemServices;
+import com.calcmadeeasy.services.SectionServices;
+import com.calcmadeeasy.services.UserProgressService;
 import com.calcmadeeasy.services.UserServices;
 
 import jakarta.transaction.Transactional;
@@ -26,20 +38,64 @@ public class UserServiceTest {
   @Autowired
   private UserServices userServices;
   @Autowired
+  private UserProgressService upService;
+  @Autowired
   private CourseServices courseServices;
+  @Autowired
+  private ChapterServices chapterService;
+  @Autowired
+  private SectionServices sectionService;
+  @Autowired
+  private PageServices pageService;
+  @Autowired
+  private ProblemServices problemService;
 
   private User user;
+  private UserProgress up;
   private Course course;
+  private Chapter chapter;
+  private Section section;
+  private Page page;
+  private Problem problem;
 
   @BeforeEach
   public void setup() {
-    
+    problem = Problem.builder()
+        .description("description")
+        .points(3)
+        .solution("solution")
+        .isChallenge(false)
+        .solutionType(ProblemSolutionType.EXPRESSION)
+        .build();
+    problemService.createProblem(problem);
+
+    page = Page.builder()
+        .content("content")
+        .build();
+
+    pageService.createPage(page);
+
+    section = Section.builder()
+        .description("description")
+        .pages(page)
+        .title("title")
+        .build();
+    sectionService.createSection(section);
+
+    chapter = Chapter.builder()
+        .description("description")
+        .title("title")
+        .sections(section)
+        .build();
+    chapterService.createChapter(chapter);
+
     course = Course.builder()
         .description("description1")
         .title("title1")
+        .chapters(chapter)
         .build();
     courseServices.createCourse(course);
-    
+
     user = User.builder()
         .firstName("firstname")
         .lastName("lastname")
@@ -47,6 +103,9 @@ public class UserServiceTest {
         .profilePicUrl("/test")
         .build();
     userServices.createUser(user);
+
+    up = new UserProgress(user, page, problem);
+    upService.createUserProgress(up);
   }
 
   // Create
@@ -102,9 +161,11 @@ public class UserServiceTest {
     userServices.unenrollCourse(user.getId(), course.getId());
 
     boolean contains = userServices.getUser(user.getId()).getCourses().contains(course);
-    int size = userServices.getUser(user.getId()).getCourses().size();
+    int courseCount = userServices.getUser(user.getId()).getCourses().size();
+    List<UserProgress> progressAfter = upService.getProgressForUser(user.getId());
 
     assertFalse(contains, "Error: course persisted after supposed removal");
-    assertEquals(0, size, "Error: courses is not empty");
+    assertEquals(0, courseCount, "Error: courses is not empty");
+    assertTrue(progressAfter.isEmpty(), "Error: progress was not deleted when unenrolling course");
   }
 }
