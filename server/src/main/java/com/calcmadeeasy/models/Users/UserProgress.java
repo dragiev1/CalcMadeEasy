@@ -22,7 +22,7 @@ import jakarta.persistence.UniqueConstraint;
 
 /*
  * An object for storing progress with a many-to-many relationship including unique users and problems.  
- * Supports for calculation of specific parts of a course's progress or total progress without bloating 
+ * Supports calculation of specific parts of a course's progress or total progress without bloating 
  * other classes.
 */
 @Entity
@@ -77,6 +77,10 @@ public class UserProgress {
     this.updatedAt = Instant.now();
   }
 
+  public UUID getId() {
+    return id;
+  }
+
   public User getUser() {
     return user;
   }
@@ -115,14 +119,28 @@ public class UserProgress {
 
   // Setters
   public void recordAttempt(boolean isCorrect, Problem p) {
+    if (solved)
+      throw new IllegalArgumentException("Problem was already solved!");
+
     this.attempts++;
     touch();
     this.lastAttempted = this.updatedAt;
 
     if (isCorrect && !solved) {
       this.solved = true;
-      this.pointsEarned = p.getPoints();
+      assignPoints(p.getPoints());
     }
+  }
+
+  public void assignPoints(int p) {
+    this.pointsEarned = p;
+  }
+
+  public void resetProgress() {
+    this.solved = false;
+    this.attempts = 0;
+    this.pointsEarned = 0;
+    this.lastAttempted = null;
   }
 
   public String toString() {

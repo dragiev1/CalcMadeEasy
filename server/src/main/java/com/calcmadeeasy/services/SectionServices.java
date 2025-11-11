@@ -19,7 +19,7 @@ public class SectionServices {
   }
 
   // ==================== CREATE ====================
-  
+
   public Section createSection(Section section) {
     return repo.save(section);
   }
@@ -38,7 +38,7 @@ public class SectionServices {
     return repo.save(s);
   }
 
-  // ==================== CREATE ====================
+  // ==================== RETRIEVE ====================
 
   public Section getSectionById(UUID sectionId) {
     return repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is "));
@@ -69,18 +69,21 @@ public class SectionServices {
   // ==================== REMOVE ====================
 
   public void removeSection(UUID sectionId) {
-    if(!exists(sectionId)) throw new IllegalArgumentException("Section does not exist, cannot remove");
-    repo.deleteById(sectionId); 
+    if (!exists(sectionId))
+      throw new IllegalArgumentException("Section does not exist, cannot remove");
+    repo.deleteById(sectionId);
+    if (exists(sectionId))
+      throw new IllegalArgumentException("Section was found but page was not removed");
   }
 
   public void removePage(UUID sectionId, UUID pageId) {
-    if(!exists(sectionId)) throw new IllegalArgumentException("Section does not exist, cannot remove page");
-    
+    if (!exists(sectionId))
+      throw new IllegalArgumentException("Section does not exist, cannot remove page");
+
     Section section = getSectionById(sectionId);
     boolean removed = section.getPages().removeIf(p -> p.getId().equals(pageId));
-    
-    if(!removed) throw new IllegalArgumentException("Section was found but page was not removed");
+
+    if (!removed)
+      throw new IllegalArgumentException("Section was found but page was not removed");
   }
 }
-
-
