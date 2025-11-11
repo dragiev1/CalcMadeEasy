@@ -77,4 +77,8 @@ public class UserProgressService {
     if (!removed)
       throw new IllegalArgumentException("UserProgress persists despite being removed");
   }
+
+  public void removeAll(List<UUID> ups) {
+    repo.deleteAllById(ups);
+  }
 }

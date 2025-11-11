@@ -1,7 +1,11 @@
 package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.models.Pages.Page;
+import com.calcmadeeasy.models.Sections.Section;
+import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserRepo;
 
 import jakarta.transaction.Transactional;
@@ -15,9 +19,13 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class UserServices {
   private final UserRepo repo;
+  private UserProgressService upService;
+  private CourseServices courseService;
 
-  public UserServices(UserRepo repo) {
+  public UserServices(UserRepo repo, UserProgressService upService, CourseServices courseService) {
     this.repo = repo;
+    this.upService = upService;
+    this.courseService = courseService;
   }
 
   // ==================== CREATE ====================
@@ -70,6 +78,22 @@ public class UserServices {
   public void unenrollCourse(UUID uId, UUID courseId) {
     User u = getUser(uId);
     u.unenrollCourse(courseId);
+
+    Course course = courseService.getCourse(courseId);
+
+    // Functional style of getting all of the page ids to wipe user progress.
+    List<UUID> pageIds = course.getChapters().stream()
+        .flatMap((Chapter ch) -> ch.getSections().stream()) 
+        .flatMap((Section s) -> s.getPages().stream()) 
+        .map(Page::getId)
+        .toList();
+
+    List<UUID> progressToRemove = upService.getProgressForUser(uId).stream()
+      .filter(p -> pageIds.contains(p.getPage().getId()))
+      .map(UserProgress::getId)
+      .toList();
+
+    upService.removeAll(progressToRemove);
   }
 
 }
