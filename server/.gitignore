@@ -1,6 +1,9 @@
 ### dotenv ###
 .env
 
+### dotenv ###
+*.sh
+
 ### Java ###
 # Compiled class file
 *.class
