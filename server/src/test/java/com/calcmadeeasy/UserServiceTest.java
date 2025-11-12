@@ -143,7 +143,7 @@ public class UserServiceTest {
     int size = 1;
     UUID uId = user.getId();
     // Act
-    userServices.addCourse(uId, course);
+    userServices.enrollCourse(uId, course.getId());
     int newSize = userServices.getUser(uId).getCourses().size();
 
     // Assert
@@ -156,7 +156,7 @@ public class UserServiceTest {
 
   @Test
   public void testUnenrollCourse() {
-    userServices.addCourse(user.getId(), course);
+    userServices.enrollCourse(user.getId(), course.getId());
 
     userServices.unenrollCourse(user.getId(), course.getId());
 

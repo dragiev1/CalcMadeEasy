@@ -1,0 +1,19 @@
+### Create a new User
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+
+{
+  "firstName": "Stivi",
+  "lastName": "Dragiev",
+  "email": "test@example.com",
+  "profilePicUrl": "/images/profile.png"
+}
+
+### Get all users
+GET http://localhost:8080/api/v1/users
+Accept: application/json
+
+
+### Get single user
+GET http://localhost:8080/api/v1/users/ef0eed29-eb71-4f86-8e91-d771e873aab1
+Accept: application/json

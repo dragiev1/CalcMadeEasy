@@ -64,15 +64,9 @@ public class UserServices {
 
   // ==================== UPDATE ====================
 
-  public void addCourse(UUID uId, Course c) {
+  public void enrollCourse(UUID uId, UUID cId) {
     User u = getUser(uId);
-    u.enrollNewCourse(c);
-  }
-
-  // ==================== REMOVE ====================
-
-  public void removeUser(UUID uId) {
-    repo.deleteById(uId);
+    u.enrollNewCourse(courseService.getCourse(cId));
   }
 
   public void unenrollCourse(UUID uId, UUID courseId) {
@@ -83,17 +77,23 @@ public class UserServices {
 
     // Functional style of getting all of the page ids to wipe user progress.
     List<UUID> pageIds = course.getChapters().stream()
-        .flatMap((Chapter ch) -> ch.getSections().stream()) 
-        .flatMap((Section s) -> s.getPages().stream()) 
+        .flatMap((Chapter ch) -> ch.getSections().stream())
+        .flatMap((Section s) -> s.getPages().stream())
         .map(Page::getId)
         .toList();
 
     List<UUID> progressToRemove = upService.getProgressForUser(uId).stream()
-      .filter(p -> pageIds.contains(p.getPage().getId()))
-      .map(UserProgress::getId)
-      .toList();
+        .filter(p -> pageIds.contains(p.getPage().getId()))
+        .map(UserProgress::getId)
+        .toList();
 
     upService.removeAll(progressToRemove);
+  }
+
+  // ==================== REMOVE ====================
+
+  public void removeUser(UUID uId) {
+    repo.deleteById(uId);
   }
 
 }
