@@ -3,6 +3,8 @@ package com.calcmadeeasy.services;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
+import com.calcmadeeasy.dto.CreateUserDTO;
+import com.calcmadeeasy.dto.UserDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserProgress;
@@ -10,7 +12,10 @@ import com.calcmadeeasy.repository.UserRepo;
 
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -30,22 +35,26 @@ public class UserServices {
 
   // ==================== CREATE ====================
 
-  public User createUser(User user) {
+  // Production method for user creation.
+  public User createUser(CreateUserDTO user) {
+    if (user == null)
+      throw new IllegalArgumentException("Cannot save null user");
+
+    User u = User.builder()
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .profilePicUrl(user.getProfilePicUrl())
+        .build();
+
+    return repo.save(u);
+  }
+
+  // Internal only method for user creation.
+  public User createUserEntity(User user) {
     if (user == null)
       throw new IllegalArgumentException("Cannot save null user");
     return repo.save(user);
-  }
-
-  public List<User> createUsers(User... users) {
-    if (users == null || users.length == 0)
-      throw new IllegalArgumentException("Cannot save null user");
-    return repo.saveAll(List.of(users));
-  }
-
-  public List<User> createUsers(List<User> users) {
-    if (users == null || users.isEmpty())
-      throw new IllegalArgumentException("Cannot save null user");
-    return repo.saveAll(users);
   }
 
   // ==================== RETRIEVAL ====================
@@ -54,12 +63,32 @@ public class UserServices {
     return repo.existsById(uId);
   }
 
+  public UserDTO getUserDTO(UUID uId) {
+    User u = repo.findById(uId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
+    List<UserProgress> up = upService.getProgressForUser(uId);
+    return new UserDTO(u, up);
+  }
+
   public User getUser(UUID uId) {
     return repo.findById(uId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
   }
 
-  public List<User> getAllUsers() {
-    return repo.findAll();
+  public List<UserDTO> getAllUsers() {
+    List<User> users = repo.findAll();
+    Map<UUID, List<UserProgress>> progressMap = new HashMap<>();
+
+    // Get all the user progresses and map them to progressMap using user's id as the key.
+    for (UserProgress up : upService.getAllProgresses()) {
+      progressMap
+          .computeIfAbsent(up.getUser().getId(), k -> new ArrayList<>())
+          .add(up);
+    }
+
+    // Stream the users and make new Data Transfer Objects for each one using the user
+    // itself and the corresponding UserProgress.
+    return users.stream()
+    .map(u -> new UserDTO(u, progressMap.getOrDefault(u.getId(), List.of())))
+    .toList();
   }
 
   // ==================== UPDATE ====================
@@ -75,7 +104,7 @@ public class UserServices {
 
     Course course = courseService.getCourse(courseId);
 
-    // Functional style of getting all of the page ids to wipe user progress.
+    // Getting all of the page ids to wipe user progress.
     List<UUID> pageIds = course.getChapters().stream()
         .flatMap((Chapter ch) -> ch.getSections().stream())
         .flatMap((Section s) -> s.getPages().stream())

@@ -38,6 +38,10 @@ public class UserProgressService {
     return repo.findByUserId(userId);
   }
 
+  public List<UserProgress> getAllProgresses() {
+    return repo.findAll();
+  }
+
   public boolean exists(UUID upId) {
     return repo.existsById(upId);
   }

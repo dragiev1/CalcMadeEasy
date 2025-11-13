@@ -62,7 +62,7 @@ public class UserProgressServiceTest {
         .lastName("lastname")
         .profilePicUrl("/")
         .build();
-    userService.createUser(user);
+    userService.createUserEntity(user);
 
     up = new UserProgress(user, page, problem);
     upService.createUserProgress(up);

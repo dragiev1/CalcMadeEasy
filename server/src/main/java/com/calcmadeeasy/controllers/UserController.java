@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.calcmadeeasy.dto.CreateUserDTO;
+import com.calcmadeeasy.dto.UserDTO;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.services.UserServices;
 
@@ -28,22 +30,22 @@ public class UserController {
   // ---------------- CREATE ----------------
 
   @PostMapping
-  public ResponseEntity<User> createUser(@RequestBody User user) {
-    User savedUser = userService.createUser(user);
+  public ResponseEntity<User> createUser(@RequestBody CreateUserDTO newUser) {
+    User savedUser = userService.createUser(newUser);
     return ResponseEntity.ok(savedUser);
   }
 
   // ---------------- READ ----------------
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUser(@PathVariable UUID userId) {
-    User user = userService.getUser(userId);
+  public ResponseEntity<UserDTO> getUser(@PathVariable UUID userId) {
+    UserDTO user = userService.getUserDTO(userId);
     return ResponseEntity.ok(user);
   }
 
   @GetMapping
-  public ResponseEntity<List<User>> getAllUsers() {
-    List<User> users = userService.getAllUsers();
+  public ResponseEntity<List<UserDTO>> getAllUsers() {
+    List<UserDTO> users = userService.getAllUsers();
     return ResponseEntity.ok(users);
   }
 

@@ -102,7 +102,7 @@ public class UserServiceTest {
         .email("example@test.com")
         .profilePicUrl("/test")
         .build();
-    userServices.createUser(user);
+    userServices.createUserEntity(user);
 
     up = new UserProgress(user, page, problem);
     upService.createUserProgress(up);
