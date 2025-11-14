@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.calcmadeeasy.dto.Tags.CreateTagDTO;
+import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.services.TagServices;
 
@@ -27,7 +29,8 @@ public class TagServiceTest {
   @Test
   public void testCreateTag() {
     Tag tag = new Tag("test (createTag)", 0.9);
-    tagServices.createTag(tag);
+    CreateTagDTO t = new CreateTagDTO(tag);
+    tagServices.createTag(t);
     boolean exists = tagServices.exists(tag.getId());
     assertEquals(exists, true, "Tag does not exist");
     System.out.println("Successfully created tag");
@@ -65,7 +68,8 @@ public class TagServiceTest {
   @Test
   public void testGetTagById() {
     Tag tag = new Tag("test (getTagById)", 0.5);
-    Tag saved = tagServices.createTag(tag);
+    CreateTagDTO t = new CreateTagDTO(tag);
+    TagDTO saved = tagServices.createTag(t);
     Tag retrieved = tagServices.getTagById(tag.getId());
     assertEquals(saved, retrieved);
     System.out.println("Successfully retreived page");
@@ -94,8 +98,8 @@ public class TagServiceTest {
     // Arrange
     Tag tag = new Tag("test (updateDifficultyById)", 0.5);
     double og = tag.getDifficulty();
-
-    tagServices.createTag(tag);
+    CreateTagDTO t = new CreateTagDTO(tag);
+    tagServices.createTag(t);
 
     // Act
     tagServices.updateDifficultyById(tag.getId(), 0.3);
@@ -115,7 +119,8 @@ public class TagServiceTest {
     Tag tag = new Tag("test (updateNameById)", 0.6);
     String og = tag.getTagName();
 
-    tagServices.createTag(tag);
+    CreateTagDTO t = new CreateTagDTO(tag);
+    tagServices.createTag(t);
 
     // Act
     tagServices.updateNameById(tag.getId(), "CHANGED");
@@ -135,7 +140,8 @@ public class TagServiceTest {
   public void testDeleteTagById() {
     // Arrange
     Tag tag = new Tag("test (deleteTagById)", 0.3);
-    tagServices.createTag(tag);
+    CreateTagDTO t = new CreateTagDTO(tag);
+    tagServices.createTag(t);
 
     // Act
     tagServices.deleteTagById(tag.getId());
