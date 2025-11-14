@@ -1,13 +1,14 @@
-package com.calcmadeeasy.dto;
+package com.calcmadeeasy.dto.Users;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 import com.calcmadeeasy.models.Users.User;
-import com.calcmadeeasy.models.Users.UserProgress;
 
 /*
  * Data Transfer Object for all/single User requests. 
+ * Outbound only. 
  */
 public class UserDTO {
   private UUID id;
@@ -15,15 +16,23 @@ public class UserDTO {
   private String lastName;
   private String email;
   private String profilePicUrl;
-  private List<UserProgress> up;
+  private List<UserProgressDTO> up;
+  private Instant updatedAt;
+  private Instant createdAt;
 
-  public UserDTO(User user, List<UserProgress> up) {
+  // No args constructor for Jackson.
+  public UserDTO() {
+  }
+
+  public UserDTO(User user, List<UserProgressDTO> up) {
     this.id = user.getId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();
     this.email = user.getEmail();
     this.profilePicUrl = user.getProfilePicUrl();
     this.up = up;
+    this.updatedAt = user.getUpdatedAt();
+    this.createdAt = user.getCreatedAt();
   }
 
   // Getters
@@ -48,30 +57,18 @@ public class UserDTO {
     return profilePicUrl;
   }
 
-  public List<UserProgress> getUserProgress() {
+  public List<UserProgressDTO> getUserProgress() {
     return up;
   }
 
-  // Setters
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
+  public Instant getCreatedAt() {
+    return createdAt;
   }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
+  public Instant getUpdatedAt() {
+    return updatedAt;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
 
-  public void setProfilePicUrl(String profilePicUrl) {
-    this.profilePicUrl = profilePicUrl;
-  }
-
-  public void setUserProgress(List<UserProgress> up) {
-    this.up = up;
-  }
-
+  // No setters.
 }

@@ -3,8 +3,10 @@ package com.calcmadeeasy.services;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
-import com.calcmadeeasy.dto.CreateUserDTO;
-import com.calcmadeeasy.dto.UserDTO;
+import com.calcmadeeasy.dto.Users.CreateUserDTO;
+import com.calcmadeeasy.dto.Users.UserDTO;
+import com.calcmadeeasy.dto.Users.UserProgressDTO;
+import com.calcmadeeasy.dto.Users.UserResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserProgress;
@@ -36,7 +38,7 @@ public class UserServices {
   // ==================== CREATE ====================
 
   // Production method for user creation.
-  public User createUser(CreateUserDTO user) {
+  public UserResponseDTO createUser(CreateUserDTO user) {
     if (user == null)
       throw new IllegalArgumentException("Cannot save null user");
 
@@ -47,7 +49,9 @@ public class UserServices {
         .profilePicUrl(user.getProfilePicUrl())
         .build();
 
-    return repo.save(u);
+    repo.save(u);
+
+    return new UserResponseDTO(u);
   }
 
   // Internal only method for user creation.
@@ -64,9 +68,12 @@ public class UserServices {
   }
 
   public UserDTO getUserDTO(UUID uId) {
-    User u = repo.findById(uId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
-    List<UserProgress> up = upService.getProgressForUser(uId);
-    return new UserDTO(u, up);
+    User u = repo.findById(uId)
+        .orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
+
+    List<UserProgressDTO> progressDTOs = upService.getProgressForUserDTO(uId);
+
+    return new UserDTO(u, progressDTOs);
   }
 
   public User getUser(UUID uId) {
@@ -75,20 +82,22 @@ public class UserServices {
 
   public List<UserDTO> getAllUsers() {
     List<User> users = repo.findAll();
-    Map<UUID, List<UserProgress>> progressMap = new HashMap<>();
+    Map<UUID, List<UserProgressDTO>> progressMap = new HashMap<>();
 
-    // Get all the user progresses and map them to progressMap using user's id as the key.
-    for (UserProgress up : upService.getAllProgresses()) {
+    // Get all the user progresses and map them to progressMap using user's id as
+    // the key.
+    for (UserProgressDTO up : upService.getAllProgressDTO()) {
       progressMap
-          .computeIfAbsent(up.getUser().getId(), k -> new ArrayList<>())
+          .computeIfAbsent(up.getId(), k -> new ArrayList<>())
           .add(up);
     }
 
-    // Stream the users and make new Data Transfer Objects for each one using the user
+    // Stream the users and make new Data Transfer Objects for each one using the
+    // user
     // itself and the corresponding UserProgress.
     return users.stream()
-    .map(u -> new UserDTO(u, progressMap.getOrDefault(u.getId(), List.of())))
-    .toList();
+        .map(u -> new UserDTO(u, progressMap.getOrDefault(u.getId(), List.of())))
+        .toList();
   }
 
   // ==================== UPDATE ====================
@@ -111,7 +120,7 @@ public class UserServices {
         .map(Page::getId)
         .toList();
 
-    List<UUID> progressToRemove = upService.getProgressForUser(uId).stream()
+    List<UUID> progressToRemove = upService.getProgressForUserEntity(uId).stream()
         .filter(p -> pageIds.contains(p.getPage().getId()))
         .map(UserProgress::getId)
         .toList();

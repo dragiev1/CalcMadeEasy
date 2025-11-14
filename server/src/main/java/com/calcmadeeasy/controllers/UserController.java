@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.calcmadeeasy.dto.CreateUserDTO;
-import com.calcmadeeasy.dto.UserDTO;
-import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.dto.Users.CreateUserDTO;
+import com.calcmadeeasy.dto.Users.UserDTO;
+import com.calcmadeeasy.dto.Users.UserResponseDTO;
+
 import com.calcmadeeasy.services.UserServices;
 
 @RestController
@@ -30,14 +31,14 @@ public class UserController {
   // ---------------- CREATE ----------------
 
   @PostMapping
-  public ResponseEntity<User> createUser(@RequestBody CreateUserDTO newUser) {
-    User savedUser = userService.createUser(newUser);
+  public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserDTO newUser) {
+    UserResponseDTO savedUser = userService.createUser(newUser);
     return ResponseEntity.ok(savedUser);
   }
 
   // ---------------- READ ----------------
 
-  @GetMapping("/{id}")
+  @GetMapping("/{userId}")
   public ResponseEntity<UserDTO> getUser(@PathVariable UUID userId) {
     UserDTO user = userService.getUserDTO(userId);
     return ResponseEntity.ok(user);
@@ -51,13 +52,13 @@ public class UserController {
 
   // ---------------- UPDATE ----------------
 
-  @PutMapping("/{id}/enroll/{courseId}")
+  @PutMapping("/{userId}/enroll/{courseId}")
   public ResponseEntity<Void> enrollCourse(@PathVariable UUID userId, @PathVariable UUID courseId) {
     userService.enrollCourse(userId, courseId);
     return ResponseEntity.ok().build();
   }
 
-  @PutMapping("/{id}/unenroll/{courseId}")
+  @PutMapping("/{userId}/unenroll/{courseId}")
   public ResponseEntity<Void> unenrollCourse(@PathVariable UUID userId, @PathVariable UUID courseId) {
     userService.unenrollCourse(userId, courseId);
     return ResponseEntity.ok().build();
@@ -65,7 +66,7 @@ public class UserController {
 
   // ---------------- REMOVE ----------------
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{userId}")
   public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
     userService.removeUser(userId);
     return ResponseEntity.ok().build();

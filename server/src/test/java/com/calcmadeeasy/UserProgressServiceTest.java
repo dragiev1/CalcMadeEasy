@@ -75,18 +75,18 @@ public class UserProgressServiceTest {
   }
 
   @Test
-  public void testGetProgressForUser() {
-    int size = upService.getProgressForUser(user.getId()).size();
+  public void testGetProgressForUserEntity() {
+    int size = upService.getProgressForUserEntity(user.getId()).size();
 
     assertEquals(1, size);
-    assertTrue(upService.getProgressForUser(user.getId()).stream().allMatch(p -> p.getUser().equals(user)));
+    assertTrue(upService.getProgressForUserEntity(user.getId()).stream().allMatch(p -> p.getUser().equals(user)));
   }
 
   @Test
   public void testRecordAttempt() {
     up.recordAttempt(true, problem);
 
-    UserProgress updated = upService.getUserProgress(up.getId());
+    UserProgress updated = upService.getUserProgressEntity(up.getId());
     boolean updatedSolved = updated.isSolved();
     int pointsEarned = updated.getPointsEarned();
 
@@ -98,12 +98,12 @@ public class UserProgressServiceTest {
   public void testResetProgress() {
     // Arrange
     upService.recordAttempt(up.getId(), true, problem);
-    if (!upService.getUserProgress(up.getId()).isSolved())
+    if (!upService.getUserProgressEntity(up.getId()).isSolved())
       throw new IllegalArgumentException("Error: expected isSolved to be true, but was false");
 
     // Act
     upService.resetProgress(up.getId());
-    UserProgress updated = upService.getUserProgress(up.getId());
+    UserProgress updated = upService.getUserProgressEntity(up.getId());
     boolean isSolved = updated.isSolved();
     int points = updated.getPointsEarned();
     int attempts = updated.getAttempts();

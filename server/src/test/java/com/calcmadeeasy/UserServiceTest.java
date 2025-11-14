@@ -162,7 +162,7 @@ public class UserServiceTest {
 
     boolean contains = userServices.getUser(user.getId()).getCourses().contains(course);
     int courseCount = userServices.getUser(user.getId()).getCourses().size();
-    List<UserProgress> progressAfter = upService.getProgressForUser(user.getId());
+    List<UserProgress> progressAfter = upService.getProgressForUserEntity(user.getId());
 
     assertFalse(contains, "Error: course persisted after supposed removal");
     assertEquals(0, courseCount, "Error: courses is not empty");

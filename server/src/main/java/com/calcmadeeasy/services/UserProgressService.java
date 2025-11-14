@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.calcmadeeasy.dto.Users.UserProgressDTO;
 import com.calcmadeeasy.models.Problem.Problem;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
@@ -28,19 +29,43 @@ public class UserProgressService {
 
   // ==================== RETRIEVE ====================
 
-  public UserProgress getUserProgress(UUID upId) {
-    return repo.findById(upId)
-        .orElseThrow(() -> new RuntimeException("UserProgress could not be found with id: " + upId));
+  public UserProgressDTO getUserProgress(UUID upId) {
+
+    return new UserProgressDTO(repo.findById(upId)
+        .orElseThrow(() -> new RuntimeException("UserProgress could not be found with id: " + upId)));
   }
 
-  public List<UserProgress> getProgressForUser(UUID userId) {
-    if(userId == null) throw new IllegalArgumentException("");
+  public UserProgress getUserProgressEntity(UUID upId) {
+    return repo.findById(upId)
+        .orElseThrow(() -> new RuntimeException("UserProgress does not exists with id: " + upId));
+  }
+
+  public List<UserProgressDTO> getProgressForUserDTO(UUID userId) {
+    return getProgressForUserEntity(userId)
+        .stream()
+        .map(UserProgressDTO::new)
+        .toList();
+  }
+
+  public List<UserProgress> getProgressForUserEntity(UUID userId) {
+    if (userId == null)
+      throw new IllegalArgumentException("");
+
     return repo.findByUserId(userId);
   }
 
-  public List<UserProgress> getAllProgresses() {
+  public List<UserProgressDTO> getAllProgressDTO() {
+    return getAllProgresses()
+        .stream()
+        .map(UserProgressDTO::new)
+        .toList();
+  }
+
+  private List<UserProgress> getAllProgresses() {
     return repo.findAll();
   }
+
+  // TODO: add a get grade for a section here.
 
   public boolean exists(UUID upId) {
     return repo.existsById(upId);
@@ -49,7 +74,7 @@ public class UserProgressService {
   // ==================== UPDATE ====================
 
   public void recordAttempt(UUID upId, boolean isCorrect, Problem p) {
-    UserProgress up = getUserProgress(upId);
+    UserProgress up = getUserProgressEntity(upId);
     up.recordAttempt(isCorrect, p);
   }
 
@@ -61,9 +86,8 @@ public class UserProgressService {
     if (!exists(upId))
       throw new IllegalArgumentException("Section does not exist, cannot remove");
 
-    UserProgress up = getUserProgress(upId);
+    UserProgress up = getUserProgressEntity(upId);
     up.resetProgress();
-
 
     if (up.isSolved() || up.getAttempts() != 0)
       throw new RuntimeException("User progress did not reset correctly!");

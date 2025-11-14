@@ -1,4 +1,4 @@
-package com.calcmadeeasy.dto;
+package com.calcmadeeasy.dto.Users;
 
 import com.calcmadeeasy.models.Users.User;
 
@@ -11,6 +11,9 @@ public class CreateUserDTO {
   private String lastName;
   private String email;
   private String profilePicUrl;
+
+  // No args constructor for Jackson.
+  public CreateUserDTO() {}
 
   public CreateUserDTO(User user) {
     this.firstName = user.getFirstName();
