@@ -1,8 +1,8 @@
 package com.calcmadeeasy;
 
-import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Tags.Tag;
-import com.calcmadeeasy.models.Problem.ProblemSolutionType;
 import com.calcmadeeasy.services.ProblemServices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

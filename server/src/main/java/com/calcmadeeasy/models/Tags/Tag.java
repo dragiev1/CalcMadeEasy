@@ -3,9 +3,10 @@ package com.calcmadeeasy.models.Tags;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Objects;
 
-import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problems.Problem;
+
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

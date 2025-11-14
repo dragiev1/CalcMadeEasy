@@ -1,4 +1,4 @@
-package com.calcmadeeasy.models.Problem;
+package com.calcmadeeasy.models.Problems;
 
 public enum ProblemType {
   EXERCISE,

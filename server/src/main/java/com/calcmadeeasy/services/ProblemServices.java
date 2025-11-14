@@ -8,8 +8,8 @@ import java.util.Arrays;
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.interfaces.IExpr;
 
-import com.calcmadeeasy.models.Problem.Problem;
-import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.ProblemRepo;
 

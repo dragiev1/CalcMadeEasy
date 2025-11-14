@@ -10,8 +10,8 @@ import java.util.function.Function;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.calcmadeeasy.models.Problem.Problem;
-import com.calcmadeeasy.models.Problem.ProblemType;
+import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Problems.ProblemType;
 import com.calcmadeeasy.models.Sections.Section;
 
 import jakarta.persistence.CascadeType;

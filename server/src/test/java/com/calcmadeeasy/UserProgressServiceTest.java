@@ -11,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.models.Problem.Problem;
-import com.calcmadeeasy.models.Problem.ProblemSolutionType;
+import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.services.PageServices;

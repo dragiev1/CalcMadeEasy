@@ -1,9 +1,9 @@
 package com.calcmadeeasy;
 
 import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.models.Problem.Problem;
-import com.calcmadeeasy.models.Problem.ProblemSolutionType;
-import com.calcmadeeasy.models.Problem.ProblemType;
+import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Problems.ProblemSolutionType;
+import com.calcmadeeasy.models.Problems.ProblemType;
 import com.calcmadeeasy.services.PageServices;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

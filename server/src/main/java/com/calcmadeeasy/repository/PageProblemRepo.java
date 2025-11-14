@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.calcmadeeasy.models.Pages.PageProblem;
-import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problems.Problem;
 
 @Repository
 public interface PageProblemRepo extends JpaRepository<PageProblem, UUID> {

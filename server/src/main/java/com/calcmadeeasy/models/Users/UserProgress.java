@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problems.Problem;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -2,8 +2,8 @@ package com.calcmadeeasy.models.Pages;
 
 import java.util.UUID;
 
-import com.calcmadeeasy.models.Problem.Problem;
-import com.calcmadeeasy.models.Problem.ProblemType;
+import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Problems.ProblemType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

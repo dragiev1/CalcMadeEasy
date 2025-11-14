@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.calcmadeeasy.dto.Users.UserProgressDTO;
-import com.calcmadeeasy.models.Problem.Problem;
+import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
 
