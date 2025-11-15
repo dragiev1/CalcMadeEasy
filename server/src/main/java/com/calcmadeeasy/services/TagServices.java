@@ -81,20 +81,17 @@ public class TagServices {
 
   // ==================== UPDATE ====================
 
-  public void updateDifficultyById(UUID tagId, double newDifficulty) {
-    if (newDifficulty > 1 || newDifficulty < 0)
+  public TagDTO updateTag(UUID tagId, TagDTO request) {
+    if (request.getDifficulty() > 1 || request.getDifficulty() < 0)
       throw new IllegalArgumentException("Difficulty must be a decimal between 0 and 1");
+    
     Tag tag = getTagEntity(tagId);
-    tag.setDifficulty(newDifficulty);
-    repo.save(tag);
-  }
 
-  public void updateNameById(UUID tagId, String name) {
-    if (name.isEmpty() || name.equals(" "))
-      throw new IllegalArgumentException("Cannot assign empty name to a tag");
-    Tag tag = getTagEntity(tagId);
-    tag.setTagName(name);
+    tag.setDifficulty(request.getDifficulty());
+    tag.setTagName(request.getTagName());
     repo.save(tag);
+
+    return new TagDTO(tag);
   }
 
   // ==================== DELETE ====================
