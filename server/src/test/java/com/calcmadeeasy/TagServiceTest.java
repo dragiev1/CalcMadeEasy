@@ -102,39 +102,23 @@ public class TagServiceTest {
   public void testUpdateDifficultyById() {
     // Arrange
     Tag tag = new Tag("test (updateDifficultyById)", 0.5);
-    double og = tag.getDifficulty();
-    TagDTO newTag = tagServices.createTag(new CreateTagDTO(tag));
-
+    double ogDiff = tag.getDifficulty();
+    String ogName = tag.getTagName();
+    TagDTO request = new TagDTO(new Tag("changed", 0.3));
+    
     // Act
-    tagServices.updateDifficultyById(newTag.getId(), 0.3);
-    Tag retrieved = tagServices.getTagEntity(newTag.getId());
+    TagDTO retrieved = tagServices.updateTag(newTag.getId(), request);
     double newDiff = retrieved.getDifficulty();
+    String newName = retrieved.getTagName();
 
     // Assert
-    assertNotEquals(og, newDiff);
+    assertNotEquals(ogDiff, newDiff);
+    assertNotEquals(ogName, newName);
     assertEquals(0.3, newDiff,
         "Error: difficulty does not match expected");
+    assertEquals("changed", newName,
+        "Error: name does not match expected");
     System.out.println("Successfully updated difficulty on an existing tag");
-  }
-
-  @Test
-  public void testUpdateNameById() {
-    // Arrange
-    Tag tag = new Tag("test (updateNameById)", 0.6);
-    String og = tag.getTagName();
-
-    TagDTO newTag = tagServices.createTag(new CreateTagDTO(tag));
-
-    // Act
-    tagServices.updateNameById(newTag.getId(), "CHANGED");
-    Tag retreived = tagServices.getTagEntity(newTag.getId());
-    String newName = retreived.getTagName();
-
-    // Assert
-    assertNotEquals(og, newName, "Error: tag name did not update properly");
-    assertEquals("CHANGED", newName,
-        "Error: expected value does not equate");
-    System.out.println("Succesfully updated tag name on existing tag");
   }
 
   // Delete
