@@ -98,7 +98,7 @@ public class ProblemServiceTest {
 
   }
 
-  // RETRIEVAL
+  // READ
 
   @Test
   public void testGetProblemById() {

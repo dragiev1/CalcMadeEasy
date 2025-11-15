@@ -37,7 +37,7 @@ public class ChapterServices {
     return repo.saveAll(chapters);
   }
 
-  // ==================== RETRIEVE ====================
+  // ==================== READ ====================
 
   public Chapter getChapter(UUID chapterId) {
     return repo.findById(chapterId)
@@ -75,7 +75,7 @@ public class ChapterServices {
     repo.save(c);
   }
 
-  // ==================== REMOVE ====================
+  // ==================== DELETE ====================
 
   public void removeChapter(UUID chapterId) {
     repo.deleteById(chapterId);

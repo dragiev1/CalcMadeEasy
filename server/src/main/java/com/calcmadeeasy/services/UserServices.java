@@ -61,7 +61,7 @@ public class UserServices {
     return repo.save(user);
   }
 
-  // ==================== RETRIEVAL ====================
+  // ==================== READ ====================
 
   public boolean exists(UUID uId) {
     return repo.existsById(uId);
@@ -128,7 +128,7 @@ public class UserServices {
     upService.removeAll(progressToRemove);
   }
 
-  // ==================== REMOVE ====================
+  // ==================== DELETE ====================
 
   public void removeUser(UUID uId) {
     repo.deleteById(uId);

@@ -98,7 +98,7 @@ public class SectionServiceTest {
     System.out.println("Successfully added a new page to a section");
   }
 
-  // RETRIVAL
+  // READ
 
   @Test
   public void testGetAllPages() {
@@ -145,7 +145,7 @@ public class SectionServiceTest {
     System.out.println("Successfully updated title");
   }
 
-  // REMOVE
+  // DELETE
 
   @Test
   public void testRemoveSection() {

@@ -31,7 +31,7 @@ public class CourseServices {
     return repo.saveAll(courses);
   }
 
-  // ==================== RETRIEVAL ====================
+  // ==================== READ ====================
 
   public Course getCourse(UUID courseId) {
     return repo.findById(courseId)
@@ -76,7 +76,7 @@ public class CourseServices {
     return repo.save(c);
   }
 
-  // ==================== REMOVE ====================
+  // ==================== DELETE ====================
 
   public void removeCourse(UUID courseId) {
     boolean exists = exists(courseId);

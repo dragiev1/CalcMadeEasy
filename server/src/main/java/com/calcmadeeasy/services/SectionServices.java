@@ -38,7 +38,7 @@ public class SectionServices {
     return repo.save(s);
   }
 
-  // ==================== RETRIEVE ====================
+  // ==================== READ ====================
 
   public Section getSectionById(UUID sectionId) {
     return repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is "));
@@ -66,7 +66,7 @@ public class SectionServices {
     repo.save(section); // Save section
   }
 
-  // ==================== REMOVE ====================
+  // ==================== DELETE ====================
 
   public void removeSection(UUID sectionId) {
     if (!exists(sectionId))

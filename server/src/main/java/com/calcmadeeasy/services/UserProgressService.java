@@ -27,7 +27,7 @@ public class UserProgressService {
     return repo.save(up);
   }
 
-  // ==================== RETRIEVE ====================
+  // ==================== READ ====================
 
   public UserProgressDTO getUserProgress(UUID upId) {
 
@@ -93,7 +93,7 @@ public class UserProgressService {
       throw new RuntimeException("User progress did not reset correctly!");
   }
 
-  // ==================== REMOVE ====================
+  // ==================== DELETE ====================
 
   public void removeProgress(UUID upId) {
     if (!exists(upId))
