@@ -54,11 +54,16 @@ public class TagServices {
         .toList();
   }
 
-  public TagDTO getTagById(UUID tagId) {
+  public TagDTO getTag(UUID tagId) {
     Tag t = repo.findById(tagId)
         .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
 
     return new TagDTO(t);
+  }
+
+  public Tag getTagEntity(UUID tagId) {
+    return repo.findById(tagId)
+        .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
   }
 
   public List<Tag> getTagsByDifficultyRange(double lowerBound, double upperBound) {
@@ -79,7 +84,7 @@ public class TagServices {
   public void updateDifficultyById(UUID tagId, double newDifficulty) {
     if (newDifficulty > 1 || newDifficulty < 0)
       throw new IllegalArgumentException("Difficulty must be a decimal between 0 and 1");
-    Tag tag = getTagById(tagId);
+    Tag tag = getTagEntity(tagId);
     tag.setDifficulty(newDifficulty);
     repo.save(tag);
   }
@@ -87,7 +92,7 @@ public class TagServices {
   public void updateNameById(UUID tagId, String name) {
     if (name.isEmpty() || name.equals(" "))
       throw new IllegalArgumentException("Cannot assign empty name to a tag");
-    Tag tag = getTagById(tagId);
+    Tag tag = getTagEntity(tagId);
     tag.setTagName(name);
     repo.save(tag);
   }

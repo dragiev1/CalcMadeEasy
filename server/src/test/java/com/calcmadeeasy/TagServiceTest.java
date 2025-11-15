@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,14 +25,20 @@ public class TagServiceTest {
   @Autowired
   private TagServices tagServices;
 
+  private Tag tag;
+  private TagDTO newTag;
+
+  @BeforeEach
+  public void setup() {
+    tag = new Tag("test (createTag)", 0.9);
+    newTag = tagServices.createTag(new CreateTagDTO(tag));
+  }
+
   // Create
 
   @Test
   public void testCreateTag() {
-    Tag tag = new Tag("test (createTag)", 0.9);
-    CreateTagDTO t = new CreateTagDTO(tag);
-    tagServices.createTag(t);
-    boolean exists = tagServices.exists(tag.getId());
+    boolean exists = tagServices.exists(newTag.getId());
     assertEquals(exists, true, "Tag does not exist");
     System.out.println("Successfully created tag");
   }
@@ -54,24 +61,22 @@ public class TagServiceTest {
 
   @Test
   public void testGetAllTags() {
-    Tag tag1 = new Tag("test1 (getAllTags)", 0.1);
     Tag tag2 = new Tag("test2 (getAllTags)", 0.1);
-    List<Tag> ogTags = List.of(tag1, tag2);
+    TagDTO t2 = tagServices.createTag(new CreateTagDTO(tag2));
+    List<TagDTO> ogTags = List.of(newTag, t2);
+    List<TagDTO> tags = tagServices.getAllTags();
 
-    tagServices.createTags(tag1, tag2);
-    List<Tag> tags = tagServices.getAllTags();
-
-    assertEquals(ogTags, tags, "Error: original tag list does not match with list from database");
+    assertEquals(ogTags.get(0).getId(), tags.get(0).getId(), "Error: original tag list does not match with list from database");
+    assertEquals(ogTags.get(1).getId(), tags.get(1).getId(), "Error: original tag list does not match with list from database");
     System.out.println("Succesfully retrieved all tags");
   }
 
   @Test
-  public void testGetTagById() {
+  public void testGetTag() {
     Tag tag = new Tag("test (getTagById)", 0.5);
-    CreateTagDTO t = new CreateTagDTO(tag);
-    TagDTO saved = tagServices.createTag(t);
-    Tag retrieved = tagServices.getTagById(tag.getId());
-    assertEquals(saved, retrieved);
+    TagDTO saved = tagServices.createTag(new CreateTagDTO(tag));
+    Tag retrieved = tagServices.getTagEntity(saved.getId());
+    assertEquals(saved.getId(), retrieved.getId());
     System.out.println("Successfully retreived page");
   }
 
@@ -98,12 +103,11 @@ public class TagServiceTest {
     // Arrange
     Tag tag = new Tag("test (updateDifficultyById)", 0.5);
     double og = tag.getDifficulty();
-    CreateTagDTO t = new CreateTagDTO(tag);
-    tagServices.createTag(t);
+    TagDTO newTag = tagServices.createTag(new CreateTagDTO(tag));
 
     // Act
-    tagServices.updateDifficultyById(tag.getId(), 0.3);
-    Tag retrieved = tagServices.getTagById(tag.getId());
+    tagServices.updateDifficultyById(newTag.getId(), 0.3);
+    Tag retrieved = tagServices.getTagEntity(newTag.getId());
     double newDiff = retrieved.getDifficulty();
 
     // Assert
@@ -119,12 +123,11 @@ public class TagServiceTest {
     Tag tag = new Tag("test (updateNameById)", 0.6);
     String og = tag.getTagName();
 
-    CreateTagDTO t = new CreateTagDTO(tag);
-    tagServices.createTag(t);
+    TagDTO newTag = tagServices.createTag(new CreateTagDTO(tag));
 
     // Act
-    tagServices.updateNameById(tag.getId(), "CHANGED");
-    Tag retreived = tagServices.getTagById(tag.getId());
+    tagServices.updateNameById(newTag.getId(), "CHANGED");
+    Tag retreived = tagServices.getTagEntity(newTag.getId());
     String newName = retreived.getTagName();
 
     // Assert
@@ -138,18 +141,12 @@ public class TagServiceTest {
 
   @Test
   public void testDeleteTagById() {
-    // Arrange
-    Tag tag = new Tag("test (deleteTagById)", 0.3);
-    CreateTagDTO t = new CreateTagDTO(tag);
-    tagServices.createTag(t);
-
     // Act
-    tagServices.deleteTagById(tag.getId());
-    boolean exists = tagServices.exists(tag.getId());
+    tagServices.deleteTagById(newTag.getId());
+    boolean exists = tagServices.exists(newTag.getId());
 
     // Assert
     assertEquals(false, exists, "Error: tag was not deleted");
     System.out.println("Successfully deleted tag");
-
   }
 }

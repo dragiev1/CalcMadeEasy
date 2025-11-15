@@ -42,7 +42,7 @@ public class TagController {
 
   @GetMapping("/{tagId}")
   public ResponseEntity<TagDTO> getTag(@PathVariable UUID tagId) {
-    TagDTO t = tagService.getTagById(tagId);
+    TagDTO t = tagService.getTag(tagId);
     return ResponseEntity.ok(t);
   }
 }
