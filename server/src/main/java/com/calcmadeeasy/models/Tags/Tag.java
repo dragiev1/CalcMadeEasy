@@ -25,7 +25,7 @@ public class Tag {
 
   @Column(unique = true, nullable = false)
   private String name;
-  private double difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
+  private Double difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
 
   @ManyToMany(mappedBy = "tags")
   private Set<Problem> problems = new HashSet<>();
@@ -34,7 +34,7 @@ public class Tag {
   public Tag() {
   }
 
-  public Tag(String name, double difficulty) {
+  public Tag(String name, Double difficulty) {
     this.name = name;
     this.difficulty = difficulty;
   }
@@ -49,7 +49,7 @@ public class Tag {
     return name;
   }
 
-  public double getDifficulty() {
+  public Double getDifficulty() {
     return difficulty;
   }
 
@@ -61,7 +61,7 @@ public class Tag {
     this.name = name;
   }
 
-  public void setDifficulty(double difficulty) {
+  public void setDifficulty(Double difficulty) {
     if (difficulty < 0 || difficulty > 1) {
       throw new IllegalArgumentException("ERROR: Difficulty must be between 0 and 1");
     }

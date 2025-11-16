@@ -57,7 +57,7 @@ public class TagServiceTest {
     System.out.println("Successfully created multiple tags");
   }
 
-  // Retrevial
+  // Read
 
   @Test
   public void testGetAllTags() {
@@ -90,7 +90,7 @@ public class TagServiceTest {
     tagServices.createTags(og);
     List<Tag> correct = List.of(tag1, tag2, tag3);
 
-    List<Tag> retrieved = tagServices.getTagsByDifficultyRange(0, 0.5);
+    List<Tag> retrieved = tagServices.getTagsByDifficultyRange(Double.valueOf(0), Double.valueOf(0.5));
 
     assertEquals(correct, retrieved, "Error: original tag list does not equate to tags");
     System.out.println("Successfully retrieved correct list in respect to difficulty bounds inputted");
@@ -102,13 +102,13 @@ public class TagServiceTest {
   public void testUpdateDifficultyById() {
     // Arrange
     Tag tag = new Tag("test (updateDifficultyById)", 0.5);
-    double ogDiff = tag.getDifficulty();
+    Double ogDiff = tag.getDifficulty();
     String ogName = tag.getTagName();
     TagDTO request = new TagDTO(new Tag("changed", 0.3));
-    
+
     // Act
     TagDTO retrieved = tagServices.updateTag(newTag.getId(), request);
-    double newDiff = retrieved.getDifficulty();
+    Double newDiff = retrieved.getDifficulty();
     String newName = retrieved.getTagName();
 
     // Assert

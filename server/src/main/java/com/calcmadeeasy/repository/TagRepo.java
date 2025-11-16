@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface TagRepo extends JpaRepository<Tag, UUID> {
   Optional<Tag> findByName(String name);
 
-  List<Tag> findByDifficultyBetween(double lower, double upper);
+  List<Tag> findByDifficultyBetween(Double lower, Double upper);
 }

@@ -2,12 +2,13 @@ package com.calcmadeeasy.services;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.Arrays;
-
 
 import org.matheclipse.core.eval.ExprEvaluator;
 import org.matheclipse.core.interfaces.IExpr;
 
+import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
+import com.calcmadeeasy.dto.Problems.ProblemDTO;
+import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Tags.Tag;
@@ -26,16 +27,18 @@ public class ProblemServices {
 
   // ==================== CREATE ====================
 
-  public Problem createProblem(Problem problem) {
-    return repo.save(problem);
-  }
+  public ProblemResponseDTO createProblem(CreateProblemDTO problem) {
+    Problem p = Problem.builder()
+        .description(problem.getDescription())
+        .isChallenge(problem.getIsChallenge())
+        .points(problem.getPoints())
+        .solution(problem.getSolution())
+        .solutionType(problem.getSolutionType())
+        .build();
 
-  public List<Problem> createProblems(Problem... problems) {
-    return repo.saveAll(Arrays.asList(problems));
-  }
+    repo.save(p);
 
-  public List<Problem> createProblems(List<Problem> problems) {
-    return repo.saveAll(problems);
+    return new ProblemResponseDTO(p);
   }
 
   public Problem addTag(Problem problem, Tag tag) {
@@ -45,12 +48,24 @@ public class ProblemServices {
 
   // ==================== READ ====================
 
-  public List<Problem> getAllProblems() {
+  public List<Problem> getAllProblem() {
     return repo.findAll();
   }
 
-  public Problem getProblemById(UUID id) {
+  public List<ProblemDTO> getAllProblemDTOs() {
+    return repo.findAll()
+        .stream()
+        .map(ProblemDTO::new)
+        .toList();
+  }
+
+  public Problem getProblemEntity(UUID id) {
     return repo.findById(id).orElse(null);
+  }
+
+  public ProblemDTO getProblemDTO(UUID pId) {
+    ProblemDTO p = new ProblemDTO(getProblemEntity(pId));
+    return p;
   }
 
   public boolean verifySolution(Problem problem, String userSolution) {
@@ -104,36 +119,18 @@ public class ProblemServices {
 
   // ==================== UPDATE ====================
 
-  public void updateDescription(UUID problemId, String newDescription) {
-    Problem problem = getProblemById(problemId);
-    problem.setDescription(newDescription);
-    repo.save(problem);
-  }
+  public ProblemDTO updateProblem(UUID pId, CreateProblemDTO request) {
+    Problem p = getProblemEntity(pId);
+    
+    if(request.getDescription() != null) 
+      p.setDescription(request.getDescription());
+    if(request.getSolution() != null) 
+      p.setSolution(request.getSolution());
+    if(request.getSolutionType() != null)
+      p.setSolutionType(request.getSolutionType());
 
-  public void updateSolution(UUID problemId, String newSolution) {
-    Problem problem = getProblemById(problemId);
-    problem.setSolution(newSolution);
-    repo.save(problem);
-  }
-
-  public void updateSolutionType(UUID problemId, ProblemSolutionType type) {
-    if (type != ProblemSolutionType.NUMERICAL && type != ProblemSolutionType.EXPRESSION)
-      throw new IllegalArgumentException("Type " + type + " does not exist as a ProblemSolutionType enum");
-    Problem problem = getProblemById(problemId);
-    problem.setSolutionType(type);
-    repo.save(problem);
-  }
-
-  public void updateIsChallenge(UUID problemId, boolean isChallenge) {
-    Problem problem = getProblemById(problemId);
-    problem.setIsChallenge(isChallenge);
-    repo.save(problem);
-  }
-
-  public void updatePoints(UUID problemId, int newPoints) {
-    Problem problem = getProblemById(problemId);
-    problem.setPoints(newPoints);
-    repo.save(problem);
+    repo.save(p);
+    return new ProblemDTO(p);
   }
 
   // ==================== DELETE ====================
@@ -147,7 +144,7 @@ public class ProblemServices {
   public void deleteTagFromProblem(UUID tagId, UUID problemId) {
     if (!exists(problemId))
       throw new IllegalArgumentException("Problem to be deleted does not exist");
-    Problem p = getProblemById(problemId);
+    Problem p = getProblemEntity(problemId);
     boolean removed = p.getTags().removeIf(t -> t.getId().equals(tagId));
     if (!removed)
       throw new IllegalArgumentException("Problem was found but tag was not removed");

@@ -24,7 +24,7 @@ public class TagServices {
   // ==================== CREATE ====================
 
   @Transactional
-  public Tag getOrCreateTag(String name, double difficulty) {
+  public Tag getOrCreateTag(String name, Double difficulty) {
     return repo.findByName(name).orElseGet(() -> repo.save(new Tag(name, difficulty)));
   }
 
@@ -66,7 +66,7 @@ public class TagServices {
         .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
   }
 
-  public List<Tag> getTagsByDifficultyRange(double lowerBound, double upperBound) {
+  public List<Tag> getTagsByDifficultyRange(Double lowerBound, Double upperBound) {
     if (upperBound > 1 || lowerBound < 0)
       throw new IllegalArgumentException("Unacceptable bounds range inputted");
 
@@ -87,8 +87,9 @@ public class TagServices {
     
     Tag tag = getTagEntity(tagId);
 
-    tag.setDifficulty(request.getDifficulty());
-    tag.setTagName(request.getTagName());
+    if (request.getDifficulty() != null) tag.setDifficulty(request.getDifficulty());
+    if(request.getTagName() != null) tag.setTagName(request.getTagName());
+
     repo.save(tag);
 
     return new TagDTO(tag);

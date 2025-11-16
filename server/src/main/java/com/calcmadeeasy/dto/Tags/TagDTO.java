@@ -8,7 +8,7 @@ import com.calcmadeeasy.models.Tags.Tag;
 public class TagDTO {
   private UUID id;
   private String name;
-  private double difficulty;
+  private Double difficulty;
 
   // No args constructor for Jackson.
   public TagDTO() {
@@ -30,7 +30,7 @@ public class TagDTO {
     return name;
   }
 
-  public double getDifficulty() {
+  public Double getDifficulty() {
     return difficulty;
   }
 
