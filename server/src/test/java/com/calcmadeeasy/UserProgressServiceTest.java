@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
@@ -49,7 +50,7 @@ public class UserProgressServiceTest {
         .isChallenge(false)
         .solutionType(ProblemSolutionType.EXPRESSION)
         .build();
-    problemService.createProblem(problem);
+    problemService.createProblem(new CreateProblemDTO(problem));
 
     page = Page.builder()
         .content("content")
