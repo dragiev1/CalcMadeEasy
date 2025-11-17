@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,10 +56,27 @@ public class ProblemController {
 
   @PutMapping("/{problemId}")
   public ResponseEntity<ProblemDTO> updateProblem(
-    @PathVariable UUID problemId, 
-    @RequestBody CreateProblemDTO request) {
-      ProblemDTO p = problemService.updateProblem(problemId, request);
-      return ResponseEntity.ok(p);
+      @PathVariable UUID problemId,
+      @RequestBody CreateProblemDTO request) {
+    ProblemDTO p = problemService.updateProblem(problemId, request);
+    return ResponseEntity.ok(p);
+  }
+
+  // ---------------- DELETE ----------------
+
+  @DeleteMapping("/{problemId}")
+  public ResponseEntity<Void> deleteProblem(@PathVariable UUID problemId) {
+    problemService.deleteProblem(problemId);
+    return ResponseEntity.ok().build();
+  }
+
+  @DeleteMapping("/{problemId}/remove-tag/{tagId}")
+  public ResponseEntity<ProblemDTO> deleteTagFromProblem(
+      @PathVariable UUID problemId,
+      @PathVariable UUID tagId) {
+        problemService.deleteTagFromProblem(tagId, problemId);
+        ProblemDTO p = new ProblemDTO(problemService.getProblemEntity(problemId));
+        return ResponseEntity.ok(p);
   }
 
 }

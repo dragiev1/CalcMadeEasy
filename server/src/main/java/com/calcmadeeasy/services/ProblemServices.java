@@ -20,9 +20,11 @@ import org.springframework.stereotype.Service;
 public class ProblemServices {
 
   private final ProblemRepo repo;
+  private final TagServices tagService;
 
-  public ProblemServices(ProblemRepo repo) {
+  public ProblemServices(ProblemRepo repo, TagServices tagService) {
     this.repo = repo;
+    this.tagService = tagService;
   }
 
   // ==================== CREATE ====================
@@ -41,9 +43,14 @@ public class ProblemServices {
     return new ProblemResponseDTO(p);
   }
 
-  public Problem addTag(Problem problem, Tag tag) {
-    problem.getTags().add(tag);
-    return repo.save(problem);
+  public ProblemDTO addTag(UUID problemId, UUID tagId) {
+    Problem p = getProblemEntity(problemId);
+    Tag tag = tagService.getTagEntity(tagId);
+
+    p.addTag(tag);
+    repo.save(p);
+
+    return new ProblemDTO(p);
   }
 
   // ==================== READ ====================
@@ -130,6 +137,7 @@ public class ProblemServices {
       p.setSolutionType(request.getSolutionType());
 
     repo.save(p);
+
     return new ProblemDTO(p);
   }
 

@@ -201,7 +201,7 @@ public class Problem {
     touch();
   }
 
-  public void setTag(Tag newTag) {
+  public void addTag(Tag newTag) {
     this.tags.add(newTag);
     touch();
   }

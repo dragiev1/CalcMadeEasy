@@ -3,10 +3,11 @@ package com.calcmadeeasy.dto.Problems;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
-import com.calcmadeeasy.models.Tags.Tag;
 
 // Outbound only.
 public class ProblemDTO {
@@ -16,7 +17,7 @@ public class ProblemDTO {
   private boolean isChallenge;
   private String solution;
   private ProblemSolutionType solutionType;
-  private Set<Tag> tags;
+  private Set<TagDTO> tags;
   private Instant createdAt;
   private Instant updatedAt;
 
@@ -27,7 +28,7 @@ public class ProblemDTO {
     this.points = problem.getPoints();
     this.solution = problem.getSolution();
     this.solutionType = problem.getSolutionType();
-    this.tags = problem.getTags();
+    this.tags = problem.getTags().stream().map(TagDTO::new).collect(Collectors.toSet());
     this.createdAt = problem.getCreatedAt();
     this.updatedAt = problem.getUpdatedAt();
   }
@@ -54,7 +55,7 @@ public class ProblemDTO {
     return isChallenge;
   }
 
-  public Set<Tag> getTags() {
+  public Set<TagDTO> getTags() {
     return tags;
   }
 
@@ -68,6 +69,13 @@ public class ProblemDTO {
 
   public Instant getUpdatedAt() {
     return updatedAt;
+  }
+
+  public TagDTO getTagById(UUID tagId) {
+    return tags.stream()
+        .filter(tag -> tag.getId().equals(tagId))
+        .findFirst()
+        .orElse(null);
   }
 
   // Setters
