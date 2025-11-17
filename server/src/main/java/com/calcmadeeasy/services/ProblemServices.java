@@ -135,6 +135,10 @@ public class ProblemServices {
       p.setSolution(request.getSolution());
     if(request.getSolutionType() != null)
       p.setSolutionType(request.getSolutionType());
+    if(request.getIsChallenge() != null)
+      p.setIsChallenge(request.getIsChallenge());
+    if(request.getPoints() != null)
+      p.setPoints(request.getPoints());
 
     repo.save(p);
 

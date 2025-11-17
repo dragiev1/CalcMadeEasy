@@ -13,8 +13,8 @@ import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 public class ProblemDTO {
   private UUID id;
   private String description;
-  private int points;
-  private boolean isChallenge;
+  private Integer points;
+  private Boolean isChallenge;
   private String solution;
   private ProblemSolutionType solutionType;
   private Set<TagDTO> tags;
@@ -51,7 +51,7 @@ public class ProblemDTO {
     return solutionType;
   }
 
-  public boolean getIsChallenge() {
+  public Boolean getIsChallenge() {
     return isChallenge;
   }
 
@@ -59,7 +59,7 @@ public class ProblemDTO {
     return tags;
   }
 
-  public int getPoints() {
+  public Integer getPoints() {
     return points;
   }
 
@@ -100,7 +100,7 @@ public class ProblemDTO {
     this.solutionType = solutionType;
   }
 
-  public void setIsChallenge(boolean isChallenge) {
+  public void setIsChallenge(Boolean isChallenge) {
     this.isChallenge = isChallenge;
   }
 

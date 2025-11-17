@@ -7,8 +7,8 @@ import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 public class CreateProblemDTO {
 
   private String description;
-  private int points;
-  private boolean isChallenge;
+  private Integer points;
+  private Boolean isChallenge;
   private String solution;
   private ProblemSolutionType solutionType;
 
@@ -37,11 +37,11 @@ public class CreateProblemDTO {
     return solutionType;
   }
 
-  public boolean getIsChallenge() {
+  public Boolean getIsChallenge() {
     return isChallenge;
   }
 
-  public int getPoints() {
+  public Integer getPoints() {
     return points;
   }
 

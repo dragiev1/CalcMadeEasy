@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.models.Pages.PageProblem;
 import com.calcmadeeasy.models.Tags.Tag;
 
 import jakarta.persistence.CascadeType;
@@ -23,6 +24,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Problem {
@@ -31,8 +33,8 @@ public class Problem {
   private UUID id;
 
   private String description;
-  private int points;
-  private boolean isChallenge;
+  private Integer points;
+  private Boolean isChallenge;
   private String solution;
 
   // NUMERICAL or EXPRESSION
@@ -44,6 +46,9 @@ public class Problem {
             joinColumns = @JoinColumn(name = "problem_id"), 
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
   private Set<Tag> tags = new HashSet<>();
+
+  @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<PageProblem> pageProblems = new HashSet<>();
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -64,9 +69,9 @@ public class Problem {
     private String description;
     private String solution;
     private ProblemSolutionType solutionType;
-    private boolean isChallenge;
+    private Boolean isChallenge;
     private Set<Tag> tags = new HashSet<>();
-    private int points;
+    private Integer points;
     private Instant createdAt;
 
     public Builder description(String description) {
@@ -84,7 +89,7 @@ public class Problem {
       return this;
     }
 
-    public Builder isChallenge(boolean isChallenge) {
+    public Builder isChallenge(Boolean isChallenge) {
       this.isChallenge = isChallenge;
       return this;
     }
@@ -137,7 +142,7 @@ public class Problem {
     return solutionType;
   }
 
-  public boolean getIsChallenge() {
+  public Boolean getIsChallenge() {
     return isChallenge;
   }
 
@@ -152,7 +157,7 @@ public class Problem {
       .orElse(null);
   }
 
-  public int getPoints() {
+  public Integer getPoints() {
     return points;
   }
 
@@ -180,7 +185,7 @@ public class Problem {
     touch();
   }
 
-  public void setIsChallenge(boolean trueOrFalse) {
+  public void setIsChallenge(Boolean trueOrFalse) {
     this.isChallenge = trueOrFalse;
     touch();
   }

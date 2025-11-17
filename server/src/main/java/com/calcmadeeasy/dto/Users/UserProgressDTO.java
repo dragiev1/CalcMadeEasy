@@ -13,12 +13,12 @@ public class UserProgressDTO {
   private UUID pageId;
 
   // Problem fields.
-  private boolean isChallenge;
-  private int points;
+  private Boolean isChallenge;
+  private Integer points;
 
-  private int attempts;
-  private int pointsEarned;
-  private boolean solved;
+  private Integer attempts;
+  private Integer pointsEarned;
+  private Boolean solved;
   private Instant lastAttempted;
 
   private Instant createdAt;
@@ -55,11 +55,11 @@ public class UserProgressDTO {
     return problemId;
   }
 
-  public boolean getIsChallenge() {
+  public Boolean getIsChallenge() {
     return isChallenge;
   }
 
-  public int getPoints() {
+  public Integer getPoints() {
     return points;
   }
 
@@ -67,15 +67,15 @@ public class UserProgressDTO {
     return pageId;
   }
 
-  public int getAttempts() {
+  public Integer getAttempts() {
     return attempts;
   }
 
-  public boolean isSolved() {
+  public Boolean isSolved() {
     return solved;
   }
 
-  public int getPointsEarned() {
+  public Integer getPointsEarned() {
     return pointsEarned;
   }
 

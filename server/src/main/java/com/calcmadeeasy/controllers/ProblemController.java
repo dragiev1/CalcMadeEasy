@@ -23,10 +23,6 @@ import com.calcmadeeasy.services.ProblemServices;
 public class ProblemController {
   private ProblemServices problemService;
 
-  // No args constructor for Jackson.
-  public ProblemController() {
-  }
-
   public ProblemController(ProblemServices problemService) {
     this.problemService = problemService;
   }
@@ -62,6 +58,15 @@ public class ProblemController {
     return ResponseEntity.ok(p);
   }
 
+  @PutMapping("/{problemId}/add-tag/{tagId}")
+  public ResponseEntity<ProblemDTO> addTagToProblem(
+    @PathVariable UUID problemId, 
+    @PathVariable UUID tagId) {
+      problemService.addTag(problemId, tagId);
+      ProblemDTO p = problemService.getProblemDTO(problemId);
+      return ResponseEntity.ok(p);
+    }
+
   // ---------------- DELETE ----------------
 
   @DeleteMapping("/{problemId}")
@@ -74,9 +79,9 @@ public class ProblemController {
   public ResponseEntity<ProblemDTO> deleteTagFromProblem(
       @PathVariable UUID problemId,
       @PathVariable UUID tagId) {
-        problemService.deleteTagFromProblem(tagId, problemId);
-        ProblemDTO p = new ProblemDTO(problemService.getProblemEntity(problemId));
-        return ResponseEntity.ok(p);
+    problemService.deleteTagFromProblem(tagId, problemId);
+    ProblemDTO p = new ProblemDTO(problemService.getProblemEntity(problemId));
+    return ResponseEntity.ok(p);
   }
 
 }

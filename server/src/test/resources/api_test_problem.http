@@ -1,0 +1,44 @@
+### Create a new problem
+POST http://localhost:8080/api/v1/problems
+Content-Type: application/json
+
+{
+  "description": "DESCRIPTION",
+  "solution": "SOLUTION",
+  "solutionType": "NUMERICAL",
+  "isChallenge": false,
+  "points": 100
+}
+
+
+### Get existing problems
+GET http://localhost:8080/api/v1/problems
+Content-Type: application/json
+
+### Get an existing problem
+GET http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301
+Content-Type: application/json
+
+
+### Add a new tag to an existing problem
+PUT http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301
+Content-Type: application/json
+
+{
+  "solutionType": "EXPRESSION",
+  "isChallenge": false,
+  "points": 0
+}
+
+### Adds a tag to an existing problem
+PUT http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301/add-tag/757fbbc4-29f4-40fa-90cf-5eba3d39bd28
+Content-Type: application/json
+
+
+### Removes a tag appended to an existing problem
+DELETE http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301/remove-tag/757fbbc4-29f4-40fa-90cf-5eba3d39bd28
+Content-Type: application/json
+
+### Deletes a problem
+DELETE http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301
+Content-Type: application/json
