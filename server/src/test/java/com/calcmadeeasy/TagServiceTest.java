@@ -117,7 +117,7 @@ public class TagServiceTest {
     assertEquals(0.3, newDiff,
         "Error: difficulty does not match expected");
     assertEquals("changed", newName,
-        "Error: name does not match expected");
+        "Error: tag name does not match expected");
     System.out.println("Successfully updated difficulty on an existing tag");
   }
 

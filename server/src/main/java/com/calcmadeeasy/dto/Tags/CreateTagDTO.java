@@ -4,7 +4,7 @@ import com.calcmadeeasy.models.Tags.Tag;
 
 // Inbound only.
 public class CreateTagDTO {
-  private String name;
+  private String tagName;
   private Double difficulty;
 
   // No args constructor for Jackson.
@@ -12,14 +12,14 @@ public class CreateTagDTO {
   }
 
   public CreateTagDTO(Tag t) {
-    this.name = t.getTagName();
+    this.tagName = t.getTagName();
     this.difficulty = t.getDifficulty();
   }
 
   // Getters
 
   public String getName() {
-    return name;
+    return tagName;
   }
 
   public Double getDifficulty() {
@@ -28,8 +28,8 @@ public class CreateTagDTO {
 
   // Setters
 
-  public void setName(String name) {
-    this.name = name;
+  public void setName(String tagName) {
+    this.tagName = tagName;
   }
 
   public void setDifficulty(Double difficulty) {

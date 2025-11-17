@@ -24,8 +24,8 @@ public class TagServices {
   // ==================== CREATE ====================
 
   @Transactional
-  public Tag getOrCreateTag(String name, Double difficulty) {
-    return repo.findByName(name).orElseGet(() -> repo.save(new Tag(name, difficulty)));
+  public Tag getOrCreateTag(String tagName, Double difficulty) {
+    return repo.findByTagName(tagName).orElseGet(() -> repo.save(new Tag(tagName, difficulty)));
   }
 
   public TagDTO createTag(CreateTagDTO tag) {
@@ -84,11 +84,13 @@ public class TagServices {
   public TagDTO updateTag(UUID tagId, TagDTO request) {
     if (request.getDifficulty() > 1 || request.getDifficulty() < 0)
       throw new IllegalArgumentException("Difficulty must be a decimal between 0 and 1");
-    
+
     Tag tag = getTagEntity(tagId);
 
-    if (request.getDifficulty() != null) tag.setDifficulty(request.getDifficulty());
-    if(request.getTagName() != null) tag.setTagName(request.getTagName());
+    if (request.getDifficulty() != null)
+      tag.setDifficulty(request.getDifficulty());
+    if (request.getTagName() != null)
+      tag.setTagName(request.getTagName());
 
     repo.save(tag);
 

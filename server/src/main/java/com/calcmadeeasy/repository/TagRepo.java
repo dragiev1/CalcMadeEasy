@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface TagRepo extends JpaRepository<Tag, UUID> {
-  Optional<Tag> findByName(String name);
+  Optional<Tag> findByTagName(String tagName);
 
   List<Tag> findByDifficultyBetween(Double lower, Double upper);
 }
