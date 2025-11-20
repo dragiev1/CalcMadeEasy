@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
+import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.repository.SectionRepo;
@@ -20,8 +22,15 @@ public class SectionServices {
 
   // ==================== CREATE ====================
 
-  public Section createSection(Section section) {
-    return repo.save(section);
+  public SectionResponseDTO createSection(CreateSectionDTO section) {
+    Section s = Section.builder()
+        .title(section.getTitle())
+        .description(section.getDescription())
+        .build();
+
+    repo.save(s);
+
+    return new SectionResponseDTO(s);
   }
 
   public List<Section> createSections(Section... sections) {
