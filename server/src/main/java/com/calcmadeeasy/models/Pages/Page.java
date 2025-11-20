@@ -160,7 +160,7 @@ public class Page {
     touch();
   }
 
-  public void setProblem(Problem problem, ProblemType type) {
+  public void addProblem(Problem problem, ProblemType type) {
     PageProblem pp = new PageProblem(this, problem, type);
     problems.add(pp);
     problemQuantity++;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
@@ -18,7 +19,8 @@ import com.calcmadeeasy.dto.Pages.PageProblemDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.services.PageServices;
 
-@RestController("/api/v1/pages")
+@RestController
+@RequestMapping("/api/v1/pages")
 public class PageController {
   private PageServices pageService;
 
@@ -58,9 +60,8 @@ public class PageController {
       return ResponseEntity.ok(p);
   }
 
-  @PutMapping("/{pageId}/add-problem")
+  @PutMapping("/add-problem")
   public ResponseEntity<PageDTO> addProblem(
-    @PathVariable UUID pageId,
     @RequestBody PageProblemDTO pageProblemDTO) {
       PageDTO p = pageService.addProblem(pageProblemDTO);
       return ResponseEntity.ok(p);

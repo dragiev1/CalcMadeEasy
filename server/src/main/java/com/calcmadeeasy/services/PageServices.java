@@ -95,7 +95,7 @@ public class PageServices {
     Page page = getPageEntity(dto.getPageId());
     Problem problem = problemService.getProblemEntity(dto.getProblemId());
     ProblemType pType = dto.getProblemType();
-    page.setProblem(problem, pType);
+    page.addProblem(problem, pType);
 
     repo.save(page);
     return new PageDTO(page);
