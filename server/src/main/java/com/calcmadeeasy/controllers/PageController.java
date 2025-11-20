@@ -16,7 +16,6 @@ import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageProblemDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
-import com.calcmadeeasy.models.Pages.PageProblem;
 import com.calcmadeeasy.services.PageServices;
 
 @RestController("/api/v1/pages")

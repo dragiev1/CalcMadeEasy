@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
@@ -55,7 +56,7 @@ public class UserProgressServiceTest {
     page = Page.builder()
         .content("content")
         .build();
-    pageService.createPage(page);
+    pageService.createPage(new CreatePageDTO(page));
 
     user = User.builder()
         .email("test@example.com")

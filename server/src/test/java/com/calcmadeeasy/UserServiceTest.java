@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
@@ -73,8 +74,7 @@ public class UserServiceTest {
     page = Page.builder()
         .content("content")
         .build();
-
-    pageService.createPage(page);
+    pageService.createPage(new CreatePageDTO(page));
 
     section = Section.builder()
         .description("description")
