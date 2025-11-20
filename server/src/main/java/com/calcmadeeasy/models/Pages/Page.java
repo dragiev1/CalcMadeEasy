@@ -3,9 +3,7 @@ package com.calcmadeeasy.models.Pages;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Function;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -99,22 +97,22 @@ public class Page {
     return problemQuantity;
   }
 
-  /*
-   * Returns a list of problems that satisfy the attribute inputted.
-   * 
-   * @params Function<Problem, T> attributeExtractor = lamba
-   * expression that is sending a problem related function for data extraction.
-   * T value = value using to search for problems to retrieve.
-   */
-  public <T> List<Problem> getProblemsBy(
-      Function<Problem, T> attributeExtractor,
-      T value) {
+  // /*
+  //  * Returns a list of problems that satisfy the attribute inputted.
+  //  * 
+  //  * @params Function<Problem, T> attributeExtractor = lamba
+  //  * expression that is sending a problem related function for data extraction.
+  //  * T value = value using to search for problems to retrieve.
+  //  */
+  // public <T> List<Problem> getProblemsBy(
+  //     Function<Problem, T> attributeExtractor,
+  //     T value) {
 
-    return problems.stream()
-        .map(PageProblem::getProblem)
-        .filter(p -> Objects.equals(attributeExtractor.apply(p), value))
-        .toList();
-  }
+  //   return problems.stream()
+  //       .map(PageProblem::getProblem)
+  //       .filter(p -> Objects.equals(attributeExtractor.apply(p), value))
+  //       .toList();
+  // }
 
   // /*
   //  * Returns a list of problems by containing a certain value.
@@ -185,6 +183,10 @@ public class Page {
         return;
       }
     }
+  }
+
+  public void removeAllProblems() {
+    this.problems = new ArrayList<>();
   }
 
   @Override
