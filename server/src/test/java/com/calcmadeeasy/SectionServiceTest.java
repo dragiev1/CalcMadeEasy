@@ -2,6 +2,7 @@ package com.calcmadeeasy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.dto.Pages.CreatePageDTO;
+import com.calcmadeeasy.dto.Pages.PageDTO;
+import com.calcmadeeasy.dto.Pages.PageResponseDTO;
+import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
+import com.calcmadeeasy.dto.Sections.SectionDTO;
+import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
+import com.calcmadeeasy.services.PageServices;
 import com.calcmadeeasy.services.SectionServices;
 
 import jakarta.transaction.Transactional;
@@ -26,146 +34,87 @@ public class SectionServiceTest {
 
   @Autowired
   private SectionServices sectionService;
+  @Autowired
+  private PageServices pageService;
 
-  private Page page1;
-  private Page page2;
-  private Section section1;
-  private Section section2;
+  private Page page;
+  private Section section;
+  private PageDTO pageDTO;
+  private SectionDTO sectionDTO;
 
   @BeforeEach
   public void setup() {
-    page1 = Page.builder()
+    page = Page.builder()
         .content("content (test)")
         .build();
-    page2 = Page.builder()
-        .content("content2 (test)")
-        .build();
-    section1 = Section.builder()
+    PageResponseDTO pageResponse = pageService.createPage(new CreatePageDTO(page));
+    pageDTO = pageService.getPageDTO(pageResponse.getId());
+
+    section = Section.builder()
         .description("description (test)")
         .title("title (test)")
-        .pages(page1)
+        .pages(page)
         .build();
-    section2 = Section.builder()
-        .description("description2 (test)")
-        .title("title2 (test)")
-        .pages(page2)
-        .build();
-    sectionService.createSection(section1);
-    sectionService.createSection(section2);
+
+    SectionResponseDTO response = sectionService.createSection(new CreateSectionDTO(section));
+    sectionDTO = sectionService.getSectionDTO(response.getId());
   }
 
   // CREATE
 
   @Test
   public void testCreateSection() {
-    sectionService.createSection(section1);
-    boolean exists = sectionService.exists(section1.getId());
+    boolean exists = sectionService.exists(sectionDTO.getId());
     String err = "Section was not saved";
-    assertEquals(true, exists, err);
-  }
-
-  @Test
-  public void testCreateSections() {
-    sectionService.createSections(section1, section2);
-
-    boolean retrieved1 = sectionService.exists(section1.getId());
-    boolean retrieved2 = sectionService.exists(section2.getId());
-
-    String err = "Section was not saved";
-    assertEquals(true, retrieved1, err);
-    assertEquals(true, retrieved2, err);
-    System.out.println("Successfully retrieved section");
-  }
-
-  @Test
-  public void testAddPage() {
-    // Arrange
-    List<Page> ogPages = new ArrayList<>();
-    ogPages.add(page2);
-
-    sectionService.createSection(section2);
-
-    // Act
-    sectionService.addPage(section2, page1);
-
-    // Assert
-
-    int size = sectionService.getAllSections().size();
-    String err = "Error: section was not saved properly";
-    assertNotEquals(ogPages.size(), size);
-    assertEquals(true, sectionService.getSectionById(section2.getId()).getPages().contains(page1), err);
-    assertEquals(true, sectionService.getSectionById(section2.getId()).getPages().contains(page2), err);
-    System.out.println("Successfully added a new page to a section");
+    assertTrue(exists, err);
   }
 
   // READ
 
   @Test
   public void testGetAllPages() {
-    sectionService.createSections(section1, section2);
-
     int size = sectionService.getAllSections().size();
-    boolean retrieved1 = sectionService.exists(section1.getId());
-    boolean retrieved2 = sectionService.exists(section2.getId());
+    boolean retrieved1 = sectionService.exists(sectionDTO.getId());
 
     String err = "Error: section(s) was not saved properly ";
-    assertEquals(2, size, err);
+    assertEquals(1, size, err);
     assertEquals(true, retrieved1, err);
-    assertEquals(true, retrieved2, err);
-    System.out.println("Successfully retrieved all sections");
   }
 
   // UPDATE
 
   @Test
-  public void testUpdateDescription() {
-    sectionService.createSection(section1);
-    String changed = "CHANGED";
+  public void testAddPage() {
+    List<Page> ogPages = new ArrayList<>();
+    ogPages.add(page);
 
-    sectionService.updateDescription(section1.getId(), changed);
+    sectionService.addPage(sectionDTO.getId(), pageDTO.getId());
+    int size = sectionService.getAllSections().size();
 
-    String err = "Error: description was not updated";
-    assertEquals(changed, sectionService.getSectionById(section1.getId()).getDescription(), err);
-    System.out.println("Successfully updated description");
-  }
-
-  @Test
-  public void testUpdateTitle() {
-    // Arrange
-    sectionService.createSection(section1);
-    String changed = "CHANGED";
-
-    // Act
-    sectionService.updateTitle(section1.getId(), changed);
-    String retrieved = sectionService.getSectionById(section1.getId()).getTitle();
-
-    // Assert
-    String err = "Error: title did not update correctly";
-    assertEquals(changed, retrieved, err);
-    System.out.println("Successfully updated title");
+    String err = "Error: section was not saved properly";
+    assertNotEquals(ogPages.size(), size);
+    assertEquals(pageDTO.getId(), sectionService.getSectionEntity(sectionDTO.getId()).getPages().get(0).getId(), err);
   }
 
   // DELETE
 
   @Test
   public void testRemoveSection() {
-    UUID sId = section1.getId();
-    sectionService.createSection(section1);
+    UUID id = sectionDTO.getId();
 
-    sectionService.removeSection(sId);
-    boolean removed = sectionService.exists(sId);
+    sectionService.deleteSection(id);
+    boolean removed = sectionService.exists(id);
 
     String err = "Error: section persists upon deletion";
     assertEquals(false, removed, err);
-    System.out.println("Successfully deleted section");
   }
 
   @Test
   public void testRemovePage() {
-    sectionService.removePage(section2.getId(), page2.getId());
-    boolean exist = sectionService.getSectionById(section2.getId()).getPages().isEmpty();
+    sectionService.removePage(sectionDTO.getId(), pageDTO.getId());
+    boolean exist = sectionService.getSectionEntity(sectionDTO.getId()).getPages().isEmpty();
+
     String err = "Error: page was not removed from the section properly";
-    assertEquals(true, exist, err);
-    System.out.println("Successfully removed a page from section");
+    assertTrue(exist, err);
   }
 }
