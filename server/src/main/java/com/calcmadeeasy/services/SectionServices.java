@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
+import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
@@ -15,9 +16,11 @@ import com.calcmadeeasy.repository.SectionRepo;
 @Service
 public class SectionServices {
   private final SectionRepo repo;
+  private PageServices pageService;
 
-  public SectionServices(SectionRepo repo) {
+  public SectionServices(SectionRepo repo, PageServices pageService) {
     this.repo = repo;
+    this.pageService = pageService;
   }
 
   // ==================== CREATE ====================
@@ -41,19 +44,26 @@ public class SectionServices {
     return repo.saveAll(sections);
   }
 
-  public Section addPage(Section section, Page page) {
-    Section s = getSectionById(section.getId());
-    s.getPages().add(page);
-    return repo.save(s);
-  }
-
   // ==================== READ ====================
 
-  public Section getSectionById(UUID sectionId) {
+  public SectionDTO getSectionDTO(UUID sectionId) {
+    Section s = repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is "));
+
+    return new SectionDTO(s);
+  }
+
+  public Section getSectionEntity(UUID sectionId) {
     return repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is "));
   }
 
-  public List<Section> getAllSections() {
+  public List<SectionDTO> getAllSections() {
+    return repo.findAll()
+        .stream()
+        .map(SectionDTO::new)
+        .toList();
+  }
+
+  public List<Section> getAllSectionEntities() {
     return repo.findAll();
   }
 
@@ -63,36 +73,52 @@ public class SectionServices {
 
   // ==================== UPDATE ====================
 
-  public void updateDescription(UUID sectionId, String newDesc) {
-    Section section = getSectionById(sectionId);
-    section.setDescription(newDesc);
-    repo.save(section);
+  public SectionDTO updateSection(UUID sectionId, CreateSectionDTO request) {
+    Section s = getSectionEntity(sectionId);
+
+    if (request.getDescription() != null)
+      s.setDescription(request.getDescription());
+    if (request.getTitle() != null)
+      s.setTitle(request.getTitle());
+
+    repo.save(s);
+
+    return new SectionDTO(s);
   }
 
-  public void updateTitle(UUID sectionId, String newTitle) {
-    Section section = getSectionById(sectionId); // Get section
-    section.setTitle(newTitle); // Set title
-    repo.save(section); // Save section
+  public SectionDTO addPage(UUID sectionId, UUID pageId) {
+    Section s = getSectionEntity(sectionId);
+    Page p = pageService.getPageEntity(pageId);
+
+    s.getPages().add(p);
+    repo.save(s);
+
+    return new SectionDTO(s);
   }
 
   // ==================== DELETE ====================
 
-  public void removeSection(UUID sectionId) {
-    if (!exists(sectionId))
+  public void deleteSection(UUID sectionId) {
+    boolean exists = exists(sectionId);
+    if (!exists)
       throw new IllegalArgumentException("Section does not exist, cannot remove");
+
     repo.deleteById(sectionId);
-    if (exists(sectionId))
-      throw new IllegalArgumentException("Section was found but page was not removed");
+
+    if (exists)
+      throw new IllegalArgumentException("Section was found but was not deleted");
   }
 
-  public void removePage(UUID sectionId, UUID pageId) {
+  public SectionDTO removePage(UUID sectionId, UUID pageId) {
     if (!exists(sectionId))
       throw new IllegalArgumentException("Section does not exist, cannot remove page");
 
-    Section section = getSectionById(sectionId);
-    boolean removed = section.getPages().removeIf(p -> p.getId().equals(pageId));
+    Section s = getSectionEntity(sectionId);
+    boolean removed = s.getPages().removeIf(p -> p.getId().equals(pageId));
 
     if (!removed)
       throw new IllegalArgumentException("Section was found but page was not removed");
+
+    return new SectionDTO(s);
   }
 }
