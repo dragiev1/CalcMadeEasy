@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
+import com.calcmadeeasy.dto.Sections.UpdateSectionDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.repository.SectionRepo;
@@ -73,7 +74,7 @@ public class SectionServices {
 
   // ==================== UPDATE ====================
 
-  public SectionDTO updateSection(UUID sectionId, CreateSectionDTO request) {
+  public SectionDTO updateSection(UUID sectionId, UpdateSectionDTO request) {
     Section s = getSectionEntity(sectionId);
 
     if (request.getDescription() != null)
@@ -89,8 +90,9 @@ public class SectionServices {
   public SectionDTO addPage(UUID sectionId, UUID pageId) {
     Section s = getSectionEntity(sectionId);
     Page p = pageService.getPageEntity(pageId);
-
+    p.setPosition(pageService.getPagesBySection(sectionId).size() + 1);
     s.getPages().add(p);
+
     repo.save(s);
 
     return new SectionDTO(s);

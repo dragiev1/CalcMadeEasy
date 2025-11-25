@@ -11,7 +11,6 @@ public class CreateSectionDTO {
 
   public CreateSectionDTO() {}
 
-
   // Getters
 
   public String getDescription() {

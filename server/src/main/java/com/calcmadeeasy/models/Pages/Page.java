@@ -35,6 +35,8 @@ public class Page {
   @JoinColumn(name = "section_id")
   private Section section;
 
+  private Integer position;
+
   @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<PageProblem> problems;
 
@@ -55,9 +57,15 @@ public class Page {
     private String content;
     private List<PageProblem> problems;
     private Instant createdAt;
+    private Integer position;
 
     public Builder content(String content) {
       this.content = content;
+      return this;
+    }
+
+    public Builder position(Integer position) {
+      this.position = position;
       return this;
     }
 
@@ -75,6 +83,7 @@ public class Page {
     this.content = b.content;
     this.problems = b.problems == null ? new ArrayList<>() : new ArrayList<>(b.problems);
     this.problemQuantity = 0;
+    this.position = b.position;
     this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
     this.updatedAt = this.createdAt;
   }
@@ -95,6 +104,14 @@ public class Page {
 
   public int getProblemQuantity() {
     return problemQuantity;
+  }
+
+  public Integer getPosition() {
+    return position;
+  }
+
+  public Section getSection() {
+    return section;
   }
 
   // /*
@@ -171,6 +188,10 @@ public class Page {
     this.section = section;
   }
 
+  public void setPosition(Integer newPosition) {
+    this.position = newPosition;
+  }
+
   // Removers
 
   // Removes a problem from the page (eg. exercises or homeworks)
@@ -194,6 +215,7 @@ public class Page {
     return "\nPage{\n" +
         "id=" + id +
         ", content=" + content +
+        ", position=" + position +
         ", problems=" + problems.toString() +
         ", total problems=" + problemQuantity +
         ", createdAt=" + createdAt +

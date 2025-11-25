@@ -1,0 +1,19 @@
+### Create new Section
+POST http://localhost:8080/api/v1/sections
+Content-Type: application/json
+
+{
+  "title": "TITLE",
+  "description": "DESCRIPTION",
+  "chapterId": "ad98c02c-d099-4fde-a570-22eebf9d97d0"
+}
+
+
+
+### Get all existing sections
+POST http://localhost:8080/api/v1/sections
+Content-Type: application/json
+
+### Get an existing section
+POST http://localhost:8080/api/v1/sections/
+Content-Type: application/json
