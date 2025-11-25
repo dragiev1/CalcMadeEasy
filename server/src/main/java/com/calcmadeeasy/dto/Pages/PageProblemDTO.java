@@ -13,11 +13,6 @@ public class PageProblemDTO {
   public PageProblemDTO() {
   }
 
-  public PageProblemDTO(UUID pageId, UUID problemId, ProblemType problemType) {
-    this.pageId = pageId;
-    this.problemId = problemId;
-    this.problemType = problemType;
-  }
 
   // Getters
 

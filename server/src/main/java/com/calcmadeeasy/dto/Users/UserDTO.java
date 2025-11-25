@@ -69,6 +69,4 @@ public class UserDTO {
     return updatedAt;
   }
 
-
-  // No setters.
 }

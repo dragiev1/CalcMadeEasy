@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
+import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Pages.Page;
@@ -81,7 +82,7 @@ public class UserServiceTest {
         .pages(page)
         .title("title")
         .build();
-    sectionService.createSection(section);
+    sectionService.createSection(new CreateSectionDTO(section));
 
     chapter = Chapter.builder()
         .description("description")

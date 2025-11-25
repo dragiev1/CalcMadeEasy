@@ -78,37 +78,4 @@ public class ProblemDTO {
         .orElse(null);
   }
 
-  // Setters
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setPoints(int points) {
-    this.points = points;
-  }
-
-  public void setSolution(String solution) {
-    this.solution = solution;
-  }
-
-  public void setSolutionType(ProblemSolutionType solutionType) {
-    this.solutionType = solutionType;
-  }
-
-  public void setIsChallenge(Boolean isChallenge) {
-    this.isChallenge = isChallenge;
-  }
-
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public void setUpdatedAt(Instant updatedAt) {
-    this.updatedAt = updatedAt;
-  }
 }

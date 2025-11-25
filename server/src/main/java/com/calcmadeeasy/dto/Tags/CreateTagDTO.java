@@ -1,6 +1,5 @@
 package com.calcmadeeasy.dto.Tags;
 
-import com.calcmadeeasy.models.Tags.Tag;
 
 // Inbound only.
 public class CreateTagDTO {
@@ -11,10 +10,6 @@ public class CreateTagDTO {
   public CreateTagDTO() {
   }
 
-  public CreateTagDTO(Tag t) {
-    this.tagName = t.getTagName();
-    this.difficulty = t.getDifficulty();
-  }
 
   // Getters
 

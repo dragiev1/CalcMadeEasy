@@ -46,6 +46,4 @@ public class UserResponseDTO {
     return profilePicUrl;
   }
 
-  // No setters
-
 }

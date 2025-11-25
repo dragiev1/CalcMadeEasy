@@ -1,10 +1,10 @@
 package com.calcmadeeasy.dto.Users;
 
-import com.calcmadeeasy.models.Users.User;
 
 /*
  * Data Transfer Object for http responses regarding creating new Users.
  * NOTE: Will need to update this to tie in with Google OAuth 2.0. 
+ * Inbound only.
  */
 public class CreateUserDTO {
   private String firstName;
@@ -15,12 +15,6 @@ public class CreateUserDTO {
   // No args constructor for Jackson.
   public CreateUserDTO() {}
 
-  public CreateUserDTO(User user) {
-    this.firstName = user.getFirstName();
-    this.lastName = user.getLastName();
-    this.email = user.getEmail();
-    this.profilePicUrl = user.getProfilePicUrl();
-  }
 
   // Getters
 

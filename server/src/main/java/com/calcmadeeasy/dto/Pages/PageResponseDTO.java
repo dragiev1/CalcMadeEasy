@@ -43,25 +43,4 @@ public class PageResponseDTO {
     return updatedAt;
   }
 
-  // Setters
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-  public void setProblemQuantity(Integer problemQuantity) {
-    this.problemQuantity = problemQuantity;
-  }
-
-  public void setUpdatedAt(Instant updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
-  }
 }

@@ -1,18 +1,16 @@
 package com.calcmadeeasy.dto.Sections;
 
-import com.calcmadeeasy.models.Sections.Section;
+import java.util.UUID;
+
 
 // Inbound only.
 public class CreateSectionDTO {
   private String title;
   private String description;
+  private UUID chapterId;
 
   public CreateSectionDTO() {}
 
-  public CreateSectionDTO(Section section) {
-    this.title = section.getTitle();
-    this.description = section.getDescription();
-  }
 
   // Getters
 
@@ -24,6 +22,23 @@ public class CreateSectionDTO {
     return title;
   }
 
+  public UUID getChapterId() {
+    return chapterId;
+  }
 
-  // No setters.
+
+  // Setters
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void setChapterId(UUID chapterId) {
+    this.chapterId = chapterId;
+  }
+  
 }

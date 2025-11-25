@@ -34,5 +34,4 @@ public class TagDTO {
     return difficulty;
   }
 
-  // No setters.
 }
