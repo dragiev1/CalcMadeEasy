@@ -54,30 +54,4 @@ public class SectionDTO {
     return createdAt;
   }
 
-  // Setters
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setPages(List<Page> pages) {
-    this.pages = pages;
-  }
-
-  public void setUpdatedAt(Instant updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
-  }
-
 }

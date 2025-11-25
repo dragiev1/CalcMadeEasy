@@ -12,6 +12,7 @@ public class PageDTO {
   private UUID id;
   private String content;
   private Integer problemQuantity;
+  private Integer position;
   private List<Problem> exercises;
   private List<Problem> homework;
   private Instant createdAt;
@@ -23,6 +24,7 @@ public class PageDTO {
     this.id = page.getId();
     this.content = page.getContent();
     this.problemQuantity = page.getProblemQuantity();
+    this.position = page.getPosition();
     this.exercises = page.getExercises();
     this.homework = page.getHomework();
     this.createdAt = page.getCreatedAt();
@@ -31,7 +33,7 @@ public class PageDTO {
 
   // Getters
 
-    public UUID getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -49,6 +51,10 @@ public class PageDTO {
 
   public Integer getProblemQuantity() {
     return problemQuantity;
+  }
+
+  public Integer getPosition() {
+    return position;
   }
 
   public Instant getCreatedAt() {

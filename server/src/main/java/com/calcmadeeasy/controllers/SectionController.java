@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
+import com.calcmadeeasy.dto.Sections.UpdateSectionDTO;
 import com.calcmadeeasy.services.SectionServices;
 
 @RestController
@@ -54,7 +55,7 @@ public class SectionController {
   @PutMapping("/{sectionId}")
   public ResponseEntity<SectionDTO> updateSection(
       @PathVariable UUID sectionId,
-      @RequestBody CreateSectionDTO request) {
+      @RequestBody UpdateSectionDTO request) {
     SectionDTO s = sectionService.updateSection(sectionId, request);
     return ResponseEntity.ok(s);
   }

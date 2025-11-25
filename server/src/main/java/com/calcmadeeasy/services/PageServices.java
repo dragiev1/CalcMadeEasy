@@ -31,7 +31,7 @@ public class PageServices {
     Page p = Page.builder()
         .content(page.getContent())
         .build();
-
+    
     repo.save(p);
 
     return new PageResponseDTO(p);
@@ -81,7 +81,7 @@ public class PageServices {
 
   // ==================== UPDATE ====================
 
-  public PageDTO updateContent(UUID pageId, CreatePageDTO request) {
+  public PageDTO updatePage(UUID pageId, CreatePageDTO request) {
     Page page = getPageEntity(pageId);
 
     if (request.getContent() != null)
