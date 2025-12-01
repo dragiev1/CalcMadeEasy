@@ -25,18 +25,6 @@ public class ChapterServices {
     return repo.save(chapter);
   }
 
-  public List<Chapter> createChapters(Chapter... chapters) {
-    if (chapters == null || chapters.length == 0)
-      throw new IllegalArgumentException("Cannot save null chapters");
-    return repo.saveAll(List.of(chapters));
-  }
-
-  public List<Chapter> createChapters(List<Chapter> chapters) {
-    if (chapters == null || chapters.size() == 0)
-      throw new IllegalArgumentException("Cannot save null chapters");
-    return repo.saveAll(chapters);
-  }
-
   // ==================== READ ====================
 
   public Chapter getChapter(UUID chapterId) {
