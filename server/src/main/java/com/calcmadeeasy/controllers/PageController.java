@@ -56,7 +56,7 @@ public class PageController {
   public ResponseEntity<PageDTO> updatePage(
     @PathVariable UUID pageId, 
     @RequestBody CreatePageDTO request) {
-      PageDTO p = pageService.updateContent(pageId, request);
+      PageDTO p = pageService.updatePage(pageId, request);
       return ResponseEntity.ok(p);
   }
 

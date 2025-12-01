@@ -8,9 +8,15 @@ public class CreatePageDTO {
   // No-args constructor for Jackson.
   public CreatePageDTO() {}
 
+  // Getters
+
   public String getContent() {
     return content;
   }
 
-  // No setters.
+  // Setters (Optional)
+
+  public void setContent(String content) {
+    this.content = content;
+  }
 }

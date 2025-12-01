@@ -43,4 +43,6 @@ public class PageResponseDTO {
     return updatedAt;
   }
 
+  // No setters.
+
 }

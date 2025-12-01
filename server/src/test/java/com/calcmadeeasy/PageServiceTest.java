@@ -33,7 +33,7 @@ public class PageServiceTest {
         pageEntity = Page.builder()
                 .content("CONTENT")
                 .build();
-        PageResponseDTO response = pageServices.createPage(new CreatePageDTO(pageEntity));
+        PageResponseDTO response = pageServices.createPage();
         pageDTO = pageServices.getPageDTO(response.getId());
     }
 

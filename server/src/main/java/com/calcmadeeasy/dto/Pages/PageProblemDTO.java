@@ -10,9 +10,7 @@ public class PageProblemDTO {
   private UUID problemId;
   private ProblemType problemType;
 
-  public PageProblemDTO() {
-  }
-
+  public PageProblemDTO() {}
 
   // Getters
 
@@ -28,6 +26,4 @@ public class PageProblemDTO {
     return problemType;
   }
 
-  
-  // No setters.
 }
