@@ -3,7 +3,7 @@ package com.calcmadeeasy.dto.Problems;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 
 // Inbound only.
-public class UpdateSectionDTO {
+public class UpdateProblemDTO {
 
   private String description;
   private Integer points;
@@ -11,7 +11,7 @@ public class UpdateSectionDTO {
   private String solution;
   private ProblemSolutionType solutionType;
 
-  public UpdateSectionDTO() {}
+  public UpdateProblemDTO() {}
 
   // Getters
 

@@ -7,9 +7,7 @@ public class CreateTagDTO {
   private Double difficulty;
 
   // No args constructor for Jackson.
-  public CreateTagDTO() {
-  }
-
+  public CreateTagDTO() {}
 
   // Getters
 

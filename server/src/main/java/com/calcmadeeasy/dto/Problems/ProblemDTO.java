@@ -7,64 +7,24 @@ import java.util.stream.Collectors;
 
 import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.models.Problems.Problem;
-import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 
 // Outbound only.
-public class ProblemDTO {
-  private UUID id;
-  private String description;
-  private Integer points;
-  private Boolean isChallenge;
-  private String solution;
-  private ProblemSolutionType solutionType;
+public class ProblemDTO extends ProblemResponseDTO {
   private Set<TagDTO> tags;
-  private Instant createdAt;
   private Instant updatedAt;
 
   public ProblemDTO(Problem problem) {
-    this.id = problem.getId();
-    this.description = problem.getDescription();
-    this.isChallenge = problem.getIsChallenge();
-    this.points = problem.getPoints();
-    this.solution = problem.getSolution();
-    this.solutionType = problem.getSolutionType();
-    this.tags = problem.getTags().stream().map(TagDTO::new).collect(Collectors.toSet());
-    this.createdAt = problem.getCreatedAt();
+    super(problem);
+    this.tags = problem.getTags().stream()
+        .map(TagDTO::new)
+        .collect(Collectors.toSet());
     this.updatedAt = problem.getUpdatedAt();
   }
 
   // Getters
 
-  public UUID getId() {
-    return id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getSolution() {
-    return solution;
-  }
-
-  public ProblemSolutionType getSolutionType() {
-    return solutionType;
-  }
-
-  public Boolean getIsChallenge() {
-    return isChallenge;
-  }
-
   public Set<TagDTO> getTags() {
     return tags;
-  }
-
-  public Integer getPoints() {
-    return points;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
   }
 
   public Instant getUpdatedAt() {

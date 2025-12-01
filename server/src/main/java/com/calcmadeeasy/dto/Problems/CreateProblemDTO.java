@@ -11,8 +11,7 @@ public class CreateProblemDTO {
   private String solution;
   private ProblemSolutionType solutionType;
 
-  public CreateProblemDTO() {
-  }
+  public CreateProblemDTO() {}
 
   // Getters
 
@@ -35,7 +34,5 @@ public class CreateProblemDTO {
   public Integer getPoints() {
     return points;
   }
-
-  // No setters
-  
+ 
 }

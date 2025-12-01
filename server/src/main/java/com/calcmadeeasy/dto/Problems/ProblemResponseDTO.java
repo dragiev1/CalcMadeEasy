@@ -1,5 +1,6 @@
 package com.calcmadeeasy.dto.Problems;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import com.calcmadeeasy.models.Problems.Problem;
@@ -13,9 +14,9 @@ public class ProblemResponseDTO {
   private Boolean isChallenge;
   private String solution;
   private ProblemSolutionType solutionType;
+  private Instant createdAt;
 
-  public ProblemResponseDTO() {
-  }
+  public ProblemResponseDTO() {}
 
   public ProblemResponseDTO(Problem problem) {
     this.id = problem.getId();
@@ -24,6 +25,7 @@ public class ProblemResponseDTO {
     this.points = problem.getPoints();
     this.solution = problem.getSolution();
     this.solutionType = problem.getSolutionType();
+    this.createdAt = problem.getCreatedAt();
   }
 
   // Getters
@@ -52,5 +54,8 @@ public class ProblemResponseDTO {
     return points;
   }
 
-  // No setters.
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
 }

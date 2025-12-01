@@ -11,8 +11,7 @@ public class TagDTO {
   private Double difficulty;
 
   // No args constructor for Jackson.
-  public TagDTO() {
-  }
+  public TagDTO() {}
 
   public TagDTO(Tag t) {
     this.id = t.getId();
