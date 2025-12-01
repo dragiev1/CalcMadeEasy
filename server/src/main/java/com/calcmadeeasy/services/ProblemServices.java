@@ -9,6 +9,7 @@ import org.matheclipse.core.interfaces.IExpr;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
+import com.calcmadeeasy.dto.Problems.UpdateProblemDTO;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Tags.Tag;
@@ -126,7 +127,7 @@ public class ProblemServices {
 
   // ==================== UPDATE ====================
 
-  public ProblemDTO updateProblem(UUID pId, CreateProblemDTO request) {
+  public ProblemDTO updateProblem(UUID pId, UpdateProblemDTO request) {
     Problem p = getProblemEntity(pId);
     
     if(request.getDescription() != null) 

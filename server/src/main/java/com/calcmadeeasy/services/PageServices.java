@@ -5,6 +5,7 @@ import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageProblemDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
+import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemType;
@@ -81,7 +82,7 @@ public class PageServices {
 
   // ==================== UPDATE ====================
 
-  public PageDTO updatePage(UUID pageId, CreatePageDTO request) {
+  public PageDTO updatePage(UUID pageId, UpdatePageDTO request) {
     Page page = getPageEntity(pageId);
 
     if (request.getContent() != null)

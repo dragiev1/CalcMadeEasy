@@ -3,6 +3,7 @@ package com.calcmadeeasy;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
+import com.calcmadeeasy.dto.Problems.UpdateProblemDTO;
 import com.calcmadeeasy.dto.Tags.CreateTagDTO;
 import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.models.Problems.Problem;
@@ -13,6 +14,7 @@ import com.calcmadeeasy.services.TagServices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,38 +38,30 @@ public class ProblemServiceTest {
   @Autowired
   private TagServices tagService;
 
-  private Tag tag1;
-  private Tag tag2;
+  private CreateTagDTO tag1;
+  private CreateTagDTO tag2;
+  private Tag tagEntity1;
   private Problem problem1;
-  private Problem problem2;
   private ProblemDTO testProblemDTO;
 
   @BeforeEach
   public void setup() {
-    tag1 = new Tag("Tag1", Double.valueOf(0));
-    tag2 = new Tag("Tag2", Double.valueOf(1));
-    tagService.createTag(new CreateTagDTO(tag1));
-    tagService.createTag(new CreateTagDTO(tag2));
+    CreateTagDTO tag1 = new CreateTagDTO();
+    tag1.setName("Tag1");
+    tag1.setDifficulty(Double.valueOf(0));
+    TagDTO tag1DTO = tagService.createTag(tag1);
+    tagEntity1 = tagService.getTagEntity(tag1DTO.getId());
 
-    problem1 = Problem.builder()
-        .description("description1 (getAllProblems)")
-        .isChallenge(false)
-        .points(3)
-        .solutionType(ProblemSolutionType.EXPRESSION)
-        .solution("solution1 (getAllProblems)")
-        .tags(tag1, tag2)
-        .build();
-    problem2 = Problem.builder()
-        .description("description2 (getAllProblems)")
-        .isChallenge(true)
-        .points(1)
-        .solutionType(ProblemSolutionType.NUMERICAL)
-        .solution("25")
-        .tags(tag2)
-        .build();
-    ProblemResponseDTO response = problemService.createProblem(new CreateProblemDTO(problem1));
+    CreateProblemDTO dto = new CreateProblemDTO();
+    dto.setDescription("DESCRIPTION");
+    dto.setIsChallenge(false);
+    dto.setSolution("SOLUTION");
+    dto.setSolutionType(ProblemSolutionType.EXPRESSION);
+    dto.setPoints(0);
+    ProblemResponseDTO response = problemService.createProblem(dto);
     problem1 = problemService.getProblemEntity(response.getId());
     testProblemDTO = problemService.getProblemDTO(response.getId());
+
   }
 
   // CREATE
@@ -76,29 +70,25 @@ public class ProblemServiceTest {
   public void testCreateProblem() {
     boolean retrieved = problemService.exists(testProblemDTO.getId());
 
-    assertEquals(true, retrieved, "Error: problem did not save");
-    System.out.println("Successfully saved problem");
+    assertTrue(retrieved, "Error: problem did not save");
   }
 
   @Test
   public void testAddTag() {
     // Arrange
-    Set<Tag> ogTags = new HashSet<>();
+    
+    Set<CreateTagDTO> ogTags = new HashSet<>();
     ogTags.add(tag1);
     ogTags.add(tag2);
 
-    Tag extraTag = new Tag("extra tag (addTag)", 0.5);
-    TagDTO t = tagService.createTag(new CreateTagDTO(extraTag));
-
     // Act
-    ProblemDTO updated = problemService.addTag(problem1.getId(), t.getId());
+    ProblemDTO updated = problemService.addTag(problem1.getId(), tagEntity1.getId());
 
     // Assert
     assertNotEquals(ogTags, updated.getTags(),
-        "Error: original tags set matches problem's tag set when adding new tag");
-    assertEquals(t.getId(), updated.getTagById(t.getId()).getId(),
+        "Error: old tag set matches new tag set when adding new tag");
+    assertEquals(tagEntity1.getId(), updated.getTagById(tagEntity1.getId()).getId(),
         "Error: tag did not append to the problem");
-    System.out.println("Successfully added tag to a problem");
 
   }
 
@@ -112,27 +102,39 @@ public class ProblemServiceTest {
     assertEquals(true, exists, "Error: problem was not saved properly");
     assertEquals(retrieved.getId(), testProblemDTO.getId(),
         "Error: original problem and retrieved problem do not match");
-    System.out.println("Successfully retrieved problem");
   }
 
   @Test
   public void testGetAllProblems() {
-    ProblemResponseDTO r = problemService.createProblem(new CreateProblemDTO(problem2));
-    problem2 = problemService.getProblemEntity(r.getId());
-    int correctQuantity = 2;
+
+    int correctQuantity = 1;
 
     int retrievedQuantity = problemService.getAllProblemDTOs().size();
     List<ProblemDTO> retrieved = problemService.getAllProblemDTOs();
 
-    assertEquals(retrieved.get(0).getId(), testProblemDTO.getId(), "Error: testProblemDTO was not saved properly");
-    assertEquals(retrieved.get(1).getId(), problem2.getId(), "Error: problem2 was not saved properly");
+    assertEquals(retrieved.get(0).getId(), problem1.getId(), "Error: problem1 was not saved properly");
     assertEquals(correctQuantity, retrievedQuantity, "Error: quantity of problems do not match");
-    System.out.println("Successfully retrieved all problems");
   }
 
   // UPDATE
 
-  // TODO: Test new updateProblem() service method
+  @Test
+  public void testUpdateProblem() {
+    UpdateProblemDTO update = new UpdateProblemDTO();
+    update.setDescription("CHANGED");
+    update.setIsChallenge(true);
+    update.setSolutionType(ProblemSolutionType.NUMERICAL);
+    update.setPoints(100);
+    update.setSolution("CHANGED");
+
+    ProblemDTO updated = problemService.updateProblem(problem1.getId(), update);
+    Problem p = problemService.getProblemEntity(updated.getId());
+
+    assertTrue(p.getIsChallenge());
+    assertEquals(p.getDescription(), p.getSolution(), "Error: description or solution was not updated correct");
+    assertEquals(p.getSolutionType(), ProblemSolutionType.NUMERICAL, "Error: solution type was not updated");
+    assertEquals(p.getPoints(), 100, "Error: points was not updated");
+  }  
 
   // DELETION
 
@@ -144,24 +146,19 @@ public class ProblemServiceTest {
     boolean retrieved = problemService.exists(pId);
 
     assertEquals(false, retrieved, "Error: problem still exists after deletion");
-    System.out.println("Successfully deleted a problem");
   }
 
   @Test
   public void testDeleteTagFromProblem() {
     // Arrange
-    Tag extraTag = new Tag("extra tag (addTag)", 0.5);
-    TagDTO t = tagService.createTag(new CreateTagDTO(extraTag));
-    extraTag = tagService.getTagEntity(t.getId());
-    problemService.addTag(problem1.getId(), extraTag.getId());
-    
+    problemService.addTag(problem1.getId(), tagEntity1.getId());
+
     // Act
     Set<Tag> retrieved = problemService.getProblemEntity(problem1.getId()).getTags();
-    assertEquals(true, retrieved.contains(extraTag), "Error: Tag never appended to the problem's tag set");
-    retrieved.remove(extraTag);
+    assertEquals(true, retrieved.contains(tagEntity1), "Error: Tag never appended to the problem's tag set");
+    retrieved.remove(tagEntity1);
 
     // Assert
-    assertEquals(false, retrieved.contains(extraTag), "Error: Tag exists after deletion");
-    System.out.println("Successfully removed Tag from Problem");
+    assertEquals(false, retrieved.contains(tagEntity1), "Error: Tag exists after deletion");
   }
 }

@@ -11,7 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
+import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
+import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
@@ -44,19 +46,18 @@ public class UserProgressServiceTest {
 
   @BeforeEach
   public void setup() {
-    problem = Problem.builder()
-        .description("description")
-        .points(3)
-        .solution("solution")
-        .isChallenge(false)
-        .solutionType(ProblemSolutionType.EXPRESSION)
-        .build();
-    problemService.createProblem(new CreateProblemDTO(problem));
+    CreateProblemDTO pdto = new CreateProblemDTO();
+    pdto.setDescription("DESCRIPTION");
+    pdto.setIsChallenge(false);
+    pdto.setSolution("SOLUTION");
+    pdto.setSolutionType(ProblemSolutionType.EXPRESSION);
+    ProblemResponseDTO response = problemService.createProblem(pdto);
+    problem = problemService.getProblemEntity(response.getId());
 
-    page = Page.builder()
-        .content("content")
-        .build();
-    pageService.createPage(new CreatePageDTO(page));
+    CreatePageDTO dto = new CreatePageDTO();
+    dto.setContent("CONTENT");
+    PageResponseDTO pageResponse = pageService.createPage(dto);
+    page = pageService.getPageEntity(pageResponse.getId());
 
     user = User.builder()
         .email("test@example.com")
@@ -109,7 +110,7 @@ public class UserProgressServiceTest {
     boolean isSolved = updated.isSolved();
     int points = updated.getPointsEarned();
     int attempts = updated.getAttempts();
-    
+
     // Assert
     assertFalse(isSolved);
     assertEquals(0, points);

@@ -34,5 +34,27 @@ public class CreateProblemDTO {
   public Integer getPoints() {
     return points;
   }
+
+  // Setters
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
  
+  public void setPoints(Integer points) {
+    this.points = points;
+  }
+
+  public void setIsChallenge(Boolean isChallenge) {
+    this.isChallenge = isChallenge;
+  }
+
+  public void setSolution(String solution) {
+    this.solution = solution;
+  }
+
+  public void setSolutionType(ProblemSolutionType solutionType) {
+    this.solutionType = solutionType;
+  }
+  
 }

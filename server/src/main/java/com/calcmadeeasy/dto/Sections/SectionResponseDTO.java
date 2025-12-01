@@ -10,6 +10,7 @@ public class SectionResponseDTO {
   private UUID id;
   private String title;
   private String description;
+  private UUID chapterId;
   private Instant updatedAt;
   private Instant createdAt;
 
@@ -19,6 +20,7 @@ public class SectionResponseDTO {
     this.id = section.getId();
     this.description = section.getDescription();
     this.title = section.getTitle();
+    this.chapterId = section.getChapterId();
     this.updatedAt = section.getUpdatedAt();
     this.createdAt = section.getCreatedAt();
   }
@@ -35,6 +37,10 @@ public class SectionResponseDTO {
 
   public String getTitle() {
     return title;
+  }
+
+  public UUID getChapterId() {
+    return chapterId;
   }
 
   public Instant getUpdatedAt() {

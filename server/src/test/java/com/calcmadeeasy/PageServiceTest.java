@@ -3,6 +3,7 @@ package com.calcmadeeasy;
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
+import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.services.PageServices;
 
@@ -23,25 +24,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PageServiceTest {
 
     @Autowired
-    private PageServices pageServices;
+    private PageServices pageService;
 
-    private Page pageEntity;
     private PageDTO pageDTO;
 
     @BeforeEach
     public void setup() {
-        pageEntity = Page.builder()
-                .content("CONTENT")
-                .build();
-        PageResponseDTO response = pageServices.createPage();
-        pageDTO = pageServices.getPageDTO(response.getId());
+        CreatePageDTO dto = new CreatePageDTO();
+        dto.setContent("CONTENT");
+        PageResponseDTO response = pageService.createPage(dto);
+        pageDTO = pageService.getPageDTO(response.getId());
     }
 
     // Create
 
     @Test
     public void testPageCreation() {
-        boolean exists = pageServices.exists(pageDTO.getId());
+        boolean exists = pageService.exists(pageDTO.getId());
 
         assertTrue(exists);
     }
@@ -50,7 +49,7 @@ public class PageServiceTest {
 
     @Test
     public void testGetAllPages() {
-        List<PageDTO> pages = pageServices.getAllPages();
+        List<PageDTO> pages = pageService.getAllPages();
 
         assertEquals(1, pages.size());
     }
@@ -58,7 +57,7 @@ public class PageServiceTest {
     @Test
     public void testGetPage() {
 
-        Page found = pageServices.getPageEntity(pageDTO.getId());
+        Page found = pageService.getPageEntity(pageDTO.getId());
 
         assertEquals(pageDTO.getId(), found.getId());
         assertEquals("CONTENT", found.getContent());
@@ -69,22 +68,23 @@ public class PageServiceTest {
     @Test
     public void testUpdateContent() {
         String ogContent = "CONTENT";
-        pageEntity.setContent("REPLACED");
-        CreatePageDTO dto = new CreatePageDTO(pageEntity);
+        UpdatePageDTO update = new UpdatePageDTO();
+        update.setContent("CHANGED");
 
-        pageServices.updateContent(pageDTO.getId(), dto);
+        pageService.updatePage(pageDTO.getId(), update);
 
-        Page found = pageServices.getPageEntity(pageDTO.getId());
+        Page found = pageService.getPageEntity(pageDTO.getId());
 
         assertNotEquals(ogContent, found.getContent(), "Error: contents don't match");
+        assertEquals("CHANGED", found.getContent(), "Error: content was changed, but does not match expected");
     }
 
     // Delete
 
     @Test
     public void testDeletePage() {
-        pageServices.deletePage(pageDTO.getId());
-        boolean exists = pageServices.exists(pageDTO.getId());
+        pageService.deletePage(pageDTO.getId());
+        boolean exists = pageService.exists(pageDTO.getId());
 
         // Assert
         assertFalse(exists, "Error: page persisted after deletion");

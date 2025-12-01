@@ -1,6 +1,7 @@
 package com.calcmadeeasy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -20,8 +21,6 @@ import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
-import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.services.PageServices;
 import com.calcmadeeasy.services.SectionServices;
 
@@ -37,26 +36,22 @@ public class SectionServiceTest {
   @Autowired
   private PageServices pageService;
 
-  private Page page;
-  private Section section;
   private PageDTO pageDTO;
   private SectionDTO sectionDTO;
 
   @BeforeEach
   public void setup() {
-    page = Page.builder()
-        .content("content (test)")
-        .build();
-    PageResponseDTO pageResponse = pageService.createPage(new CreatePageDTO(page));
+
+    CreatePageDTO pdto = new CreatePageDTO();
+    pdto.setContent("CONTENT");
+    PageResponseDTO pageResponse = pageService.createPage(pdto);
     pageDTO = pageService.getPageDTO(pageResponse.getId());
 
-    section = Section.builder()
-        .description("description (test)")
-        .title("title (test)")
-        .pages(page)
-        .build();
-
-    SectionResponseDTO response = sectionService.createSection(new CreateSectionDTO(section));
+    CreateSectionDTO cdto = new CreateSectionDTO();
+    cdto.setDescription("DESCRIPTION");
+    cdto.setTitle("TITLE");
+    cdto.setChapterId(new UUID(0, 0));
+    SectionResponseDTO response = sectionService.createSection(cdto);
     sectionDTO = sectionService.getSectionDTO(response.getId());
   }
 
@@ -78,18 +73,18 @@ public class SectionServiceTest {
 
     String err = "Error: section(s) was not saved properly ";
     assertEquals(1, size, err);
-    assertEquals(true, retrieved1, err);
+    assertTrue(retrieved1, err);
   }
 
   // UPDATE
 
   @Test
   public void testAddPage() {
-    List<Page> ogPages = new ArrayList<>();
-    ogPages.add(page);
+    List<PageDTO> ogPages = new ArrayList<>();
+    ogPages.add(pageDTO);
 
-    sectionService.addPage(sectionDTO.getId(), pageDTO.getId());
-    int size = sectionService.getAllSections().size();
+    SectionDTO updated = sectionService.addPage(sectionDTO.getId(), pageDTO.getId());
+    int size = updated.getPages().size();
 
     String err = "Error: section was not saved properly";
     assertNotEquals(ogPages.size(), size);
@@ -106,7 +101,7 @@ public class SectionServiceTest {
     boolean removed = sectionService.exists(id);
 
     String err = "Error: section persists upon deletion";
-    assertEquals(false, removed, err);
+    assertFalse(removed, err);
   }
 
   @Test

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.calcmadeeasy.dto.Tags.CreateTagDTO;
 import com.calcmadeeasy.dto.Tags.TagDTO;
+import com.calcmadeeasy.dto.Tags.UpdateTagDTO;
 import com.calcmadeeasy.services.TagServices;
 
 @RestController
@@ -53,7 +54,7 @@ public class TagController {
   @PutMapping("/{tagId}")
   public ResponseEntity<TagDTO> updateTag(
       @PathVariable UUID tagId,
-      @RequestBody TagDTO request) {
+      @RequestBody UpdateTagDTO request) {
         TagDTO updated = tagService.updateTag(tagId, request);
         return ResponseEntity.ok(updated);
   }

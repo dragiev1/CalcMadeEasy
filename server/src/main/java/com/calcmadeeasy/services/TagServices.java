@@ -2,6 +2,7 @@ package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.dto.Tags.CreateTagDTO;
 import com.calcmadeeasy.dto.Tags.TagDTO;
+import com.calcmadeeasy.dto.Tags.UpdateTagDTO;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.TagRepo;
 
@@ -81,7 +82,7 @@ public class TagServices {
 
   // ==================== UPDATE ====================
 
-  public TagDTO updateTag(UUID tagId, TagDTO request) {
+  public TagDTO updateTag(UUID tagId, UpdateTagDTO request) {
     if (request.getDifficulty() > 1 || request.getDifficulty() < 0)
       throw new IllegalArgumentException("Difficulty must be a decimal between 0 and 1");
 
@@ -89,8 +90,8 @@ public class TagServices {
 
     if (request.getDifficulty() != null)
       tag.setDifficulty(request.getDifficulty());
-    if (request.getTagName() != null)
-      tag.setTagName(request.getTagName());
+    if (request.getName() != null)
+      tag.setTagName(request.getName());
 
     repo.save(tag);
 

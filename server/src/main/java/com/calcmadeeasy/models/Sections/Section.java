@@ -118,6 +118,10 @@ public class Section {
     return pages;
   }
 
+  public UUID getChapterId() {
+    return chapter != null ? chapter.getId() : null;
+  }
+
   public Instant getUpdatedAt() {
     return updatedAt;
   }

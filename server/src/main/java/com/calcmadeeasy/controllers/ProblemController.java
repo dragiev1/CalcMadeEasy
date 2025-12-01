@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
+import com.calcmadeeasy.dto.Problems.UpdateProblemDTO;
 import com.calcmadeeasy.services.ProblemServices;
 
 @RestController
@@ -53,7 +54,7 @@ public class ProblemController {
   @PutMapping("/{problemId}")
   public ResponseEntity<ProblemDTO> updateProblem(
       @PathVariable UUID problemId,
-      @RequestBody CreateProblemDTO request) {
+      @RequestBody UpdateProblemDTO request) {
     ProblemDTO p = problemService.updateProblem(problemId, request);
     return ResponseEntity.ok(p);
   }

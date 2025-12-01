@@ -18,10 +18,12 @@ import com.calcmadeeasy.repository.SectionRepo;
 public class SectionServices {
   private final SectionRepo repo;
   private PageServices pageService;
+  private ChapterServices chapterService;
 
-  public SectionServices(SectionRepo repo, PageServices pageService) {
+  public SectionServices(SectionRepo repo, PageServices pageService, ChapterServices chapterService) {
     this.repo = repo;
     this.pageService = pageService;
+    this.chapterService = chapterService;
   }
 
   // ==================== CREATE ====================
@@ -32,6 +34,8 @@ public class SectionServices {
         .description(section.getDescription())
         .build();
 
+    s.setChapter(chapterService.getChapter(section.getChapterId()));
+    
     repo.save(s);
 
     return new SectionResponseDTO(s);
@@ -48,13 +52,13 @@ public class SectionServices {
   // ==================== READ ====================
 
   public SectionDTO getSectionDTO(UUID sectionId) {
-    Section s = repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is "));
+    Section s = repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
 
     return new SectionDTO(s);
   }
 
   public Section getSectionEntity(UUID sectionId) {
-    return repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is "));
+    return repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
   }
 
   public List<SectionDTO> getAllSections() {

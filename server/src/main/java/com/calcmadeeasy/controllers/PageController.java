@@ -17,6 +17,7 @@ import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageProblemDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
+import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
 import com.calcmadeeasy.services.PageServices;
 
 @RestController
@@ -55,7 +56,7 @@ public class PageController {
   @PutMapping("/{pageId}")
   public ResponseEntity<PageDTO> updatePage(
     @PathVariable UUID pageId, 
-    @RequestBody CreatePageDTO request) {
+    @RequestBody UpdatePageDTO request) {
       PageDTO p = pageService.updatePage(pageId, request);
       return ResponseEntity.ok(p);
   }

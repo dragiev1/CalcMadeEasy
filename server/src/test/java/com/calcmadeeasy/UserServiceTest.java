@@ -14,20 +14,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
-import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
+import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
+import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
-import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.services.ChapterServices;
 import com.calcmadeeasy.services.CourseServices;
 import com.calcmadeeasy.services.PageServices;
-import com.calcmadeeasy.services.ProblemServices;
 import com.calcmadeeasy.services.SectionServices;
 import com.calcmadeeasy.services.UserProgressService;
 import com.calcmadeeasy.services.UserServices;
@@ -51,7 +50,6 @@ public class UserServiceTest {
   @Autowired
   private PageServices pageService;
   @Autowired
-  private ProblemServices problemService;
 
   private User user;
   private UserProgress up;
@@ -63,26 +61,19 @@ public class UserServiceTest {
 
   @BeforeEach
   public void setup() {
-    problem = Problem.builder()
-        .description("description")
-        .points(3)
-        .solution("solution")
-        .isChallenge(false)
-        .solutionType(ProblemSolutionType.EXPRESSION)
-        .build();
-    problemService.createProblem(new CreateProblemDTO(problem));
 
-    page = Page.builder()
-        .content("content")
-        .build();
-    pageService.createPage(new CreatePageDTO(page));
+    CreatePageDTO padto = new CreatePageDTO();
+    padto.setContent("CONTENT");
+    PageResponseDTO pageResponse = pageService.createPage(padto);
+    page = pageService.getPageEntity(pageResponse.getId());
 
-    section = Section.builder()
-        .description("description")
-        .pages(page)
-        .title("title")
-        .build();
-    sectionService.createSection(new CreateSectionDTO(section));
+    CreateSectionDTO cdto = new CreateSectionDTO();
+    cdto.setDescription("DESCRIPTION");
+    cdto.setTitle("TITLE");
+    cdto.setChapterId(new UUID(0, 0));
+    SectionResponseDTO response = sectionService.createSection(cdto);
+    section = sectionService.getSectionEntity(response.getId());
+    sectionService.addPage(section.getId(), page.getId());
 
     chapter = Chapter.builder()
         .description("description")
