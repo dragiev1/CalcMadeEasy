@@ -72,7 +72,6 @@ public class UserServiceTest {
     CreateSectionDTO sdto = new CreateSectionDTO();
     sdto.setDescription("DESCRIPTION");
     sdto.setTitle("TITLE");
-    sdto.setChapterId(new UUID(0, 0));
     SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
     section = sectionService.getSectionEntity(sectionResponse.getId());
     sectionService.addPage(section.getId(), page.getId());

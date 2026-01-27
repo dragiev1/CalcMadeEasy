@@ -2,11 +2,8 @@ package com.calcmadeeasy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,10 +44,10 @@ public class SectionServiceTest {
     PageResponseDTO pageResponse = pageService.createPage(pdto);
     pageDTO = pageService.getPageDTO(pageResponse.getId());
 
+
     CreateSectionDTO cdto = new CreateSectionDTO();
     cdto.setDescription("DESCRIPTION");
     cdto.setTitle("TITLE");
-    cdto.setChapterId(new UUID(0, 0));
     SectionResponseDTO response = sectionService.createSection(cdto);
     sectionDTO = sectionService.getSectionDTO(response.getId());
   }
@@ -80,15 +77,13 @@ public class SectionServiceTest {
 
   @Test
   public void testAddPage() {
-    List<PageDTO> ogPages = new ArrayList<>();
-    ogPages.add(pageDTO);
-
     SectionDTO updated = sectionService.addPage(sectionDTO.getId(), pageDTO.getId());
     int size = updated.getPages().size();
 
     String err = "Error: section was not saved properly";
-    assertNotEquals(ogPages.size(), size);
-    assertEquals(pageDTO.getId(), sectionService.getSectionEntity(sectionDTO.getId()).getPages().get(0).getId(), err);
+    assertEquals(1, size, err);
+    assertEquals(1, updated.getPages().get(0).getPosition());
+    assertEquals(pageDTO.getId(), updated.getPages().get(0).getId(), err);
   }
 
   // DELETE
@@ -106,6 +101,8 @@ public class SectionServiceTest {
 
   @Test
   public void testRemovePage() {
+    sectionService.addPage(sectionDTO.getId(), pageDTO.getId());
+
     sectionService.removePage(sectionDTO.getId(), pageDTO.getId());
     boolean exist = sectionService.getSectionEntity(sectionDTO.getId()).getPages().isEmpty();
 

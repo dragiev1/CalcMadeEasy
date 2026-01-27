@@ -50,7 +50,6 @@ public class ChapterServiceTest {
     CreateSectionDTO sdto = new CreateSectionDTO();
     sdto.setDescription("section description");
     sdto.setTitle("section title");
-    sdto.setChapterId(chapter.getId());
     SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
     section = sectionService.getSectionEntity(sectionResponse.getId());
 

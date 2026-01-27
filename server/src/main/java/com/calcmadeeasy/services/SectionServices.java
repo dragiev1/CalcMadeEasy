@@ -90,7 +90,7 @@ public class SectionServices {
   public SectionDTO addPage(UUID sectionId, UUID pageId) {
     Section s = getSectionEntity(sectionId);
     Page p = pageService.getPageEntity(pageId);
-    p.setPosition(pageService.getPagesBySection(sectionId).size() + 1);
+    p.setPosition(s.getPages().size() + 1);
     s.getPages().add(p);
 
     repo.save(s);
@@ -101,14 +101,9 @@ public class SectionServices {
   // ==================== DELETE ====================
 
   public void deleteSection(UUID sectionId) {
-    boolean exists = exists(sectionId);
-    if (!exists)
-      throw new IllegalArgumentException("Section does not exist, cannot remove");
-
     repo.deleteById(sectionId);
 
-    if (exists)
-      throw new IllegalArgumentException("Section was found but was not deleted");
+    if(exists(sectionId)) throw new IllegalArgumentException("Section persists after deletion");
   }
 
   public SectionDTO removePage(UUID sectionId, UUID pageId) {

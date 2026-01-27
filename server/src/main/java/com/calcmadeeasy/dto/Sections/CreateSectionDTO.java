@@ -1,13 +1,10 @@
 package com.calcmadeeasy.dto.Sections;
 
-import java.util.UUID;
-
 
 // Inbound only.
 public class CreateSectionDTO {
   private String title;
   private String description;
-  private UUID chapterId;
 
   public CreateSectionDTO() {}
 
@@ -21,10 +18,6 @@ public class CreateSectionDTO {
     return title;
   }
 
-  public UUID getChapterId() {
-    return chapterId;
-  }
-
 
   // Setters
 
@@ -36,8 +29,5 @@ public class CreateSectionDTO {
     this.title = title;
   }
 
-  public void setChapterId(UUID chapterId) {
-    this.chapterId = chapterId;
-  }
   
 }
