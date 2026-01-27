@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
+import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
@@ -67,20 +69,20 @@ public class UserServiceTest {
     PageResponseDTO pageResponse = pageService.createPage(padto);
     page = pageService.getPageEntity(pageResponse.getId());
 
-    CreateSectionDTO cdto = new CreateSectionDTO();
-    cdto.setDescription("DESCRIPTION");
-    cdto.setTitle("TITLE");
-    cdto.setChapterId(new UUID(0, 0));
-    SectionResponseDTO response = sectionService.createSection(cdto);
-    section = sectionService.getSectionEntity(response.getId());
+    CreateSectionDTO sdto = new CreateSectionDTO();
+    sdto.setDescription("DESCRIPTION");
+    sdto.setTitle("TITLE");
+    sdto.setChapterId(new UUID(0, 0));
+    SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
+    section = sectionService.getSectionEntity(sectionResponse.getId());
     sectionService.addPage(section.getId(), page.getId());
 
-    chapter = Chapter.builder()
-        .description("description")
-        .title("title")
-        .sections(section)
-        .build();
-    chapterService.createChapter(chapter);
+    CreateChapterDTO chdto = new CreateChapterDTO();
+    chdto.setDescription("CHAPTER DESCRIPTION");
+    chdto.setTitle("CHAPTER TITLE");
+    ChapterResponseDTO chapterResponse = chapterService.createChapter(chdto);
+    chapter = chapterService.getChapterEntity(chapterResponse.getId());
+    chapterService.addSection(chapter.getId(), section.getId());
 
     course = Course.builder()
         .description("description1")

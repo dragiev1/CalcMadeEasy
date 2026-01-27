@@ -35,7 +35,7 @@ public class CalcMadeEasyApplication {
                                  System.out.println("Database Product Name: " + conn.getMetaData().getDatabaseProductName());
                                  System.out.println("Database Product Version: " + conn.getMetaData().getDatabaseProductVersion());
                         } catch (SQLException e) {
-                                System.err.println("Failed to connect to database!");
+                                System.err.println("Failed to connect to database");
                                 e.printStackTrace();
                         }
 
