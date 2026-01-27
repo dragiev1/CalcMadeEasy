@@ -65,12 +65,15 @@ public class ChapterServices {
   // ==================== UPDATE ====================
 
   public ChapterDTO updateChapter(UUID chapterId, UpdateChapterDTO request) {
-    if(!exists(chapterId)) throw new IllegalArgumentException("Chapter does not exist");
+    if (!exists(chapterId))
+      throw new IllegalArgumentException("Chapter does not exist");
 
     Chapter c = getChapterEntity(chapterId);
 
-    if(request.getDescription() != null) c.setDescription(request.getDescription());
-    if(request.getTitle() != null) c.setTitle(request.getTitle());
+    if (request.getDescription() != null)
+      c.setDescription(request.getDescription());
+    if (request.getTitle() != null)
+      c.setTitle(request.getTitle());
 
     repo.save(c);
     return new ChapterDTO(c);
@@ -78,7 +81,8 @@ public class ChapterServices {
 
   public ChapterDTO addSection(UUID chapterId, UUID sectionId) {
     Chapter c = getChapterEntity(chapterId);
-    Section s = sectionRepo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
+    Section s = sectionRepo.findById(sectionId)
+        .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
     s.setChapter(c);
     c.addSection(s);
     repo.save(c);

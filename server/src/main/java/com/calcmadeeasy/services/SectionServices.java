@@ -18,12 +18,10 @@ import com.calcmadeeasy.repository.SectionRepo;
 public class SectionServices {
   private final SectionRepo repo;
   private PageServices pageService;
-  private ChapterServices chapterService;
 
   public SectionServices(SectionRepo repo, PageServices pageService, ChapterServices chapterService) {
     this.repo = repo;
     this.pageService = pageService;
-    this.chapterService = chapterService;
   }
 
   // ==================== CREATE ====================
@@ -33,8 +31,6 @@ public class SectionServices {
         .title(section.getTitle())
         .description(section.getDescription())
         .build();
-
-    s.setChapter(chapterService.getChapterEntity(section.getChapterId()));
     
     repo.save(s);
 
