@@ -58,8 +58,6 @@ public class UserProgress {
 
   // No-args constructor for JPA
   public UserProgress() {
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   public UserProgress(User user, Page page, Problem problem) {
@@ -69,12 +67,6 @@ public class UserProgress {
     this.attempts = 0;
     this.solved = false;
     this.pointsEarned = 0;
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
-  }
-
-  public void touch() {
-    this.updatedAt = Instant.now();
   }
 
   public UUID getId() {
@@ -123,7 +115,6 @@ public class UserProgress {
       throw new IllegalArgumentException("Problem was already solved!");
 
     this.attempts++;
-    touch();
     this.lastAttempted = this.updatedAt;
 
     if (isCorrect && !solved) {

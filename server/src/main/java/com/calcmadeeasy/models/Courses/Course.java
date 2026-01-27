@@ -39,15 +39,12 @@ public class Course {
 
   public Course() {
     this.chapters = new ArrayList<>();
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   public static class Builder {
     private String title;
     private String description;
     private List<Chapter> chapters = new ArrayList<>();
-    private Instant createdAt;
 
     public Builder title(String title) {
       this.title = title;
@@ -61,11 +58,6 @@ public class Course {
 
     public Builder chapters(Chapter... chapters) {
       this.chapters = new ArrayList<>(Arrays.asList(chapters));
-      return this;
-    }
-
-    public Builder createdAt(Instant createdAt) {
-      this.createdAt = createdAt;
       return this;
     }
 
@@ -83,8 +75,6 @@ public class Course {
     this.title = b.title;
     this.description = b.description;
     this.chapters = b.chapters == null ? new ArrayList<>() : new ArrayList<>(b.chapters);
-    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
-    this.updatedAt = this.createdAt;
   }
 
   public UUID getId() {
@@ -124,18 +114,12 @@ public class Course {
 
   // Setters
 
-  public void touch() {
-    this.updatedAt = Instant.now();
-  }
-
   public void setTitle(String newTitle) {
     this.title = newTitle;
-    touch();
   }
 
   public void setDescription(String newDescrip) {
     this.description = newDescrip;
-    touch();
   }
 
   public void addChapter(Chapter chapter) {
@@ -146,24 +130,17 @@ public class Course {
   }
 
   public void addChapters(Chapter... chapters) {
-    if (chapters == null || chapters.length == 0) {
-      System.out.println("Cannot add null or empty chapters.");
-      return;
-    }
-
-    if (this.chapters == null)
-      this.chapters = new ArrayList<>();
-
+    if (chapters == null || chapters.length == 0) 
+      throw new IllegalArgumentException("Cannot add null or empty chapters");
+    
     for (Chapter c : chapters)
       this.chapters.add(c);
-
-    System.out.println("Added chapter(s) successfully");
   }
 
   // Removers
   public void removeChapterById(UUID id) {
     for (Chapter c : chapters) {
-      if (c.getId() == id) {
+      if (c.getId().equals(id)) {
         this.chapters.remove(c);
         System.out.println("Removed " + c.toString() + " from Chapters list");
         return;

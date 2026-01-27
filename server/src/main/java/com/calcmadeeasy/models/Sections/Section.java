@@ -49,15 +49,12 @@ public class Section {
   // No-argument constructor for JPA
   public Section() {
     this.pages = new ArrayList<>();
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   public static class Builder {
     private String description;
     private String title;
     private List<Page> pages;
-    private Instant createdAt;
 
     public Builder description(String description) {
       this.description = description;
@@ -71,11 +68,6 @@ public class Section {
 
     public Builder pages(Page... pages) {
       this.pages = new ArrayList<>(Arrays.asList(pages));
-      return this;
-    }
-
-    public Builder createdAt(Instant createdAt) {
-      this.createdAt = createdAt;
       return this;
     }
 
@@ -93,8 +85,6 @@ public class Section {
     this.description = b.description;
     this.title = b.title;
     this.pages = b.pages == null ? new ArrayList<>() : new ArrayList<>(b.pages);
-    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
-    this.updatedAt = this.createdAt;
   }
 
   // Getters
@@ -130,32 +120,24 @@ public class Section {
     return createdAt;
   }
 
-  public void touch() {
-    this.updatedAt = Instant.now();
-  }
-
   // Setters
 
   public void setDescription(String newDescription) {
     this.description = newDescription;
-    touch();
   }
 
   public void setTitle(String newTitle) {
     this.title = newTitle;
-    touch();
   }
 
   public void setPage(Page newPage) {
     this.pages.add(Objects.requireNonNull(newPage));
-    touch();
   }
 
   public void setPageList(Page... newPages) {
     this.pages = new ArrayList<Page>();
     for (Page p : newPages)
       this.pages.add(p);
-    touch();
   }
 
   public void setChapter(Chapter chapter) {
@@ -174,7 +156,6 @@ public class Section {
         return;
       }
     }
-    touch();
   }
 
   // Helper Method

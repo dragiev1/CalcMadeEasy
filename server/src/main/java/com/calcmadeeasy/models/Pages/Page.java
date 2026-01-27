@@ -49,14 +49,11 @@ public class Page {
 
   public Page() {
     this.problems = new ArrayList<>();
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   public static class Builder {
     private String content;
     private List<PageProblem> problems;
-    private Instant createdAt;
     private Integer position;
 
     public Builder content(String content) {
@@ -66,11 +63,6 @@ public class Page {
 
     public Builder position(Integer position) {
       this.position = position;
-      return this;
-    }
-
-    public Builder createdAt(Instant createdAt) {
-      this.createdAt = createdAt;
       return this;
     }
 
@@ -84,12 +76,6 @@ public class Page {
     this.problems = b.problems == null ? new ArrayList<>() : new ArrayList<>(b.problems);
     this.problemQuantity = 0;
     this.position = b.position;
-    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
-    this.updatedAt = this.createdAt;
-  }
-
-  public void touch() {
-    this.updatedAt = Instant.now();
   }
 
   // Getters
@@ -174,14 +160,12 @@ public class Page {
 
   public void setContent(String newContent) {
     this.content = newContent;
-    touch();
   }
 
   public void addProblem(Problem problem, ProblemType type) {
     PageProblem pp = new PageProblem(this, problem, type);
     problems.add(pp);
     problemQuantity++;
-    touch();
   }
 
   public void setSection(Section section) {

@@ -48,15 +48,12 @@ public class Chapter {
 
   public Chapter() {
     this.sections = new ArrayList<>();
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   public static class Builder {
     private String description;
     private String title;
     private List<Section> sections;
-    private Instant createdAt;
 
     public Builder description(String description) {
       this.description = description;
@@ -70,11 +67,6 @@ public class Chapter {
 
     public Builder sections(Section... sections) {
       this.sections = new ArrayList<>(Arrays.asList(sections));
-      return this;
-    }
-
-    public Builder createdAt(Instant createdAt) {
-      this.createdAt = createdAt;
       return this;
     }
 
@@ -92,12 +84,6 @@ public class Chapter {
     this.description = b.description;
     this.title = b.title;
     this.sections = b.sections == null ? new ArrayList<Section>() : new ArrayList<Section>(b.sections);
-    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
-    this.updatedAt = this.createdAt;
-  }
-
-  public void touch() {
-    this.updatedAt = Instant.now();
   }
 
   // Getters
@@ -128,12 +114,10 @@ public class Chapter {
   // Setters
   public void setDescription(String newDescription) {
     this.description = newDescription;
-    touch();
   }
 
   public void setTitle(String newTitle) {
     this.title = newTitle;
-    touch();
   }
 
   // Add one section to the sections list.

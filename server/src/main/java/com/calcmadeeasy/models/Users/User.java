@@ -56,8 +56,6 @@ public class User {
   public User() {
     this.userProgress = new HashSet<>();
     this.courses = new ArrayList<>();
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   // Inner class for building the User object
@@ -67,8 +65,6 @@ public class User {
     private String email;
     private String profilePicUrl;
     private List<Course> courses = new ArrayList<>();
-    private Instant createdAt;
-    private Instant updatedAt;
 
     public Builder firstName(String firstName) {
       this.firstName = firstName;
@@ -96,16 +92,6 @@ public class User {
       return this;
     }
 
-    public Builder createdAt(Instant createdAt) {
-      this.createdAt = createdAt;
-      return this;
-    }
-
-    public Builder updatedAt(Instant updatedAt) {
-      this.updatedAt = updatedAt;
-      return this;
-    }
-
     public User build() {
       return new User(this);
     }
@@ -118,8 +104,6 @@ public class User {
     this.profilePicUrl = b.profilePicUrl;
     this.courses = b.courses;
     this.numCourseTaking = b.courses.size();
-    this.createdAt = b.createdAt;
-    this.updatedAt = b.updatedAt;
   }
 
   // Getters
@@ -164,9 +148,6 @@ public class User {
   }
 
   // Setters
-  public void touch() {
-    this.updatedAt = Instant.now();
-  }
 
   public void setCourseQuantity(int newQuantity) {
     this.numCourseTaking = newQuantity;
@@ -179,12 +160,10 @@ public class User {
       numCourseTaking++;
 
     this.courses.add(newCourse);
-    touch();
   }
 
   public void setProfilePicUrl(String newUrl) {
     this.profilePicUrl = newUrl;
-    touch();
   }
 
   public void setUserProgress(Page page, Problem problem) {

@@ -60,8 +60,6 @@ public class Problem {
   // No-argument constructor for JPA.
   public Problem() {
     this.tags = new HashSet<>();
-    this.createdAt = Instant.now();
-    this.updatedAt = this.createdAt;
   }
 
   // Builder inner class
@@ -72,7 +70,6 @@ public class Problem {
     private Boolean isChallenge;
     private Set<Tag> tags = new HashSet<>();
     private Integer points;
-    private Instant createdAt;
 
     public Builder description(String description) {
       this.description = description;
@@ -104,11 +101,6 @@ public class Problem {
       return this;
     }
 
-    public Builder createdAt(Instant createdAt) {
-      this.createdAt = createdAt;
-      return this;
-    }
-
     public Problem build() {
       return new Problem(this);
     }
@@ -121,8 +113,6 @@ public class Problem {
     this.isChallenge = b.isChallenge;
     this.tags = b.tags == null ? new HashSet<>() : b.tags;
     this.points = b.points;
-    this.createdAt = b.createdAt == null ? Instant.now() : b.createdAt;
-    this.updatedAt = this.createdAt;
   }
 
   // Getters
@@ -169,32 +159,24 @@ public class Problem {
     return updatedAt;
   }
 
-  public void touch() {
-    this.updatedAt = Instant.now();
-  }
-
   // Setters
 
   public void setDescription(String newDescription) {
     this.description = Objects.requireNonNull(newDescription);
-    touch();
   }
 
   public void setSolution(String solution) {
     this.solution = solution;
-    touch();
   }
 
   public void setIsChallenge(Boolean trueOrFalse) {
     this.isChallenge = trueOrFalse;
-    touch();
   }
 
   public void setPoints(int newPoints) {
     if (newPoints < 0)
       throw new IllegalArgumentException("Points cannot be negative!");
     this.points = newPoints;
-    touch();
   }
 
   public void setSolutionType(ProblemSolutionType newSolutionType) {
@@ -203,19 +185,17 @@ public class Problem {
       return;
     }
     this.solutionType = Objects.requireNonNull(newSolutionType);
-    touch();
   }
 
   public void addTag(Tag newTag) {
     this.tags.add(newTag);
-    touch();
   }
 
   // Removers
   public void removeTag(Tag tag) {
     if (this.tags.contains(tag)) {
       this.tags.remove(tag);
-      touch();
+
       return;
     } else
       System.out.println(tag + " not found in list.");
