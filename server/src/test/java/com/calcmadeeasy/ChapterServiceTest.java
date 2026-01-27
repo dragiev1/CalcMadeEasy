@@ -13,9 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.calcmadeeasy.dto.Chapters.ChapterDTO;
+import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
+import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
+import com.calcmadeeasy.dto.Chapters.UpdateChapterDTO;
+import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
+import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.services.ChapterServices;
+import com.calcmadeeasy.services.SectionServices;
 
 import jakarta.transaction.Transactional;
 
@@ -25,41 +32,34 @@ import jakarta.transaction.Transactional;
 public class ChapterServiceTest {
   @Autowired
   private ChapterServices chapterService;
+  @Autowired
+  private SectionServices sectionService;
 
   private Chapter chapter;
-  private Chapter chapter2;
-  private Section section1;
-  private Section section2;
+  private Section section;
 
   @BeforeEach
   public void setup() {
-    section1 = Section.builder()
-        .description("description1")
-        .title("title1")
-        .build();
-    section2 = Section.builder()
-        .description("description2")
-        .title("title2")
-        .build();
-    chapter = Chapter.builder()
-        .description("description")
-        .title("title")
-        .sections(section1)
-        .build();
-    chapter2 = Chapter.builder()
-        .description("description2")
-        .title("title2")
-        .build();
+    CreateSectionDTO sdto = new CreateSectionDTO();
+    sdto.setDescription("section description");
+    sdto.setTitle("section title");
+    SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
+    section = sectionService.getSectionEntity(sectionResponse.getId());
 
-    chapterService.createChapter(chapter);
-    chapterService.createChapter(chapter2);
+
+    CreateChapterDTO cdto = new CreateChapterDTO();
+    cdto.setDescription("chapter description");
+    cdto.setTitle("chapter title");
+    ChapterResponseDTO chapterResponse = chapterService.createChapter(cdto);
+    chapter = chapterService.getChapterEntity(chapterResponse.getId());
+    chapterService.addSection(chapter.getId(), section.getId());
+  
   }
 
   // Create
 
   @Test
   public void testCreateChapter() {
-    chapterService.createChapter(chapter);
     boolean exists = chapterService.exists(chapter.getId());
     assertTrue(exists);
   }
@@ -68,7 +68,7 @@ public class ChapterServiceTest {
 
   @Test
   public void testGetChapter() {
-    Chapter c = chapterService.getChapter(chapter.getId());
+    Chapter c = chapterService.getChapterEntity(chapter.getId());
     assertEquals(c, chapter);
     System.out.println("Successfully retrieved chapter");
   }
@@ -85,36 +85,23 @@ public class ChapterServiceTest {
   // Update
 
   @Test
-  public void testUpdateDescription() {
-    String changed = "CHANGED";
-    chapterService.updateDescription(chapter.getId(), changed);
-    String newDesc = chapterService.getChapter(chapter.getId()).getDescription();
-
-    assertNotEquals("description", newDesc);
-    assertEquals(changed, newDesc);
+  public void testUpdateChapter() {
+    UpdateChapterDTO update = new UpdateChapterDTO();
+    update.setDescription("CHANGED");
+    update.setTitle("CHANGED");
+    ChapterDTO dto = chapterService.updateChapter(chapter.getId(), update);
+    String err = "Error: chapter was not updated correctly";
+    assertNotEquals("chapter description", dto.getDescription(), err);
+    assertNotEquals("chapter title", dto.getTitle(), err);
     System.out.println("Successfully updated the description");
   }
 
   @Test
-  public void testUpdateTitle() {
-    String changed = "CHANGED";
-    chapterService.updateTitle(chapter.getId(), changed);
-    String newTitle = chapterService.getChapter(chapter.getId()).getTitle();
-
-    assertEquals(changed, newTitle);
-    assertNotEquals("title", newTitle);
-    System.out.println("Successfully updated title");
-  }
-
-  @Test
   public void testAddSection() {
-    chapterService.addSection(chapter.getId(), section2);
-    Chapter updated = chapterService.getChapter(chapter.getId());
-    boolean added = updated.getSections().contains(section2);
-
+    boolean exists = chapter.getSections().isEmpty();
     String err = "Error: section did not append to chapter properly";
-    assertTrue(added, err);
-    assertNotEquals(section2, updated.getSections().get(0), err);
+    assertFalse(exists, err);
+    assertEquals(section, chapter.getSections().get(0), err);
     System.out.println("Successfully added new section");
   }
 
@@ -132,9 +119,9 @@ public class ChapterServiceTest {
   @Test
   public void testRemoveSection() {
     UUID cId = chapter.getId();
-    chapterService.removeSection(cId, section1.getId());
-    Chapter c = chapterService.getChapter(cId);
-    boolean exist = c.getSections().contains(section1);
+    chapterService.removeSection(cId, section.getId());
+    Chapter c = chapterService.getChapterEntity(cId);
+    boolean exist = c.getSections().contains(section);
     int size = c.getSections().size();
 
     assertFalse(exist, "Error: section persists in chapter, was not deleted");

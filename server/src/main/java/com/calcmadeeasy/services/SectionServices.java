@@ -34,7 +34,7 @@ public class SectionServices {
         .description(section.getDescription())
         .build();
 
-    s.setChapter(chapterService.getChapter(section.getChapterId()));
+    s.setChapter(chapterService.getChapterEntity(section.getChapterId()));
     
     repo.save(s);
 
