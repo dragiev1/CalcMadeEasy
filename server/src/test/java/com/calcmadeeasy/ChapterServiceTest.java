@@ -2,9 +2,9 @@ package com.calcmadeeasy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,20 +40,20 @@ public class ChapterServiceTest {
 
   @BeforeEach
   public void setup() {
-    CreateSectionDTO sdto = new CreateSectionDTO();
-    sdto.setDescription("section description");
-    sdto.setTitle("section title");
-    SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
-    section = sectionService.getSectionEntity(sectionResponse.getId());
-
 
     CreateChapterDTO cdto = new CreateChapterDTO();
     cdto.setDescription("chapter description");
     cdto.setTitle("chapter title");
     ChapterResponseDTO chapterResponse = chapterService.createChapter(cdto);
     chapter = chapterService.getChapterEntity(chapterResponse.getId());
-    chapterService.addSection(chapter.getId(), section.getId());
-  
+
+    CreateSectionDTO sdto = new CreateSectionDTO();
+    sdto.setDescription("section description");
+    sdto.setTitle("section title");
+    sdto.setChapterId(chapter.getId());
+    SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
+    section = sectionService.getSectionEntity(sectionResponse.getId());
+
   }
 
   // Create
@@ -70,7 +70,6 @@ public class ChapterServiceTest {
   public void testGetChapter() {
     Chapter c = chapterService.getChapterEntity(chapter.getId());
     assertEquals(c, chapter);
-    System.out.println("Successfully retrieved chapter");
   }
 
   @Test
@@ -78,8 +77,7 @@ public class ChapterServiceTest {
     int size = chapterService.getAllChapters().size();
 
     String err = "Error: number of chapters retrieved does not match expected";
-    assertEquals(2, size, err);
-    System.out.println("Successfully retrieved all chapters");
+    assertEquals(1, size, err);
   }
 
   // Update
@@ -87,45 +85,50 @@ public class ChapterServiceTest {
   @Test
   public void testUpdateChapter() {
     UpdateChapterDTO update = new UpdateChapterDTO();
-    update.setDescription("CHANGED");
-    update.setTitle("CHANGED");
+    String changed = "CHANGED";
+    update.setDescription(changed);
+    update.setTitle(changed);
     ChapterDTO dto = chapterService.updateChapter(chapter.getId(), update);
     String err = "Error: chapter was not updated correctly";
-    assertNotEquals("chapter description", dto.getDescription(), err);
-    assertNotEquals("chapter title", dto.getTitle(), err);
-    System.out.println("Successfully updated the description");
+    assertEquals(changed, dto.getDescription(), err);
+    assertEquals(changed, dto.getTitle(), err);
   }
 
   @Test
   public void testAddSection() {
-    boolean exists = chapter.getSections().isEmpty();
+    chapterService.addSection(chapter.getId(), section.getId());
+    List<Section> sections = chapterService.getChapterEntity(chapter.getId()).getSections();
+    boolean exists = sections.isEmpty();
     String err = "Error: section did not append to chapter properly";
     assertFalse(exists, err);
-    assertEquals(section, chapter.getSections().get(0), err);
-    System.out.println("Successfully added new section");
+    assertEquals(1, sections.size(), err);
+    assertEquals(section.getId(), sections.get(0).getId(), err);
   }
 
   @Test
   public void testRemoveChapter() {
     UUID ogId = chapter.getId();
+
     chapterService.removeChapter(ogId);
     boolean removed = chapterService.exists(ogId);
 
     String err = "Error: chapter persists after removal";
     assertFalse(removed, err);
-    System.out.println("Successfully removed chapter");
   }
 
   @Test
   public void testRemoveSection() {
+    chapterService.addSection(chapter.getId(), section.getId());
+    assertEquals(1, chapter.getSections().size());
     UUID cId = chapter.getId();
+
     chapterService.removeSection(cId, section.getId());
     Chapter c = chapterService.getChapterEntity(cId);
     boolean exist = c.getSections().contains(section);
     int size = c.getSections().size();
+    String err = "Error: section persists in chapter, was not deleted";
 
-    assertFalse(exist, "Error: section persists in chapter, was not deleted");
-    assertEquals(0, size);
-    System.out.println("Successfully removed section");
+    assertFalse(exist, err);
+    assertEquals(0, size, err);
   }
 }
