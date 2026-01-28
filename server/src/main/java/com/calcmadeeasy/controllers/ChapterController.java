@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +66,22 @@ public class ChapterController {
   ) {
     ChapterDTO c = chapterService.addSection(chapterId, sectionId);
     return ResponseEntity.ok(c);
+  }
+
+  // ---------------- REMOVE ----------------
+
+  @DeleteMapping("/{chapterId}/remove-section/{sectionId}")
+  public ResponseEntity<ChapterDTO> removeSection(
+    @PathVariable UUID chapterId, 
+    @PathVariable UUID sectionId) {
+    ChapterDTO c = chapterService.removeSection(chapterId, sectionId);
+    return ResponseEntity.ok(c);
+  } 
+
+  @DeleteMapping("/{chapterId}")
+  public ResponseEntity<Void> removeChapter(@PathVariable UUID chapterId) {
+    chapterService.removeChapter(chapterId);
+    return ResponseEntity.ok().build();
   }
 
 }

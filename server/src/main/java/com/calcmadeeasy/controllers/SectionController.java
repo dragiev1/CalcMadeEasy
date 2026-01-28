@@ -71,13 +71,13 @@ public class SectionController {
   // ---------------- DELETE ----------------
 
   @DeleteMapping("/{sectionId}")
-  public ResponseEntity<Void> deleteSection(@PathVariable UUID sectionId) {
-    sectionService.deleteSection(sectionId);
+  public ResponseEntity<Void> removeSection(@PathVariable UUID sectionId) {
+    sectionService.removeSection(sectionId);
     return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{sectionId}/remove-page/{pageId}")
-  public ResponseEntity<SectionDTO> deletePage(
+  public ResponseEntity<SectionDTO> removePage(
       @PathVariable UUID sectionId,
       @PathVariable UUID pageId) {
         SectionDTO s = sectionService.removePage(sectionId, pageId);

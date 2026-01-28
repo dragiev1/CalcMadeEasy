@@ -1,3 +1,40 @@
-GET http://localhost:8080/api/v1/chapter/
+### Create chapter
+POST http://localhost:8080/api/v1/chapters
 Content-Type: application/json
+
+{
+  "description": "NEW DESCRIPTION",
+  "title": "NEW TITLE",
+  "courseId": "2f08d30a-4a54-41f0-acd1-1c78fb5e8a43"
+}
+
+
+### Get all chapters
+GET http://localhost:8080/api/v1/chapters
+Content-Type: application/json
+
+### Get chapter by id
+GET http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99
+Content-Type: application/json
+
+### Update chapter
+PUT http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99
+Content-Type: application/json
+
+{
+  "description": "UPDATED DESCRIPTION",
+  "title": "UPDATED TITLE"
+}
+
+### Add section to chapter
+PUT http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99/add-section/1c01cf43-c0dd-4026-94a8-759d5c9570da
+Content-Type: application/json
+
+
+### Remove section from chapter
+DELETE http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99/remove-section/1c01cf43-c0dd-4026-94a8-759d5c9570da
+
+
+### Remove chapter
+DELETE http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99
 
