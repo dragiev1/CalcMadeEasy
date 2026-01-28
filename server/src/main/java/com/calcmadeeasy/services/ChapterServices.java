@@ -5,8 +5,10 @@ import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
 import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
 import com.calcmadeeasy.dto.Chapters.UpdateChapterDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
+import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.repository.ChapterRepo;
+import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
 import java.util.List;
@@ -16,10 +18,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChapterServices {
+  private final CourseRepo courseRepo;
   private final ChapterRepo repo;
   private final SectionRepo sectionRepo;
 
-  public ChapterServices(ChapterRepo repo, SectionRepo sectionRepo) {
+  public ChapterServices(CourseRepo courseRepo, ChapterRepo repo, SectionRepo sectionRepo) {
+    this.courseRepo = courseRepo;
     this.repo = repo;
     this.sectionRepo = sectionRepo;
   }
@@ -34,6 +38,9 @@ public class ChapterServices {
         .description(chapter.getDescription())
         .title(chapter.getTitle())
         .build();
+
+    Course co = courseRepo.findById(chapter.getCourseId()).orElseThrow(() -> new IllegalArgumentException("Could not find course to set inside chapter"));
+    c.setCourse(co);
 
     repo.save(c);
     return new ChapterResponseDTO(c);
@@ -95,14 +102,15 @@ public class ChapterServices {
     repo.deleteById(chapterId);
   }
 
-  public void removeSection(UUID chapterId, UUID sectionId) {
+  public ChapterDTO removeSection(UUID chapterId, UUID sectionId) {
     if (!exists(chapterId))
       throw new RuntimeException("Chapter does not exist");
     Chapter c = getChapterEntity(chapterId);
     boolean removed = c.getSections().removeIf(s -> s.getId().equals(sectionId));
     if (!removed)
-      throw new IllegalArgumentException("Section does not exist in Chapter, could not delete");
+      throw new IllegalArgumentException("Section does not exist in Chapter, could not remove");
     repo.save(c);
+    return new ChapterDTO(c);
   }
 
 }

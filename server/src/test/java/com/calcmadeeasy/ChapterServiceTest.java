@@ -125,7 +125,7 @@ public class ChapterServiceTest {
     Chapter c = chapterService.getChapterEntity(cId);
     boolean exist = c.getSections().contains(section);
     int size = c.getSections().size();
-    String err = "Error: section persists in chapter, was not deleted";
+    String err = "Error: section persists in chapter, was not removed";
 
     assertFalse(exist, err);
     assertEquals(0, size, err);

@@ -10,18 +10,23 @@ import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.dto.Sections.UpdateSectionDTO;
+import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
+import com.calcmadeeasy.repository.ChapterRepo;
+import com.calcmadeeasy.repository.PageRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
 @Service
 public class SectionServices {
+  private final ChapterRepo chapterRepo;
   private final SectionRepo repo;
-  private PageServices pageService;
+  private final PageRepo pageRepo;
 
-  public SectionServices(SectionRepo repo, PageServices pageService, ChapterServices chapterService) {
+  public SectionServices(ChapterRepo chapterRepo, SectionRepo repo, PageRepo pageRepo, ChapterServices chapterService) {
+    this.chapterRepo = chapterRepo;
     this.repo = repo;
-    this.pageService = pageService;
+    this.pageRepo = pageRepo;
   }
 
   // ==================== CREATE ====================
@@ -32,6 +37,9 @@ public class SectionServices {
         .description(section.getDescription())
         .build();
     
+    Chapter c = chapterRepo.findById(section.getChapterId()).orElseThrow(() -> new IllegalArgumentException("Cannot find chapter to assign section to"));
+    s.setChapter(c);
+
     repo.save(s);
 
     return new SectionResponseDTO(s);
@@ -89,7 +97,7 @@ public class SectionServices {
 
   public SectionDTO addPage(UUID sectionId, UUID pageId) {
     Section s = getSectionEntity(sectionId);
-    Page p = pageService.getPageEntity(pageId);
+    Page p = pageRepo.findById(pageId).orElseThrow(() -> new IllegalArgumentException("Page does not exist to add to section"));
     p.setPosition(s.getPages().size() + 1);
     s.getPages().add(p);
 
@@ -100,7 +108,7 @@ public class SectionServices {
 
   // ==================== DELETE ====================
 
-  public void deleteSection(UUID sectionId) {
+  public void removeSection(UUID sectionId) {
     repo.deleteById(sectionId);
 
     if(exists(sectionId)) throw new IllegalArgumentException("Section persists after deletion");

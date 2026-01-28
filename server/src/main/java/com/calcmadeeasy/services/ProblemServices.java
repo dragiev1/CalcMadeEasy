@@ -148,15 +148,15 @@ public class ProblemServices {
 
   // ==================== DELETE ====================
 
-  public void deleteProblem(UUID problemId) {
+  public void removeProblem(UUID problemId) {
     if (!exists(problemId))
-      throw new IllegalArgumentException("Problem to be deleted does not exist");
+      throw new IllegalArgumentException("Problem to be removed does not exist");
     repo.deleteById(problemId);
   }
 
-  public void deleteTagFromProblem(UUID tagId, UUID problemId) {
+  public void removeTagFromProblem(UUID tagId, UUID problemId) {
     if (!exists(problemId))
-      throw new IllegalArgumentException("Problem to be deleted does not exist");
+      throw new IllegalArgumentException("Problem to be removed does not exist");
     Problem p = getProblemEntity(problemId);
     boolean removed = p.getTags().removeIf(t -> t.getId().equals(tagId));
     if (!removed)

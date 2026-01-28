@@ -80,7 +80,7 @@ public class UserProgressService {
 
   /*
    * Resets user progress for one specfic problem on one page.
-   * Does not delete the object from DB
+   * Does not remove the object from DB
    */
   public void resetProgress(UUID upId) {
     if (!exists(upId))

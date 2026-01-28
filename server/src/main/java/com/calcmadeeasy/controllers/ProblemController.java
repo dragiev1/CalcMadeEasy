@@ -71,16 +71,16 @@ public class ProblemController {
   // ---------------- DELETE ----------------
 
   @DeleteMapping("/{problemId}")
-  public ResponseEntity<Void> deleteProblem(@PathVariable UUID problemId) {
-    problemService.deleteProblem(problemId);
+  public ResponseEntity<Void> removeProblem(@PathVariable UUID problemId) {
+    problemService.removeProblem(problemId);
     return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{problemId}/remove-tag/{tagId}")
-  public ResponseEntity<ProblemDTO> deleteTagFromProblem(
+  public ResponseEntity<ProblemDTO> removeTagFromProblem(
       @PathVariable UUID problemId,
       @PathVariable UUID tagId) {
-    problemService.deleteTagFromProblem(tagId, problemId);
+    problemService.removeTagFromProblem(tagId, problemId);
     ProblemDTO p = new ProblemDTO(problemService.getProblemEntity(problemId));
     return ResponseEntity.ok(p);
   }

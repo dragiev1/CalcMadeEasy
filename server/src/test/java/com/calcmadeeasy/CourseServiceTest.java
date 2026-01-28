@@ -117,7 +117,7 @@ public class CourseServiceTest {
     courseService.removeCourse(ogId);
     boolean exist = courseService.exists(ogId);
 
-    assertEquals(false, exist, "Error: course did not delete successfully");
+    assertEquals(false, exist, "Error: course did not remove successfully");
     System.out.println("Successfully removed course");
   }
 

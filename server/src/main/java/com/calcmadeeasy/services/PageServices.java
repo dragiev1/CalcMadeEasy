@@ -104,16 +104,16 @@ public class PageServices {
 
   // ==================== DELETE ====================
 
-  // DELETES the page from pages table.
-  public void deletePage(UUID pageId) {
+  // REMOVES the page from pages table.
+  public void removePage(UUID pageId) {
     if (!repo.existsById(pageId)) {
-      throw new RuntimeException("CANNOT DELETE - page not found with id: " + pageId);
+      throw new RuntimeException("CANNOT REMOVE - page not found with id: " + pageId);
     }
     repo.deleteById(pageId);
 
   }
 
-  public PageDTO deleteProblemFromPage(UUID pageId, UUID problemId) {
+  public PageDTO removeProblemFromPage(UUID pageId, UUID problemId) {
     Page page = getPageEntity(pageId);
     page.removeProblem(problemId);
 
@@ -121,7 +121,7 @@ public class PageServices {
     return new PageDTO(page);
   }
 
-  public PageDTO deleteAllProblems(UUID pageId) {
+  public PageDTO removeAllProblems(UUID pageId) {
     Page page = getPageEntity(pageId);
     page.removeAllProblems();
 

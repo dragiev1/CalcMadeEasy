@@ -67,7 +67,7 @@ public class UserController {
   // ---------------- DELETE ----------------
 
   @DeleteMapping("/{userId}")
-  public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
+  public ResponseEntity<Void> removeUser(@PathVariable UUID userId) {
     userService.removeUser(userId);
     return ResponseEntity.ok().build();
   }

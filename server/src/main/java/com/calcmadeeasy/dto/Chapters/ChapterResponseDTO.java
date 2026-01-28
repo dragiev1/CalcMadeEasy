@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
 
+// Outbound
 public class ChapterResponseDTO {
   private UUID id;
   private String description;

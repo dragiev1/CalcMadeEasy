@@ -82,8 +82,8 @@ public class PageServiceTest {
     // Delete
 
     @Test
-    public void testDeletePage() {
-        pageService.deletePage(pageDTO.getId());
+    public void testRemovePage() {
+        pageService.removePage(pageDTO.getId());
         boolean exists = pageService.exists(pageDTO.getId());
 
         // Assert

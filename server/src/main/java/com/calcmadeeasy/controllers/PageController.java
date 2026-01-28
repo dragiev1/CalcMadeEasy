@@ -71,23 +71,23 @@ public class PageController {
   // ---------------- DELETE ----------------
   
   @DeleteMapping("/{pageId}")
-  public ResponseEntity<Void> deletePage(@PathVariable UUID pageId) {
-    pageService.deletePage(pageId);
+  public ResponseEntity<Void> removePage(@PathVariable UUID pageId) {
+    pageService.removePage(pageId);
     return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{pageId}/problems/{problemId}")
-  public ResponseEntity<PageDTO> deleteProblemFromPage(
+  public ResponseEntity<PageDTO> removeProblemFromPage(
     @PathVariable UUID pageId,
     @PathVariable UUID problemId
   ) {
-    PageDTO p = pageService.deleteProblemFromPage(pageId, problemId);
+    PageDTO p = pageService.removeProblemFromPage(pageId, problemId);
     return ResponseEntity.ok(p);
   }
 
   @DeleteMapping("/{pageId}/problems/remove-all")
-  public ResponseEntity<PageDTO> deleteAllProblems(@PathVariable UUID pageId) {
-    PageDTO p = pageService.deleteAllProblems(pageId);
+  public ResponseEntity<PageDTO> removeAllProblems(@PathVariable UUID pageId) {
+    PageDTO p = pageService.removeAllProblems(pageId);
     return ResponseEntity.ok(p);
   }
 }

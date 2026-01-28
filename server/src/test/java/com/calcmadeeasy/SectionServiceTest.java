@@ -92,7 +92,7 @@ public class SectionServiceTest {
   public void testRemoveSection() {
     UUID id = sectionDTO.getId();
 
-    sectionService.deleteSection(id);
+    sectionService.removeSection(id);
     boolean removed = sectionService.exists(id);
 
     String err = "Error: section persists upon deletion";

@@ -100,9 +100,9 @@ public class TagServices {
 
   // ==================== DELETE ====================
 
-  public void deleteTagById(UUID tagId) {
+  public void removeTagById(UUID tagId) {
     if (!(repo.existsById(tagId)))
-      throw new RuntimeException("CANNOT DELETE - tag does not exist with id: " + tagId);
+      throw new RuntimeException("CANNOT REMOVE - tag does not exist with id: " + tagId);
     repo.deleteById(tagId);
   }
 

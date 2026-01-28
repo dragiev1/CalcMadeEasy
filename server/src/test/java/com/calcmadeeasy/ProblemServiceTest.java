@@ -139,17 +139,17 @@ public class ProblemServiceTest {
   // DELETION
 
   @Test
-  public void testDeleteProblem() {
+  public void testRemoveProblem() {
     UUID pId = testProblemDTO.getId();
 
-    problemService.deleteProblem(pId);
+    problemService.removeProblem(pId);
     boolean retrieved = problemService.exists(pId);
 
     assertEquals(false, retrieved, "Error: problem still exists after deletion");
   }
 
   @Test
-  public void testDeleteTagFromProblem() {
+  public void testRemoveTagFromProblem() {
     // Arrange
     problemService.addTag(problem1.getId(), tagEntity1.getId());
 

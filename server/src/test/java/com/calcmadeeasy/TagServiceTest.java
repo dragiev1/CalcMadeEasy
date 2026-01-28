@@ -95,12 +95,12 @@ public class TagServiceTest {
   // Delete
 
   @Test
-  public void testDeleteTagById() {
+  public void testRemoveTagById() {
     // Act
-    tagServices.deleteTagById(tagDTO.getId());
+    tagServices.removeTagById(tagDTO.getId());
     boolean exists = tagServices.exists(tagDTO.getId());
 
     // Assert
-    assertFalse(exists, "Error: tag was not deleted");
+    assertFalse(exists, "Error: tag was not removed");
   }
 }
