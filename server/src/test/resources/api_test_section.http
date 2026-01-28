@@ -11,9 +11,24 @@ Content-Type: application/json
 
 
 ### Get all existing sections
-POST http://localhost:8080/api/v1/sections
+GET http://localhost:8080/api/v1/sections
 Content-Type: application/json
 
 ### Get an existing section
-POST http://localhost:8080/api/v1/sections/
+GET http://localhost:8080/api/v1/sections/045522b9-833f-4bf7-bd0d-bc390704b94c
 Content-Type: application/json
+
+
+### Update a section
+PUT http://localhost:8080/api/v1/sections/aaab4afa-732b-4d45-a5ca-1f6f234aa762
+Content-Type: application/json
+
+{
+  "title": "UPDATED",
+  "description": "UPDATED"
+}
+
+### Add new page
+### PUT http://localhost:8080/api/v1/sections/aaab4afa-732b-4d45-a5ca-1f6f234aa762/add-page/
+
+
