@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemType;
 import com.calcmadeeasy.models.Sections.Section;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,6 +34,7 @@ public class Page {
 
   @ManyToOne(fetch = FetchType.LAZY) // Many pages belong to one section
   @JoinColumn(name = "section_id")
+  @JsonBackReference
   private Section section;
 
   private Integer position;

@@ -12,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,9 +36,11 @@ public class Chapter {
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Chapters in a one course.
   @JoinColumn(name = "course_id")
+  @JsonBackReference
   private Course course;
 
   @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Section> sections = new ArrayList<>();
 
   @CreationTimestamp
@@ -152,6 +156,9 @@ public class Chapter {
 
   public void setCourse(Course course) {
     this.course = course;
+    if (course != null && !course.getChapters().contains(this)) {
+      course.getChapters().add(this);
+    }
   }
 
   // Removers

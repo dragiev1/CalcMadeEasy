@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -28,6 +29,7 @@ public class Course {
   private String description;
 
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL) // Many chapters in one course.
+  @JsonManagedReference
   private List<Chapter> chapters;
 
   @CreationTimestamp

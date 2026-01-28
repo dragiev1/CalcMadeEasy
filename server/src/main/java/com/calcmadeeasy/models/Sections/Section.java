@@ -12,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Pages.Page;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,9 +36,11 @@ public class Section {
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Sections in a one chapter.
   @JoinColumn(name = "chapter_id")
+  @JsonBackReference
   private Chapter chapter;
 
   @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private List<Page> pages;
 
   @CreationTimestamp
