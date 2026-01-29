@@ -63,7 +63,7 @@ public class TagController {
 
   @DeleteMapping("/{tagId}")
   public ResponseEntity<Void> removeTag(@PathVariable UUID tagId) {
-    tagService.deleteTagById(tagId);
+    tagService.removeTagById(tagId);
     return ResponseEntity.ok().build();
   }
 }
