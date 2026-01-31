@@ -34,9 +34,7 @@ public class CourseServiceTest {
 
   @BeforeEach
   public void setup() {
-    chapter1 = Chapter.builder().description("description1").title("title1").build();
-    chapter2 = Chapter.builder().description("description2").title("title2").build();
-    course = Course.builder().description("description").title("title").chapters(chapter1).build();
+    
   }
 
   // Create

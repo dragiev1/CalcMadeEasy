@@ -82,14 +82,14 @@ public class PageServices {
 
   // ==================== UPDATE ====================
 
-  public PageDTO updatePage(UUID pageId, UpdatePageDTO request) {
+  public PageResponseDTO updatePage(UUID pageId, UpdatePageDTO request) {
     Page page = getPageEntity(pageId);
 
     if (request.getContent() != null)
       page.setContent(request.getContent());
 
     repo.save(page);
-    return new PageDTO(page);
+    return new PageResponseDTO(page);
   }
 
   public PageDTO addProblem(PageProblemDTO dto) {

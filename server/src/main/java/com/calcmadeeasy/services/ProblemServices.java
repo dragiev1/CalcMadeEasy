@@ -44,16 +44,6 @@ public class ProblemServices {
     return new ProblemResponseDTO(p);
   }
 
-  public ProblemDTO addTag(UUID problemId, UUID tagId) {
-    Problem p = getProblemEntity(problemId);
-    Tag tag = tagService.getTagEntity(tagId);
-
-    p.addTag(tag);
-    repo.save(p);
-
-    return new ProblemDTO(p);
-  }
-
   // ==================== READ ====================
 
   public List<Problem> getAllProblem() {
@@ -127,20 +117,30 @@ public class ProblemServices {
 
   // ==================== UPDATE ====================
 
-  public ProblemDTO updateProblem(UUID pId, UpdateProblemDTO request) {
+  public ProblemResponseDTO updateProblem(UUID pId, UpdateProblemDTO request) {
     Problem p = getProblemEntity(pId);
-    
-    if(request.getDescription() != null) 
+
+    if (request.getDescription() != null)
       p.setDescription(request.getDescription());
-    if(request.getSolution() != null) 
+    if (request.getSolution() != null)
       p.setSolution(request.getSolution());
-    if(request.getSolutionType() != null)
+    if (request.getSolutionType() != null)
       p.setSolutionType(request.getSolutionType());
-    if(request.getIsChallenge() != null)
+    if (request.getIsChallenge() != null)
       p.setIsChallenge(request.getIsChallenge());
-    if(request.getPoints() != null)
+    if (request.getPoints() != null)
       p.setPoints(request.getPoints());
 
+    repo.save(p);
+
+    return new ProblemResponseDTO(p);
+  }
+
+  public ProblemDTO addTag(UUID problemId, UUID tagId) {
+    Problem p = getProblemEntity(problemId);
+    Tag tag = tagService.getTagEntity(tagId);
+
+    p.addTag(tag);
     repo.save(p);
 
     return new ProblemDTO(p);

@@ -82,7 +82,7 @@ public class SectionServices {
 
   // ==================== UPDATE ====================
 
-  public SectionDTO updateSection(UUID sectionId, UpdateSectionDTO request) {
+  public SectionResponseDTO updateSection(UUID sectionId, UpdateSectionDTO request) {
     Section s = getSectionEntity(sectionId);
 
     if (request.getDescription() != null)
@@ -92,7 +92,7 @@ public class SectionServices {
 
     repo.save(s);
 
-    return new SectionDTO(s);
+    return new SectionResponseDTO(s);
   }
 
   public SectionDTO addPage(UUID sectionId, UUID pageId) {

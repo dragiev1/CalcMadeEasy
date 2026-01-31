@@ -13,10 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.calcmadeeasy.dto.Chapters.ChapterDTO;
 import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
 import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
 import com.calcmadeeasy.dto.Chapters.UpdateChapterDTO;
+import com.calcmadeeasy.dto.Courses.CourseResponseDTO;
+import com.calcmadeeasy.dto.Courses.CreateCourseDTO;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
@@ -45,12 +46,16 @@ public class ChapterServiceTest {
 
   @BeforeEach
   public void setup() {
-
+    CreateCourseDTO codto = new CreateCourseDTO();
+    codto.setDescription("course description");
+    codto.setTitle("course title");
+    CourseResponseDTO courseResponse = courseService.createCourse(codto);
+    course = courseService.getCourseEntity(courseResponse.getId());
 
     CreateChapterDTO cdto = new CreateChapterDTO();
     cdto.setDescription("chapter description");
     cdto.setTitle("chapter title");
-    cdto.setCourseId(new UUID(0, 0));
+    cdto.setCourseId(course.getId());
     ChapterResponseDTO chapterResponse = chapterService.createChapter(cdto);
     chapter = chapterService.getChapterEntity(chapterResponse.getId());
 
@@ -95,7 +100,7 @@ public class ChapterServiceTest {
     String changed = "CHANGED";
     update.setDescription(changed);
     update.setTitle(changed);
-    ChapterDTO dto = chapterService.updateChapter(chapter.getId(), update);
+    ChapterResponseDTO dto = chapterService.updateChapter(chapter.getId(), update);
     String err = "Error: chapter was not updated correctly";
     assertEquals(changed, dto.getDescription(), err);
     assertEquals(changed, dto.getTitle(), err);
