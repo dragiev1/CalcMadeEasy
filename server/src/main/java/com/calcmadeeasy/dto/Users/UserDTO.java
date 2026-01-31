@@ -21,8 +21,7 @@ public class UserDTO {
   private Instant createdAt;
 
   // No args constructor for Jackson.
-  public UserDTO() {
-  }
+  public UserDTO() {}
 
   public UserDTO(User user, List<UserProgressDTO> up) {
     this.id = user.getId();

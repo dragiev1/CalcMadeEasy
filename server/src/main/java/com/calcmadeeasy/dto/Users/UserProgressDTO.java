@@ -24,8 +24,7 @@ public class UserProgressDTO {
   private Instant createdAt;
   private Instant updatedAt;
 
-  public UserProgressDTO() {
-  }
+  public UserProgressDTO() {}
 
   public UserProgressDTO(UserProgress up) {
     this.id = up.getId();

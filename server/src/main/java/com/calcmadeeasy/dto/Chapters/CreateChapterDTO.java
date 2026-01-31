@@ -8,8 +8,7 @@ public class CreateChapterDTO {
   private String title;
   private UUID courseId;
 
-  public CreateChapterDTO() {
-  }
+  public CreateChapterDTO() {}
 
   // Getters
 

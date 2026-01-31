@@ -104,14 +104,14 @@ public class UserServices {
 
   public void enrollCourse(UUID uId, UUID cId) {
     User u = getUser(uId);
-    u.enrollNewCourse(courseService.getCourse(cId));
+    u.enrollNewCourse(courseService.getCourseEntity(cId));
   }
 
   public void unenrollCourse(UUID uId, UUID courseId) {
     User u = getUser(uId);
     u.unenrollCourse(courseId);
 
-    Course course = courseService.getCourse(courseId);
+    Course course = courseService.getCourseEntity(courseId);
 
     // Getting all of the page ids to wipe user progress.
     List<UUID> pageIds = course.getChapters().stream()
