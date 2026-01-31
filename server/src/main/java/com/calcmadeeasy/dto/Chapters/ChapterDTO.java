@@ -10,8 +10,7 @@ public class ChapterDTO extends ChapterResponseDTO {
 
   private List<Section> sections;
 
-  public ChapterDTO() {
-  }
+  public ChapterDTO() {}
 
   public ChapterDTO(Chapter chapter) {
     super(chapter);

@@ -27,6 +27,7 @@ public class ChapterController {
   public ChapterController(ChapterServices chapterService) {
     this.chapterService = chapterService;
   }
+  
   // ---------------- CREATE ----------------
 
   @PostMapping
@@ -52,10 +53,10 @@ public class ChapterController {
   // ---------------- UPDATE ----------------
   
   @PutMapping("/{chapterId}")
-  public ResponseEntity<ChapterDTO> updateChapter(
+  public ResponseEntity<ChapterResponseDTO> updateChapter(
     @PathVariable UUID chapterId, 
     @RequestBody UpdateChapterDTO request) {
-      ChapterDTO c = chapterService.updateChapter(chapterId, request);
+      ChapterResponseDTO c = chapterService.updateChapter(chapterId, request);
       return ResponseEntity.ok(c);
   } 
 

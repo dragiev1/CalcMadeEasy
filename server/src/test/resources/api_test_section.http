@@ -29,6 +29,6 @@ Content-Type: application/json
 }
 
 ### Add new page
-### PUT http://localhost:8080/api/v1/sections/aaab4afa-732b-4d45-a5ca-1f6f234aa762/add-page/
+PUT http://localhost:8080/api/v1/sections/aaab4afa-732b-4d45-a5ca-1f6f234aa762/add-page/
 
 

@@ -20,8 +20,10 @@ import com.calcmadeeasy.dto.Chapters.UpdateChapterDTO;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
+import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.services.ChapterServices;
+import com.calcmadeeasy.services.CourseServices;
 import com.calcmadeeasy.services.SectionServices;
 
 import jakarta.transaction.Transactional;
@@ -31,25 +33,31 @@ import jakarta.transaction.Transactional;
 @ActiveProfiles("test")
 public class ChapterServiceTest {
   @Autowired
+  private CourseServices courseService;
+  @Autowired
   private ChapterServices chapterService;
   @Autowired
   private SectionServices sectionService;
 
+  private Course course;
   private Chapter chapter;
   private Section section;
 
   @BeforeEach
   public void setup() {
 
+
     CreateChapterDTO cdto = new CreateChapterDTO();
     cdto.setDescription("chapter description");
     cdto.setTitle("chapter title");
+    cdto.setCourseId(new UUID(0, 0));
     ChapterResponseDTO chapterResponse = chapterService.createChapter(cdto);
     chapter = chapterService.getChapterEntity(chapterResponse.getId());
 
     CreateSectionDTO sdto = new CreateSectionDTO();
     sdto.setDescription("section description");
     sdto.setTitle("section title");
+    sdto.setChapterId(chapter.getId());
     SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
     section = sectionService.getSectionEntity(sectionResponse.getId());
 

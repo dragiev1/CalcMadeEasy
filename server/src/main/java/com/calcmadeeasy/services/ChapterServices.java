@@ -71,7 +71,7 @@ public class ChapterServices {
 
   // ==================== UPDATE ====================
 
-  public ChapterDTO updateChapter(UUID chapterId, UpdateChapterDTO request) {
+  public ChapterResponseDTO updateChapter(UUID chapterId, UpdateChapterDTO request) {
     if (!exists(chapterId))
       throw new IllegalArgumentException("Chapter does not exist");
 
@@ -83,7 +83,7 @@ public class ChapterServices {
       c.setTitle(request.getTitle());
 
     repo.save(c);
-    return new ChapterDTO(c);
+    return new ChapterResponseDTO(c);
   }
 
   public ChapterDTO addSection(UUID chapterId, UUID sectionId) {
