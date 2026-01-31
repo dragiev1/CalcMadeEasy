@@ -1,5 +1,9 @@
 package com.calcmadeeasy.services;
 
+import com.calcmadeeasy.dto.Courses.CourseDTO;
+import com.calcmadeeasy.dto.Courses.CourseResponseDTO;
+import com.calcmadeeasy.dto.Courses.CreateCourseDTO;
+import com.calcmadeeasy.dto.Courses.UpdateCourseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.repository.CourseRepo;
@@ -19,27 +23,31 @@ public class CourseServices {
 
   // ==================== CREATE ====================
 
-  public Course createCourse(Course course) {
-    return repo.save(course);
-  }
-
-  public List<Course> createCourses(Course... courses) {
-    return repo.saveAll(List.of(courses));
-  }
-
-  public List<Course> createCourses(List<Course> courses) {
-    return repo.saveAll(courses);
+  public CourseResponseDTO createCourse(CreateCourseDTO course) {
+    Course c = Course.builder()
+        .description(course.getDescription())
+        .title(course.getTitle())
+        .build();
+    repo.save(c);
+    return new CourseResponseDTO(c);
   }
 
   // ==================== READ ====================
 
-  public Course getCourse(UUID courseId) {
+  public Course getCourseEntity(UUID courseId) {
     return repo.findById(courseId)
         .orElseThrow(() -> new IllegalArgumentException("No course found with id: " + courseId));
   }
 
-  public List<Course> getCourses() {
-    return repo.findAll();
+  public CourseDTO getCourseDTO(UUID courseId) {
+    Course c = repo.findById(courseId)
+        .orElseThrow(() -> new IllegalArgumentException("No course found with id: " + courseId));
+
+    return new CourseDTO(c);
+  }
+
+  public List<CourseDTO> getAllCoursesDTO() {
+    return repo.findAll().stream().map(CourseDTO::new).toList();
   }
 
   public boolean exists(UUID courseId) {
@@ -48,32 +56,32 @@ public class CourseServices {
 
   // ==================== UPDATE ====================
 
-  public void updateTitle(UUID courseId, String newTitle) {
-    Course c = getCourse(courseId);
-    c.setTitle(newTitle);
+  public CourseResponseDTO updateCourse(UUID courseId, UpdateCourseDTO request) {
+    if (request == null)
+      throw new IllegalArgumentException("Data sent is null; did not update course.");
+
+    Course c = getCourseEntity(courseId);
+
+    if (request.getDescription() != null)
+      c.setDescription(request.getDescription());
+    if (request.getTitle() != null)
+      c.setDescription(request.getTitle());
+
     repo.save(c);
+    return new CourseResponseDTO(c);
   }
 
-  public void updateDescription(UUID courseId, String newDescription) {
-    Course c = getCourse(courseId);
-    c.setDescription(newDescription);
-    repo.save(c);
-  }
+  public CourseDTO addChapter(UUID courseId, Chapter chapter) {
+    if (chapter == null)
+      throw new IllegalArgumentException("Cannot append null chapter");
 
-  public Course addChapter(UUID courseId, Chapter chapter) {
-    if(chapter == null) throw new IllegalArgumentException("Cannot append null chapter");
-    Course c = getCourse(courseId);
+    Course c = getCourseEntity(courseId);
+
     chapter.setCourse(c);
     c.addChapter(chapter);
-    return repo.save(c);
-  }
 
-  public Course addChapters(UUID courseId, Chapter... chapters) {
-    if(chapters == null) throw new IllegalArgumentException("Cannot append null chapters");
-    Course c = getCourse(courseId);
-    for(Chapter ch : chapters) ch.setCourse(c);
-    c.addChapters(chapters);
-    return repo.save(c);
+    repo.save(c);
+    return new CourseDTO(c);
   }
 
   // ==================== DELETE ====================
@@ -87,9 +95,10 @@ public class CourseServices {
   }
 
   public void removeChapter(UUID courseId, UUID chapterId) {
-    Course c = getCourse(courseId);
-    boolean removed = c.getChapters().removeIf(ch -> ch.getId().equals(chapterId));  
-    if(!removed) throw new IllegalArgumentException("Chapter does not exist in course, could not remove");
-    repo.save(c);  
+    Course c = getCourseEntity(courseId);
+    boolean removed = c.getChapters().removeIf(ch -> ch.getId().equals(chapterId));
+    if (!removed)
+      throw new IllegalArgumentException("Chapter does not exist in course, could not remove");
+    repo.save(c);
   }
 }
