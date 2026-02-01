@@ -1,6 +1,7 @@
 package com.calcmadeeasy.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -52,40 +53,42 @@ public class UserGradeServices {
     Course course = chapter.getCourse();
 
     // Section grade logic.
-    float sectionGrade = computeSectionGrade(user, section);
+    float sectionGrade = computeSectionGrade(user.getId(), section.getId());
     UserSectionGrade sg = sectionGradeRepo.findByUserIdAndSectionId(user.getId(), section.getId())
         .orElse(new UserSectionGrade(user, section, sectionGrade));
     sg.setGrade(sectionGrade);
     sectionGradeRepo.save(sg);
 
+
     // Chapter grade logic.
-    float chapterGrade = computeChapterGrade(user, chapter);
+    float chapterGrade = computeChapterGrade(user.getId(), chapter.getId());
     UserChapterGrade cg = chapterGradeRepo.findByUserIdAndChapterId(user.getId(), chapter.getId())
         .orElse(new UserChapterGrade(user, chapter, chapterGrade));
     cg.setGrade(chapterGrade);
     chapterGradeRepo.save(cg);
 
+
     // Course grade logic.
-    float courseGrade = computeCourseGrade(user, course);
+    float courseGrade = computeCourseGrade(user.getId(), course.getId());
     UserCourseEnrollment uce = courseEnrollmentRepo.findByUserIdAndCourseId(user.getId(), course.getId())
-      .orElseThrow(() -> new IllegalArgumentException("User is not enrolled in a course"));
+        .orElseThrow(() -> new IllegalArgumentException("User is not enrolled in a course"));
     uce.setGrade(courseGrade);
     courseEnrollmentRepo.save(uce);
 
   }
 
-  public float computeSectionGrade(User user, Section section) {
-    List<UserProgress> progresses = upRepo.findByUserIdAndPage_SectionId(user.getId(), section.getId());
+  public float computeSectionGrade(UUID userId, UUID sectionId) {
+    List<UserProgress> progresses = upRepo.findByUserIdAndPage_SectionId(userId, sectionId);
     return calculateGrade(progresses);
   }
 
-  public float computeChapterGrade(User user, Chapter chapter) {
-    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_ChapterId(user.getId(), chapter.getId());
+  public float computeChapterGrade(UUID userId, UUID chapterId) {
+    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_ChapterId(userId, chapterId);
     return calculateGrade(progresses);
   }
 
-  public float computeCourseGrade(User user, Course course) {
-    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_CourseId(user.getId(), course.getId());
+  public float computeCourseGrade(UUID userId, UUID courseId) {
+    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_CourseId(userId, courseId);
     return calculateGrade(progresses);
   }
 
@@ -104,4 +107,11 @@ public class UserGradeServices {
     return totalPoints == 0f ? 0f : (earnedPoints / totalPoints) * 100f;
   }
 
+  // ==================== DELETE ====================
+
+  public void removeAllGrades(UUID userId, UUID courseId) {
+    sectionGradeRepo.deleteByUserIdAndSection_Chapter_CourseId(userId, courseId);
+    chapterGradeRepo.deleteByUserIdAndChapter_CourseId(userId, courseId);
+    courseEnrollmentRepo.deleteByUserIdAndCourseId(userId, courseId);
+  }
 }

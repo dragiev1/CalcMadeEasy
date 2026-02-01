@@ -1,25 +1,16 @@
 package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.models.Courses.Course;
-import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.dto.Users.CreateUserDTO;
 import com.calcmadeeasy.dto.Users.UserDTO;
-import com.calcmadeeasy.dto.Users.UserProgressDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
-import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserCourseEnrollment;
-import com.calcmadeeasy.models.Users.UserProgress;
-import com.calcmadeeasy.repository.CourseEnrollmentRepo;
 import com.calcmadeeasy.repository.UserRepo;
 
 import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -30,17 +21,17 @@ public class UserServices {
   private final UserRepo repo;
   private UserProgressService upService;
   private CourseServices courseService;
-  private final CourseEnrollmentRepo enrollmentRepo;
+  private UserGradeServices gradeServices;
 
   public UserServices(
       UserRepo repo,
       UserProgressService upService,
       CourseServices courseService,
-      CourseEnrollmentRepo enrollmentRepo) {
+      UserGradeServices gradeServices) {
     this.repo = repo;
     this.upService = upService;
     this.courseService = courseService;
-    this.enrollmentRepo = enrollmentRepo;
+    this.gradeServices = gradeServices;
   }
 
   // ==================== CREATE ====================
@@ -71,36 +62,24 @@ public class UserServices {
 
   // ==================== READ ====================
 
-  public boolean exists(UUID uId) {
-    return repo.existsById(uId);
+  public boolean exists(UUID userId) {
+    return repo.existsById(userId);
   }
 
-  public UserDTO getUserDTO(UUID uId) {
-    User u = repo.findById(uId)
-        .orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
+  public UserDTO getUserDTO(UUID userId) {
+    User u = repo.findById(userId)
+        .orElseThrow(() -> new RuntimeException("User does not exist with id: " + userId));
 
     return new UserDTO(u);
   }
 
-  public User getUser(UUID uId) {
-    return repo.findById(uId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
+  public User getUser(UUID userId) {
+    return repo.findById(userId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + userId));
   }
 
   public List<UserDTO> getAllUsers() {
     List<User> users = repo.findAll();
-    Map<UUID, List<UserProgressDTO>> progressMap = new HashMap<>();
 
-    // Get all the user progresses and map them to progressMap using user's id as
-    // the key.
-    for (UserProgressDTO up : upService.getAllProgressDTO()) {
-      progressMap
-          .computeIfAbsent(up.getId(), k -> new ArrayList<>())
-          .add(up);
-    }
-
-    // Stream the users and make new Data Transfer Objects for each one using the
-    // user
-    // itself and the corresponding UserProgress.
     return users.stream()
         .map(UserDTO::new)
         .toList();
@@ -108,40 +87,37 @@ public class UserServices {
 
   // ==================== UPDATE ====================
 
-  public UserDTO enrollCourse(UUID uId, UUID cId) {
-    User u = getUser(uId);
-    Course c = courseService.getCourseEntity(cId);
+  public UserDTO enrollCourse(UUID userId, UUID courseId) {
+    User u = getUser(userId);
+    Course c = courseService.getCourseEntity(courseId);
     UserCourseEnrollment uce = new UserCourseEnrollment(u, c);
-    enrollmentRepo.save(uce);
+    u.enrollNewCourse(uce);
+    repo.save(u);
     return new UserDTO(u);
   }
 
-  public UserDTO unenrollCourse(UUID uId, UUID courseId) {
-    User u = getUser(uId);
+  public UserDTO unenrollCourse(UUID userId, UUID courseId) {
+    User u = getUser(userId);
+
+    if(!u.isEnrolledIn(courseId)) throw new IllegalArgumentException("User is not enrolled in this course"); 
+
+    // Remove all the progress in course.
+    upService.removeAllProgressByUserAndCourseId(userId, courseId);
+    
+    // Remove all grades calculated from progress.
+    gradeServices.removeAllGrades(userId, courseId);
+    
+    // Unenroll user from course fully.
     u.unenrollCourse(courseId);
-
-    Course course = courseService.getCourseEntity(courseId);
-
-    // Getting all of the page ids to wipe user progress.
-    List<UUID> pageIds = course.getChapters().stream()
-        .flatMap((Chapter ch) -> ch.getSections().stream())
-        .flatMap((Section s) -> s.getPages().stream())
-        .map(Page::getId)
-        .toList();
-
-    List<UUID> progressToRemove = upService.getProgressForUserEntity(uId).stream()
-        .filter(p -> pageIds.contains(p.getPage().getId()))
-        .map(UserProgress::getId)
-        .toList();
-
-    upService.removeAll(progressToRemove);
+    
     return new UserDTO(u);
   }
 
   // ==================== DELETE ====================
 
-  public void removeUser(UUID uId) {
-    repo.deleteById(uId);
+  public void removeUser(UUID userId) {
+    repo.deleteById(userId);
+    if(exists(userId)) throw new IllegalAccessError("User was not properly removed");
   }
 
 }

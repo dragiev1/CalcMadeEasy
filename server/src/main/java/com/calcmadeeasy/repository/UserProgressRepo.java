@@ -29,4 +29,7 @@ public interface UserProgressRepo extends JpaRepository<UserProgress, UUID> {
   // For course-level computation
   List<UserProgress> findByUserIdAndPage_Section_Chapter_CourseId(UUID userId, UUID courseId);
 
+  // Deletes all progress given a user and course id.
+  void deleteByUserIdAndPage_Section_Chapter_CourseId(UUID userId, UUID courseId);
+  
 }

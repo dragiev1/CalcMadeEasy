@@ -13,4 +13,8 @@ public interface CourseEnrollmentRepo extends JpaRepository<UserCourseEnrollment
   
   // Get course grade object by unique user id.
   Optional<UserCourseEnrollment> findByUserIdAndCourseId(UUID userId, UUID courseId);
+
+  // Delete grade and join of a course and unique user for unenrolling from a course.
+  void deleteByUserIdAndCourseId(UUID userId, UUID courseId);
+  
 }

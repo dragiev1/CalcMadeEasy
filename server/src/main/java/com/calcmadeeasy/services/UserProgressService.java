@@ -108,7 +108,15 @@ public class UserProgressService {
       throw new IllegalArgumentException("UserProgress persists despite being removed");
   }
 
+  public void removeAllProgressByUserAndCourseId(UUID userId, UUID courseId) {
+    repo.deleteByUserIdAndPage_Section_Chapter_CourseId(userId, courseId);
+  }
+
   public void removeAll(List<UUID> ups) {
     repo.deleteAllById(ups);
+
+    for (UUID ids : ups)
+      if (exists(ids))
+        throw new IllegalArgumentException("All user progress was not removed correctly");
   }
 }
