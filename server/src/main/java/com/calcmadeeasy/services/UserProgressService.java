@@ -109,7 +109,7 @@ public class UserProgressService {
   }
 
   public void removeAllProgressByUserAndCourseId(UUID userId, UUID courseId) {
-    repo.deleteByUserIdAndPage_Section_Chapter_CourseId(userId, courseId);
+    repo.deleteByUserIdAndPage_Section_Chapter_Course_Id(userId, courseId);
   }
 
   public void removeAll(List<UUID> ups) {

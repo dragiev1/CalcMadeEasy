@@ -76,8 +76,8 @@ public class CourseServices {
   public CourseDTO addChapter(UUID courseId, UUID chapterId) {
     Chapter chapter = chapterService.getChapterEntity(chapterId);
 
-    if (chapter == null)
-      throw new IllegalArgumentException("Cannot append null chapter");
+    if (chapter.getCourse() != null)
+      throw new IllegalStateException("Chapter already belongs to another course");
 
     Course c = getCourseEntity(courseId);
 

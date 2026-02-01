@@ -16,8 +16,8 @@ public interface SectionGradeRepo extends JpaRepository<UserSectionGrade, UUID> 
   Optional<UserSectionGrade> findByUserIdAndSectionId(UUID userId, UUID sectionId);
   
   // Gets section grades for a specfic course and user.
-  List<UserSectionGrade> findByUserIdAndSection_Chapter_CourseId(UUID userId, UUID courseId);
+  List<UserSectionGrade> findByUserIdAndSection_Chapter_Course_Id(UUID userId, UUID courseId);
 
   // Deletes section grades for a specific course and user.
-  void deleteByUserIdAndSection_Chapter_CourseId(UUID userId, UUID courseId);
+  void deleteByUserIdAndSection_Chapter_Course_Id(UUID userId, UUID courseId);
 }

@@ -21,15 +21,15 @@ public interface UserProgressRepo extends JpaRepository<UserProgress, UUID> {
   List<UserProgress> findByProblemId(UUID userId);
 
   // Get all progress for a user in a unique section
-  List<UserProgress> findByUserIdAndPage_SectionId(UUID userId, UUID sectionId);
+  List<UserProgress> findByUserIdAndPage_Section_Id(UUID userId, UUID sectionId);
 
   // For chapter-level computation
-  List<UserProgress> findByUserIdAndPage_Section_ChapterId(UUID userId, UUID chapterId);
+  List<UserProgress> findByUserIdAndPage_Section_Chapter_Id(UUID userId, UUID chapterId);
 
   // For course-level computation
-  List<UserProgress> findByUserIdAndPage_Section_Chapter_CourseId(UUID userId, UUID courseId);
+  List<UserProgress> findByUserIdAndPage_Section_Chapter_Course_Id(UUID userId, UUID courseId);
 
   // Deletes all progress given a user and course id.
-  void deleteByUserIdAndPage_Section_Chapter_CourseId(UUID userId, UUID courseId);
+  void deleteByUserIdAndPage_Section_Chapter_Course_Id(UUID userId, UUID courseId);
   
 }

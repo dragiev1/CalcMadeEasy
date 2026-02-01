@@ -78,17 +78,17 @@ public class UserGradeServices {
   }
 
   public float computeSectionGrade(UUID userId, UUID sectionId) {
-    List<UserProgress> progresses = upRepo.findByUserIdAndPage_SectionId(userId, sectionId);
+    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Id(userId, sectionId);
     return calculateGrade(progresses);
   }
 
   public float computeChapterGrade(UUID userId, UUID chapterId) {
-    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_ChapterId(userId, chapterId);
+    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_Id(userId, chapterId);
     return calculateGrade(progresses);
   }
 
   public float computeCourseGrade(UUID userId, UUID courseId) {
-    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_CourseId(userId, courseId);
+    List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_Course_Id(userId, courseId);
     return calculateGrade(progresses);
   }
 
@@ -110,8 +110,8 @@ public class UserGradeServices {
   // ==================== DELETE ====================
 
   public void removeAllGrades(UUID userId, UUID courseId) {
-    sectionGradeRepo.deleteByUserIdAndSection_Chapter_CourseId(userId, courseId);
-    chapterGradeRepo.deleteByUserIdAndChapter_CourseId(userId, courseId);
+    sectionGradeRepo.deleteByUserIdAndSection_Chapter_Course_Id(userId, courseId);
+    chapterGradeRepo.deleteByUserIdAndChapter_Course_Id(userId, courseId);
     courseEnrollmentRepo.deleteByUserIdAndCourseId(userId, courseId);
   }
 }

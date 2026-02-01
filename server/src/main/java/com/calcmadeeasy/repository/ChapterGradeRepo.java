@@ -16,9 +16,9 @@ public interface ChapterGradeRepo extends JpaRepository<UserChapterGrade, UUID> 
   Optional<UserChapterGrade> findByUserIdAndChapterId(UUID userId, UUID chapterId);
 
   // Get a list of all grades of a unique user of a specific course.
-  List<UserChapterGrade> findByUserIdAndChapter_CourseId(UUID userId, UUID courseId);
+  List<UserChapterGrade> findByUserIdAndChapter_Course_Id(UUID userId, UUID courseId);
 
   // Delete all the chapter grades associated with a unique user on a specific course.
-  void deleteByUserIdAndChapter_CourseId(UUID userId, UUID chapterId);
+  void deleteByUserIdAndChapter_Course_Id(UUID userId, UUID chapterId);
   
 }
