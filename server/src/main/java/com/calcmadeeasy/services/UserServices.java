@@ -102,12 +102,13 @@ public class UserServices {
 
   // ==================== UPDATE ====================
 
-  public void enrollCourse(UUID uId, UUID cId) {
+  public UserDTO enrollCourse(UUID uId, UUID cId) {
     User u = getUser(uId);
     u.enrollNewCourse(courseService.getCourseEntity(cId));
+    return new UserDTO(u);
   }
 
-  public void unenrollCourse(UUID uId, UUID courseId) {
+  public UserDTO unenrollCourse(UUID uId, UUID courseId) {
     User u = getUser(uId);
     u.unenrollCourse(courseId);
 
@@ -126,6 +127,7 @@ public class UserServices {
         .toList();
 
     upService.removeAll(progressToRemove);
+    return new UserDTO(u);
   }
 
   // ==================== DELETE ====================
