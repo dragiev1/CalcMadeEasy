@@ -18,6 +18,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
+/*
+ * Contains information about a user's courses including their grades. 
+ */
+
 @Entity
 @Table(uniqueConstraints = {
   @UniqueConstraint(columnNames = {"user_id", "course_id"})

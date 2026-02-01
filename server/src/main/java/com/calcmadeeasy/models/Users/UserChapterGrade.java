@@ -18,6 +18,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
+/*
+ * Contains grade information about a unique chapter a user is studying.
+ */
+
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = { "user_id", "chapter_id" })})
 public class UserChapterGrade {
