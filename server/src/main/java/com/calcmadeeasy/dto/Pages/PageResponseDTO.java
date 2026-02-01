@@ -9,7 +9,7 @@ import com.calcmadeeasy.models.Pages.Page;
 public class PageResponseDTO {
   private UUID id;
   private String content;
-  private Integer problemQuantity;
+  private Integer position;
   private Instant createdAt;
   private Instant updatedAt;
 
@@ -18,7 +18,7 @@ public class PageResponseDTO {
   public PageResponseDTO(Page page) {
     this.id = page.getId();
     this.content = page.getContent();
-    this.problemQuantity = page.getProblemQuantity();
+    this.position = Integer.valueOf(page.getPosition());
     this.createdAt = page.getCreatedAt();
     this.updatedAt = page.getUpdatedAt();
   }
@@ -31,8 +31,8 @@ public class PageResponseDTO {
     return content;
   }
 
-  public int getProblemQuantity() {
-    return problemQuantity;
+  public Integer getPosition() {
+    return position;
   }
 
   public Instant getCreatedAt() {

@@ -7,7 +7,6 @@ import com.calcmadeeasy.models.Pages.Page;
 
 // Outbound only.
 public class PageDTO extends PageResponseDTO {
-  private Integer position;
   private List<ProblemResponseDTO> exercises;
   private List<ProblemResponseDTO> homework;
 
@@ -15,7 +14,6 @@ public class PageDTO extends PageResponseDTO {
 
   public PageDTO(Page page) {
     super(page);
-    this.position = page.getPosition();
     this.exercises = page.getExercises() == null ? List.of()
         : page.getExercises().stream().map(ProblemResponseDTO::new).toList();
     this.homework = page.getHomework() == null ? List.of()
@@ -30,10 +28,6 @@ public class PageDTO extends PageResponseDTO {
 
   public List<ProblemResponseDTO> getHomework() {
     return homework;
-  }
-
-  public Integer getPosition() {
-    return position;
   }
 
   // No setters

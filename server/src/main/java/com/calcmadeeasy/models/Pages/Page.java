@@ -30,7 +30,6 @@ public class Page {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
   private String content; // Latex markdown text
-  private int problemQuantity;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many pages belong to one section
   @JoinColumn(name = "section_id")
@@ -76,7 +75,6 @@ public class Page {
   private Page(Builder b) {
     this.content = b.content;
     this.problems = b.problems == null ? new ArrayList<>() : new ArrayList<>(b.problems);
-    this.problemQuantity = 0;
     this.position = b.position;
   }
 
@@ -91,7 +89,7 @@ public class Page {
   }
 
   public int getProblemQuantity() {
-    return problemQuantity;
+    return problems.size();
   }
 
   public Integer getPosition() {
@@ -167,7 +165,6 @@ public class Page {
   public void addProblem(Problem problem, ProblemType type) {
     PageProblem pp = new PageProblem(this, problem, type);
     problems.add(pp);
-    problemQuantity++;
   }
 
   public void setSection(Section section) {
@@ -186,7 +183,6 @@ public class Page {
       if (p.getProblem().getId().equals(problemId)) {
         problems.remove(p);
         System.out.println("Removed " + p.getProblem().toString() + " from " + p.getType() + " set.");
-        problemQuantity--;
         return;
       }
     }
@@ -203,7 +199,6 @@ public class Page {
         ", content=" + content +
         ", position=" + position +
         ", problems=" + problems.toString() +
-        ", total problems=" + problemQuantity +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "\n}";
