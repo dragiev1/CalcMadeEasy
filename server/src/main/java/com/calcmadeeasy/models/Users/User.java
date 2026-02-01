@@ -1,18 +1,12 @@
 package com.calcmadeeasy.models.Users;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.calcmadeeasy.models.Courses.Course;
-import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.models.Problems.Problem;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,11 +14,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+// TODO: Tie in with google auth 2.0 eventually to allow users to sign in with their google accounts.
 
 @Entity
 @Table(name = "app_user") // Because apparently user is not allowed as a table name.
@@ -35,15 +28,10 @@ public class User {
   private String firstName;
   private String lastName;
   private String email;
-  private String profilePicUrl; // Will store url provided by Google
-  private int numCourseTaking;
-
-  @ManyToMany
-  @JoinTable(name = "app_user_courses", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-  private List<Course> courses = new ArrayList<>(); // Courses the user is enrolled in
+  private String profilePicUrl; 
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<UserProgress> userProgress = new HashSet<>();
+  private Set<UserCourseEnrollment> coursesEnrolled = new HashSet<>();
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -53,9 +41,8 @@ public class User {
   private Instant updatedAt;
 
   // No-argument constructor for JPA
-  public User() {
-    this.userProgress = new HashSet<>();
-    this.courses = new ArrayList<>();
+  protected User() {
+    this.coursesEnrolled = new HashSet<>();
   }
 
   // Inner class for building the User object
@@ -64,7 +51,6 @@ public class User {
     private String lastName;
     private String email;
     private String profilePicUrl;
-    private List<Course> courses = new ArrayList<>();
 
     public Builder firstName(String firstName) {
       this.firstName = firstName;
@@ -86,12 +72,6 @@ public class User {
       return this;
     }
 
-    public Builder courses(Course... courses) {
-      if (courses != null && courses.length > 0)
-        this.courses = new ArrayList<>(List.of(courses));
-      return this;
-    }
-
     public User build() {
       return new User(this);
     }
@@ -102,8 +82,6 @@ public class User {
     this.lastName = b.lastName;
     this.email = b.email;
     this.profilePicUrl = b.profilePicUrl;
-    this.courses = b.courses;
-    this.numCourseTaking = b.courses.size();
   }
 
   // Getters
@@ -128,15 +106,11 @@ public class User {
   }
 
   public int getNumCoursesTaking() {
-    return numCourseTaking;
+    return coursesEnrolled.size();
   }
 
-  public List<Course> getCourses() {
-    return courses;
-  }
-
-  public Set<UserProgress> getUserProgress() {
-    return userProgress;
+  public Set<UserCourseEnrollment> getCoursesEnrolled() {
+    return coursesEnrolled;
   }
 
   public Instant getCreatedAt() {
@@ -149,34 +123,29 @@ public class User {
 
   // Setters
 
-  public void setCourseQuantity(int newQuantity) {
-    this.numCourseTaking = newQuantity;
-  }
-
-  public void enrollNewCourse(Course newCourse) {
-    if (courses == null)
-      courses = new ArrayList<>();
-    else
-      numCourseTaking++;
-
-    this.courses.add(newCourse);
+  public void enrollNewCourse(UserCourseEnrollment newCourse) {
+    this.coursesEnrolled.add(newCourse);
   }
 
   public void setProfilePicUrl(String newUrl) {
     this.profilePicUrl = newUrl;
   }
 
-  public void setUserProgress(Page page, Problem problem) {
-    UserProgress newProgress = new UserProgress(this, page, problem);
-    userProgress.add(newProgress);
+  public void unenrollCourse(UUID courseId) {
+    if (coursesEnrolled == null || coursesEnrolled.isEmpty())
+      throw new IllegalStateException("User is not enrolled in any courses");
+
+    boolean removed = coursesEnrolled.removeIf(c -> c.getCourse().getId().equals(courseId));
+
+    if (!removed)
+      throw new IllegalArgumentException("No course was enrolled with id: " + courseId);
   }
 
-  public void unenrollCourse(UUID courseId) {
-    if(courses == null || courses.isEmpty()) throw new IllegalStateException("User is not enrolled in any courses");
+  // Additional convenience methods.
 
-    boolean removed = courses.removeIf(c -> c.getId().equals(courseId));
-
-    if(!removed) throw new IllegalArgumentException("No course was found with id: " + courseId);
+  public boolean isEnrolledIn(UUID courseId) {
+    return coursesEnrolled.stream()
+        .anyMatch(c -> c.getCourse().getId().equals(courseId));
   }
 
   public String toString() {
@@ -185,8 +154,7 @@ public class User {
         ", name=" + firstName + " " + lastName +
         ", email=" + email +
         ", profilePicUrl=" + profilePicUrl +
-        ", numOfCourses=" + numCourseTaking +
-        // ", courses=" + courses.toString() +
+        ", numOfCourses=" + getNumCoursesTaking() +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "\n}";

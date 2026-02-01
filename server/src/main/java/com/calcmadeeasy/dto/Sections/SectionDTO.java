@@ -14,7 +14,9 @@ public class SectionDTO extends SectionResponseDTO {
   public SectionDTO(Section section) {
     super(section);
     this.pages = section.getPages() == null ? List.of()
-        : section.getPages().stream().map(PageResponseDTO::new).toList();
+        : section.getPages().stream()
+            .map(PageResponseDTO::new)
+            .toList();
   }
 
   // Getters.

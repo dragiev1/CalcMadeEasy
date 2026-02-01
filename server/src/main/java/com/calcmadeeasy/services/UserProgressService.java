@@ -12,6 +12,10 @@ import com.calcmadeeasy.repository.UserProgressRepo;
 
 import jakarta.transaction.Transactional;
 
+/*
+ * Service for handling raw progress updates. 
+ */
+
 @Service
 @Transactional
 public class UserProgressService {
@@ -29,7 +33,7 @@ public class UserProgressService {
 
   // ==================== READ ====================
 
-  public UserProgressDTO getUserProgress(UUID upId) {
+  public UserProgressDTO getUserProgressDTO(UUID upId) {
 
     return new UserProgressDTO(repo.findById(upId)
         .orElseThrow(() -> new RuntimeException("UserProgress could not be found with id: " + upId)));
@@ -64,8 +68,6 @@ public class UserProgressService {
   private List<UserProgress> getAllProgresses() {
     return repo.findAll();
   }
-
-  // TODO: add a get grade for a section here.
 
   public boolean exists(UUID upId) {
     return repo.existsById(upId);

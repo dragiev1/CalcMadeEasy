@@ -1,7 +1,6 @@
 package com.calcmadeeasy.dto.Users;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import com.calcmadeeasy.models.Users.User;
@@ -16,20 +15,18 @@ public class UserDTO {
   private String lastName;
   private String email;
   private String profilePicUrl;
-  private List<UserProgressDTO> up;
   private Instant updatedAt;
   private Instant createdAt;
 
   // No args constructor for Jackson.
   public UserDTO() {}
 
-  public UserDTO(User user, List<UserProgressDTO> up) {
+  public UserDTO(User user) {
     this.id = user.getId();
     this.firstName = user.getFirstName();
     this.lastName = user.getLastName();
     this.email = user.getEmail();
     this.profilePicUrl = user.getProfilePicUrl();
-    this.up = up;
     this.updatedAt = user.getUpdatedAt();
     this.createdAt = user.getCreatedAt();
   }
@@ -54,10 +51,6 @@ public class UserDTO {
 
   public String getProfilePicUrl() {
     return profilePicUrl;
-  }
-
-  public List<UserProgressDTO> getUserProgress() {
-    return up;
   }
 
   public Instant getCreatedAt() {
