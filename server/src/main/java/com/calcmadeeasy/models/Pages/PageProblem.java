@@ -37,8 +37,7 @@ public class PageProblem {
   private ProblemType type;
 
   // No-args constructor for JPA
-  public PageProblem() {
-  }
+  protected PageProblem() {}
 
   public PageProblem(Page page, Problem problem, ProblemType type) {
     this.page = page;

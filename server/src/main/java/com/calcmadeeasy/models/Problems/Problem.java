@@ -58,7 +58,7 @@ public class Problem {
   private Instant updatedAt;
 
   // No-argument constructor for JPA.
-  public Problem() {
+  protected Problem() {
     this.tags = new HashSet<>();
   }
 

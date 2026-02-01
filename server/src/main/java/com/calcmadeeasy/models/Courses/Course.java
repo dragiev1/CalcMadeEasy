@@ -39,7 +39,7 @@ public class Course {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  public Course() {
+  protected Course() {
     this.chapters = new ArrayList<>();
   }
 

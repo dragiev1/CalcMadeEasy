@@ -50,7 +50,7 @@ public class Chapter {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  public Chapter() {
+  protected Chapter() {
     this.sections = new ArrayList<>();
   }
 

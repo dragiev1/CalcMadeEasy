@@ -49,7 +49,7 @@ public class Page {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  public Page() {
+  protected Page() {
     this.problems = new ArrayList<>();
   }
 

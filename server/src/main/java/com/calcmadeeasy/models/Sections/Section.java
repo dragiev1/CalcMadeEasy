@@ -51,7 +51,7 @@ public class Section {
   private Instant updatedAt;
 
   // No-argument constructor for JPA
-  public Section() {
+  protected Section() {
     this.pages = new ArrayList<>();
   }
 

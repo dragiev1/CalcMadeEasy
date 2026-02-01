@@ -57,8 +57,7 @@ public class UserProgress {
   private Instant updatedAt;
 
   // No-args constructor for JPA
-  public UserProgress() {
-  }
+  protected UserProgress() {}
 
   public UserProgress(User user, Page page, Problem problem) {
     this.user = user;

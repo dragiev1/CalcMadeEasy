@@ -31,7 +31,7 @@ public class Tag {
   private Set<Problem> problems = new HashSet<>();
 
   // No-args constructor for JPA.
-  public Tag() {}
+  protected Tag() {}
 
   public Tag(String tagName, Double difficulty) {
     this.tagName = tagName;
