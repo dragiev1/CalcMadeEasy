@@ -32,6 +32,7 @@ public class PageServiceTest {
     public void setup() {
         CreatePageDTO dto = new CreatePageDTO();
         dto.setContent("CONTENT");
+        dto.setPosition(0);
         PageResponseDTO response = pageService.createPage(dto);
         pageDTO = pageService.getPageDTO(response.getId());
     }
@@ -41,7 +42,6 @@ public class PageServiceTest {
     @Test
     public void testPageCreation() {
         boolean exists = pageService.exists(pageDTO.getId());
-
         assertTrue(exists);
     }
 
@@ -70,6 +70,7 @@ public class PageServiceTest {
         String ogContent = "CONTENT";
         UpdatePageDTO update = new UpdatePageDTO();
         update.setContent("CHANGED");
+        update.setPosition(1);
 
         pageService.updatePage(pageDTO.getId(), update);
 

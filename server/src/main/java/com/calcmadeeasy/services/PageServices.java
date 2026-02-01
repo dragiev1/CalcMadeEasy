@@ -31,8 +31,9 @@ public class PageServices {
   public PageResponseDTO createPage(CreatePageDTO page) {
     Page p = Page.builder()
         .content(page.getContent())
+        .position(page.getPosition())
         .build();
-    
+
     repo.save(p);
 
     return new PageResponseDTO(p);
@@ -87,6 +88,8 @@ public class PageServices {
 
     if (request.getContent() != null)
       page.setContent(request.getContent());
+    if (request.getPosition() != null)
+      page.setPosition(request.getPosition());
 
     repo.save(page);
     return new PageResponseDTO(page);
