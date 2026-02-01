@@ -125,8 +125,6 @@ public class Course {
   }
 
   public void addChapter(Chapter chapter) {
-    if (this.chapters == null)
-      this.chapters = new ArrayList<>();
     this.chapters.add(chapter);
     chapter.setCourse(this);
   }
