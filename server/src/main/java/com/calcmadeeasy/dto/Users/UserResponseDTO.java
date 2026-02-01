@@ -1,5 +1,6 @@
 package com.calcmadeeasy.dto.Users;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import com.calcmadeeasy.models.Users.User;
@@ -11,10 +12,10 @@ public class UserResponseDTO {
   private String lastName;
   private String email;
   private String profilePicUrl;
+  private Instant createdAt;
 
   // No args constructor for Jackson.
-  public UserResponseDTO() {
-  }
+  public UserResponseDTO() {}
 
   public UserResponseDTO(User user) {
     this.id = user.getId();
@@ -22,6 +23,7 @@ public class UserResponseDTO {
     this.lastName = user.getLastName();
     this.email = user.getEmail();
     this.profilePicUrl = user.getProfilePicUrl();
+    this.createdAt = user.getCreatedAt();
   }
 
   // Getters
@@ -44,6 +46,10 @@ public class UserResponseDTO {
 
   public String getProfilePicUrl() {
     return profilePicUrl;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
   }
 
 }

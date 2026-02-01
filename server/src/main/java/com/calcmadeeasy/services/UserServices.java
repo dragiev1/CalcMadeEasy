@@ -9,7 +9,9 @@ import com.calcmadeeasy.dto.Users.UserProgressDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.models.Users.UserCourseEnrollment;
 import com.calcmadeeasy.models.Users.UserProgress;
+import com.calcmadeeasy.repository.CourseEnrollmentRepo;
 import com.calcmadeeasy.repository.UserRepo;
 
 import jakarta.transaction.Transactional;
@@ -28,11 +30,17 @@ public class UserServices {
   private final UserRepo repo;
   private UserProgressService upService;
   private CourseServices courseService;
+  private final CourseEnrollmentRepo enrollmentRepo;
 
-  public UserServices(UserRepo repo, UserProgressService upService, CourseServices courseService) {
+  public UserServices(
+      UserRepo repo,
+      UserProgressService upService,
+      CourseServices courseService,
+      CourseEnrollmentRepo enrollmentRepo) {
     this.repo = repo;
     this.upService = upService;
     this.courseService = courseService;
+    this.enrollmentRepo = enrollmentRepo;
   }
 
   // ==================== CREATE ====================
@@ -71,9 +79,7 @@ public class UserServices {
     User u = repo.findById(uId)
         .orElseThrow(() -> new RuntimeException("User does not exist with id: " + uId));
 
-    List<UserProgressDTO> progressDTOs = upService.getProgressForUserDTO(uId);
-
-    return new UserDTO(u, progressDTOs);
+    return new UserDTO(u);
   }
 
   public User getUser(UUID uId) {
@@ -96,7 +102,7 @@ public class UserServices {
     // user
     // itself and the corresponding UserProgress.
     return users.stream()
-        .map(u -> new UserDTO(u, progressMap.getOrDefault(u.getId(), List.of())))
+        .map(UserDTO::new)
         .toList();
   }
 
@@ -104,7 +110,9 @@ public class UserServices {
 
   public UserDTO enrollCourse(UUID uId, UUID cId) {
     User u = getUser(uId);
-    u.enrollNewCourse(courseService.getCourseEntity(cId));
+    Course c = courseService.getCourseEntity(cId);
+    UserCourseEnrollment uce = new UserCourseEnrollment(u, c);
+    enrollmentRepo.save(uce);
     return new UserDTO(u);
   }
 
