@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.calcmadeeasy.models.Sections.Section;
+import com.calcmadeeasy.models.Chapters.Chapter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,13 +18,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-/*
- * Entity for storing a section grade for a unique user. 
- */
-
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "section_id" }) })
-public class UserSectionGrade {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = { "user_id", "chapter_id" })})
+public class UserChapterGrade {
   @Id
   @GeneratedValue
   private UUID id;
@@ -34,23 +30,23 @@ public class UserSectionGrade {
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "section_id", nullable = false)
-  private Section section;
+  @JoinColumn(name = "chapter_id", nullable = false)
+  private Chapter chapter;
 
   private float grade;
 
   @CreationTimestamp
-  @Column(updatable = false)
+  @Column(nullable = false)
   private Instant createdAt;
 
   @UpdateTimestamp
   private Instant updatedAt;
 
-  protected UserSectionGrade() {}
+  protected UserChapterGrade() {}
 
-  public UserSectionGrade(User user, Section section, float grade) {
+  public UserChapterGrade(User user, Chapter chapter, float grade) {
     this.user = user;
-    this.section = section;
+    this.chapter = chapter;
     this.grade = grade;
   }
 
@@ -64,8 +60,8 @@ public class UserSectionGrade {
     return user;
   }
 
-  public Section getSection() {
-    return section;
+  public Chapter getChapter() {
+    return chapter;
   }
 
   public float getGrade() {
@@ -79,10 +75,11 @@ public class UserSectionGrade {
   public Instant getUpdatedAt() {
     return updatedAt;
   }
-  
+
   // Setters
 
   public void setGrade(float grade) {
     this.grade = grade;
   }
+  
 }
