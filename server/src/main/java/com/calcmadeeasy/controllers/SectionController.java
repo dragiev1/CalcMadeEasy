@@ -53,10 +53,10 @@ public class SectionController {
   // ---------------- UPDATE ----------------
 
   @PutMapping("/{sectionId}")
-  public ResponseEntity<SectionDTO> updateSection(
+  public ResponseEntity<SectionResponseDTO> updateSection(
       @PathVariable UUID sectionId,
       @RequestBody UpdateSectionDTO request) {
-    SectionDTO s = sectionService.updateSection(sectionId, request);
+    SectionResponseDTO s = sectionService.updateSection(sectionId, request);
     return ResponseEntity.ok(s);
   }
 

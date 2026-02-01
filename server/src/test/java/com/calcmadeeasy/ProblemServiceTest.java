@@ -127,7 +127,7 @@ public class ProblemServiceTest {
     update.setPoints(100);
     update.setSolution("CHANGED");
 
-    ProblemDTO updated = problemService.updateProblem(problem1.getId(), update);
+    ProblemResponseDTO updated = problemService.updateProblem(problem1.getId(), update);
     Problem p = problemService.getProblemEntity(updated.getId());
 
     assertTrue(p.getIsChallenge());

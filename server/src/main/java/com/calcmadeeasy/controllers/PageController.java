@@ -54,10 +54,10 @@ public class PageController {
   // ---------------- UPDATE ----------------
 
   @PutMapping("/{pageId}")
-  public ResponseEntity<PageDTO> updatePage(
+  public ResponseEntity<PageResponseDTO> updatePage(
     @PathVariable UUID pageId, 
     @RequestBody UpdatePageDTO request) {
-      PageDTO p = pageService.updatePage(pageId, request);
+      PageResponseDTO p = pageService.updatePage(pageId, request);
       return ResponseEntity.ok(p);
   }
 

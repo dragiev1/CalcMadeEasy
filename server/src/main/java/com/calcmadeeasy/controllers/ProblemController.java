@@ -52,10 +52,10 @@ public class ProblemController {
   // ---------------- UPDATE ----------------
 
   @PutMapping("/{problemId}")
-  public ResponseEntity<ProblemDTO> updateProblem(
+  public ResponseEntity<ProblemResponseDTO> updateProblem(
       @PathVariable UUID problemId,
       @RequestBody UpdateProblemDTO request) {
-    ProblemDTO p = problemService.updateProblem(problemId, request);
+    ProblemResponseDTO p = problemService.updateProblem(problemId, request);
     return ResponseEntity.ok(p);
   }
 
