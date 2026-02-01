@@ -1,5 +1,6 @@
 package com.calcmadeeasy.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,6 @@ import com.calcmadeeasy.models.Users.UserCourseEnrollment;
 @Repository
 public interface CourseEnrollmentRepo extends JpaRepository<UserCourseEnrollment, UUID> {
   
+  // Get course grade object by unique user id.
+  Optional<UserCourseEnrollment> findByUserIdAndCourseId(UUID userId, UUID courseId);
 }

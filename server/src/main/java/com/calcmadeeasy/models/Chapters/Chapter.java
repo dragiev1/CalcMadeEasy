@@ -107,6 +107,10 @@ public class Chapter {
     return sections;
   }
 
+  public Course getCourse() {
+    return course;
+  }
+
   public Instant getCreatedAt() {
     return createdAt;
   }

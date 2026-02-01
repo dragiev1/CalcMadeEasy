@@ -113,7 +113,11 @@ public class Section {
   }
 
   public UUID getChapterId() {
-    return chapter != null ? chapter.getId() : null;
+    return chapter.getId();
+  }
+
+  public Chapter getChapter() {
+    return chapter;
   }
 
   public Instant getUpdatedAt() {
