@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseServices {
   private final CourseRepo repo;
+  private ChapterServices chapterService;
 
-  public CourseServices(CourseRepo repo) {
+  public CourseServices(CourseRepo repo, ChapterServices chapterService) {
     this.repo = repo;
+    this.chapterService = chapterService;
   }
 
   // ==================== CREATE ====================
@@ -71,7 +73,9 @@ public class CourseServices {
     return new CourseResponseDTO(c);
   }
 
-  public CourseDTO addChapter(UUID courseId, Chapter chapter) {
+  public CourseDTO addChapter(UUID courseId, UUID chapterId) {
+    Chapter chapter = chapterService.getChapterEntity(chapterId);
+
     if (chapter == null)
       throw new IllegalArgumentException("Cannot append null chapter");
 
