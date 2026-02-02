@@ -2,6 +2,7 @@ package com.calcmadeeasy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
@@ -21,6 +22,7 @@ import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
+import com.calcmadeeasy.dto.Sections.UpdateSectionDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Pages.Page;
@@ -66,8 +68,8 @@ public class SectionServiceTest {
     chapter = chapterService.getChapterEntity(chapterResponse.getId());
 
     CreateSectionDTO sdto = new CreateSectionDTO();
-    sdto.setDescription("DESCRIPTION");
-    sdto.setTitle("TITLE");
+    sdto.setDescription("section description");
+    sdto.setTitle("section title");
     sdto.setChapterId(chapter.getId());
     SectionResponseDTO response = sectionService.createSection(sdto);
     section = sectionService.getSectionEntity(response.getId());
@@ -102,6 +104,25 @@ public class SectionServiceTest {
   }
 
   // UPDATE
+
+  @Test
+  public void testUpdateSection() {
+    String changed = "CHANGED";
+    String ogTitle = section.getTitle();
+    String ogDescrip = section.getDescription();
+
+    UpdateSectionDTO update = new UpdateSectionDTO();
+    update.setDescription(changed);
+    update.setTitle(changed);
+    sectionService.updateSection(section.getId(), update);
+    Section updated = sectionService.getSectionEntity(section.getId());
+
+    String err = "Error: Section was not updated correctly.";
+    assertEquals(updated.getDescription(), changed, err);
+    assertEquals(updated.getTitle(), changed, err);
+    assertNotEquals(ogTitle, updated.getTitle(), err);
+    assertNotEquals(ogDescrip, updated.getDescription(), err);
+  }
 
   @Test
   public void testAddPage() {

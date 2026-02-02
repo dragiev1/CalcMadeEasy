@@ -35,7 +35,7 @@ public class Chapter {
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Chapters in a one course.
-  @JoinColumn(name = "course_id")
+  @JoinColumn(name = "course_id", nullable = false)
   @JsonBackReference
   private Course course;
 
@@ -167,14 +167,12 @@ public class Chapter {
 
   // Removers
   public void removeSectionById(UUID id) {
-    for (Section s : this.sections) {
-      if (s.getId() == id) {
-        this.sections.remove(s);
-        System.out.println("Removed " + s + " from section list");
-      } else
-        System.out.println("No section was found in the list");
-      return;
-    }
+    Section section = sections.stream()
+      .filter(s -> s.getId().equals(id))
+      .findFirst()
+      .orElseThrow(() -> new IllegalArgumentException("Section was not found"));
+    
+      sections.remove(section);
   }
 
   // Helper Methods

@@ -35,11 +35,11 @@ public class Section {
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Sections in a one chapter.
-  @JoinColumn(name = "chapter_id")
+  @JoinColumn(name = "chapter_id", nullable = false)
   @JsonBackReference
   private Chapter chapter;
 
-  @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<Page> pages;
 
@@ -154,16 +154,13 @@ public class Section {
 
   // Removers
 
-  public void removePageById(UUID id) {
-    if (pages.isEmpty() || pages == null)
-      System.out.println("No pages in this section.");
-    for (Page p : this.pages) {
-      if (p.getId().equals(id)) {
-        pages.remove(p);
-        System.out.println("Removed " + p.toString() + "\nfrom pages list");
-        return;
-      }
-    }
+  public void removePage(UUID pageId) {
+    Page page = pages.stream()
+        .filter(p -> p.getId().equals(pageId))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Page not found"));
+
+    pages.remove(page);
   }
 
   // Helper Method

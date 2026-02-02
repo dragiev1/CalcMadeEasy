@@ -3,6 +3,7 @@ package com.calcmadeeasy.models.Courses;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class Course {
   private String title;
   private String description;
 
-  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL) // Many chapters in one course.
+  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true) // Many chapters in one course.
   @JsonManagedReference
   private List<Chapter> chapters;
 
@@ -129,26 +130,17 @@ public class Course {
     chapter.setCourse(this);
   }
 
-  public void addChapters(Chapter... chapters) {
-    if (chapters == null || chapters.length == 0) 
-      throw new IllegalArgumentException("Cannot add null or empty chapters");
-    
-    for (Chapter c : chapters)
-      this.chapters.add(c);
-  }
-
-  // Removers
-  public void removeChapterById(UUID id) {
-    for (Chapter c : chapters) {
-      if (c.getId().equals(id)) {
-        this.chapters.remove(c);
-        System.out.println("Removed " + c.toString() + " from Chapters list");
-        return;
-      }
+  public void removeChapterById(UUID chapterId) {
+  Iterator<Chapter> iterator = chapters.iterator();
+  while (iterator.hasNext()) {
+    Chapter chapter = iterator.next();
+    if (chapter.getId().equals(chapterId)) {
+      iterator.remove();
+      chapter.setCourse(null); 
+      return;
     }
-    System.out.println("Could not find chapter");
-
   }
+}
 
   public String toString() {
     return "\nChapter{\n" +

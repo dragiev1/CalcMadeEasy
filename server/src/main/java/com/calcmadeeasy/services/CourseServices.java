@@ -8,6 +8,8 @@ import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.repository.CourseRepo;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -90,6 +92,7 @@ public class CourseServices {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeCourse(UUID courseId) {
     boolean exists = exists(courseId);
     if (!exists)

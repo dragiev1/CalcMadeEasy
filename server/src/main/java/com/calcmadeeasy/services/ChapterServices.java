@@ -11,6 +11,8 @@ import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +41,8 @@ public class ChapterServices {
         .title(chapter.getTitle())
         .build();
 
-    Course co = courseRepo.findById(chapter.getCourseId()).orElseThrow(() -> new IllegalArgumentException("Could not find course to set inside chapter"));
+    Course co = courseRepo.findById(chapter.getCourseId())
+        .orElseThrow(() -> new IllegalArgumentException("Could not find course to set inside chapter"));
     c.setCourse(co);
 
     repo.save(c);
@@ -98,6 +101,7 @@ public class ChapterServices {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeChapter(UUID chapterId) {
     repo.deleteById(chapterId);
   }

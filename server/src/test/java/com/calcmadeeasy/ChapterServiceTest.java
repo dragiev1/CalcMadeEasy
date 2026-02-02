@@ -27,6 +27,7 @@ import com.calcmadeeasy.services.ChapterServices;
 import com.calcmadeeasy.services.CourseServices;
 import com.calcmadeeasy.services.SectionServices;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
@@ -39,6 +40,9 @@ public class ChapterServiceTest {
   private ChapterServices chapterService;
   @Autowired
   private SectionServices sectionService;
+
+  @Autowired
+  private EntityManager em;
 
   private Course course;
   private Chapter chapter;
@@ -56,8 +60,8 @@ public class ChapterServiceTest {
     cdto.setDescription("chapter description");
     cdto.setTitle("chapter title");
     cdto.setCourseId(course.getId());
-    ChapterResponseDTO chapterResponse = chapterService.createChapter(cdto);
-    chapter = chapterService.getChapterEntity(chapterResponse.getId());
+    ChapterResponseDTO response = chapterService.createChapter(cdto);
+    chapter = chapterService.getChapterEntity(response.getId());
 
     CreateSectionDTO sdto = new CreateSectionDTO();
     sdto.setDescription("section description");
@@ -117,15 +121,19 @@ public class ChapterServiceTest {
     assertEquals(section.getId(), sections.get(0).getId(), err);
   }
 
+  // Remove
+
   @Test
   public void testRemoveChapter() {
-    UUID ogId = chapter.getId();
+    UUID id = chapter.getId();
 
-    chapterService.removeChapter(ogId);
-    boolean removed = chapterService.exists(ogId);
+    chapterService.removeChapter(id);
+    em.flush();
+    em.clear();
+
 
     String err = "Error: chapter persists after removal";
-    assertFalse(removed, err);
+    assertFalse(chapterService.exists(id), err);
   }
 
   @Test
