@@ -126,6 +126,7 @@ public class Course {
   }
 
   public void addChapter(Chapter chapter) {
+    if(chapter.getCourse() == this) return;
     this.chapters.add(chapter);
     chapter.setCourse(this);
   }

@@ -6,8 +6,10 @@ import com.calcmadeeasy.dto.Courses.CreateCourseDTO;
 import com.calcmadeeasy.dto.Courses.UpdateCourseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.CourseRepo;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -18,11 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseServices {
   private final CourseRepo repo;
-  private ChapterServices chapterService;
+  private final ChapterRepo chapterRepo;
 
-  public CourseServices(CourseRepo repo, ChapterServices chapterService) {
+  public CourseServices(CourseRepo repo, ChapterRepo chapterRepo) {
     this.repo = repo;
-    this.chapterService = chapterService;
+    this.chapterRepo = chapterRepo;
   }
 
   // ==================== CREATE ====================
@@ -69,25 +71,30 @@ public class CourseServices {
     if (request.getDescription() != null)
       c.setDescription(request.getDescription());
     if (request.getTitle() != null)
-      c.setDescription(request.getTitle());
+      c.setTitle(request.getTitle());
 
     repo.save(c);
     return new CourseResponseDTO(c);
   }
 
-  public CourseDTO addChapter(UUID courseId, UUID chapterId) {
-    Chapter chapter = chapterService.getChapterEntity(chapterId);
+  public CourseDTO moveChapter(UUID courseId, UUID chapterId) {
+    Course target = getCourseEntity(courseId);
+    Chapter chapter = chapterRepo.findById(chapterId)
+        .orElseThrow(() -> new EntityNotFoundException("No chapter is found with id: " + chapterId));
+    Course current = chapter.getCourse();
 
-    if (chapter.getCourse() != null)
-      throw new IllegalStateException("Chapter already belongs to another course");
+    if (current == null)
+      throw new IllegalStateException("Chapter is not attached to Course: " + chapterId);
 
-    Course c = getCourseEntity(courseId);
+    if (chapter.getCourse().getId().equals(courseId))
+      return new CourseDTO(current);  // Chapter does not move; return original course.
 
-    chapter.setCourse(c);
-    c.addChapter(chapter);
+    current.getChapters().remove(chapter);
 
-    repo.save(c);
-    return new CourseDTO(c);
+    target.addChapter(chapter);
+    repo.save(target);
+    repo.save(current);
+    return new CourseDTO(target);
   }
 
   // ==================== DELETE ====================
@@ -108,4 +115,5 @@ public class CourseServices {
       throw new IllegalArgumentException("Chapter does not exist in course, could not remove");
     repo.save(c);
   }
+  
 }

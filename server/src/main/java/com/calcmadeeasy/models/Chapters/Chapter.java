@@ -91,6 +91,7 @@ public class Chapter {
   }
 
   // Getters
+
   public UUID getId() {
     return id;
   }
@@ -128,13 +129,9 @@ public class Chapter {
     this.title = newTitle;
   }
 
-  // Add one section to the sections list.
   public void addSection(Section section) {
-    if (section == null)
-      throw new IllegalArgumentException("Cannot add a null section");
-    if (sections == null)
-      sections = new ArrayList<>();
-    sections.add(section);
+    if(section.getChapter() == this) return;
+    this.sections.add(section);
     section.setChapter(this);
   }
 
@@ -145,7 +142,8 @@ public class Chapter {
     }
   }
 
-  // Removers
+  // Remove
+  
   public void removeSectionById(UUID id) {
     Section section = sections.stream()
       .filter(s -> s.getId().equals(id))
