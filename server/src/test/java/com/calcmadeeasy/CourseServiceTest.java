@@ -95,24 +95,28 @@ public class CourseServiceTest {
     assertEquals(changed, updated.getDescription(), err);
     assertEquals(changed, updated.getTitle(), err);
     assertNotEquals(ogDesc, updated.getDescription(), err);
-    assertNotEquals(ogTitle, updated.getDescription(), err);
+    assertNotEquals(ogTitle, updated.getTitle(), err);
   }
 
   @Test
-  public void testAddChapter() {
-    List<Chapter> og = new ArrayList<>();
-    og.add(chapter);
+  public void testMoveChapter() {
+    // Arrange a new course to move chapter to.
+    CreateCourseDTO testDTO = new CreateCourseDTO();
+    testDTO.setDescription("course description");
+    testDTO.setTitle("course title");
+    CourseResponseDTO testResponse = courseService.createCourse(testDTO);
+    Course moveToCourse = courseService.getCourseEntity(testResponse.getId());
 
-    courseService.addChapter(course.getId(), chapter.getId());
+    courseService.moveChapter(moveToCourse.getId(), chapter.getId());
 
-    Course updated = courseService.getCourseEntity(course.getId());
-    boolean added = updated.getChapters().contains(chapter);
+    int size = moveToCourse.getChapterQuantity();
+    boolean added = moveToCourse.getChapters().contains(chapter);
 
-    String err = "Error: chapter was not appended to course correctly";
+    String err = "Error: chapter was not moved to new course correctly";
     assertTrue(added, err);
-    assertNotEquals(og, updated.getChapters(), err);
-
-    System.out.println("Successfully appended new chapter to course");
+    assertEquals(1, size, err);
+    assertEquals(0, courseService.getCourseEntity(course.getId()).getChapterQuantity(), err);
+    assertEquals(chapter.getId(), moveToCourse.getChapters().get(0).getId(), err);
   }
 
   // Remove
@@ -125,7 +129,6 @@ public class CourseServiceTest {
     boolean exist = courseService.exists(ogId);
 
     assertEquals(false, exist, "Error: course did not remove successfully");
-    System.out.println("Successfully removed course");
   }
 
   @Test
@@ -138,6 +141,5 @@ public class CourseServiceTest {
     String err = "Error: chapter was not removed from course properly";
     assertEquals(true, isEmpty, err);
     assertNotEquals(og, courseService.getCourseEntity(course.getId()).getChapters(), err);
-    System.out.println("Successfully removed chapter from course");
   }
 }

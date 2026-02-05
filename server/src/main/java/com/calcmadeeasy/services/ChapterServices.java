@@ -104,7 +104,6 @@ public class ChapterServices {
 
     current.getSections().remove(s);
 
-    s.setChapter(target);
     target.addSection(s);
     repo.save(target);
     repo.save(current);
