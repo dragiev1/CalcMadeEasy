@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -107,14 +106,22 @@ public class ChapterServiceTest {
   }
 
   @Test
-  public void testAddSection() {
-    chapterService.addSection(chapter.getId(), section.getId());
-    List<Section> sections = chapterService.getChapterEntity(chapter.getId()).getSections();
-    boolean exists = sections.isEmpty();
-    String err = "Error: section did not append to chapter properly";
-    assertFalse(exists, err);
-    assertEquals(1, sections.size(), err);
-    assertEquals(section.getId(), sections.get(0).getId(), err);
+  public void testMoveSection() {
+    // Arrange the a new chapter to move section to.
+    CreateChapterDTO testDTO = new CreateChapterDTO();
+    testDTO.setCourseId(course.getId());
+    testDTO.setDescription("test description");
+    testDTO.setTitle("test title");
+    ChapterResponseDTO testResponse = chapterService.createChapter(testDTO);
+    Chapter testChapter = chapterService.getChapterEntity(testResponse.getId());
+
+    chapterService.moveSection(testChapter.getId(), section.getId());
+    int size = chapterService.getChapterEntity(chapter.getId()).getSections().size();
+
+    String err = "Error: section move to chapter properly";
+    assertEquals(0, size, err);
+    assertEquals(1, testChapter.getSections().size(), err);
+    assertEquals(section.getId(), testChapter.getSections().get(0).getId(), err);
   }
 
   // Remove
@@ -131,7 +138,6 @@ public class ChapterServiceTest {
 
   @Test
   public void testRemoveSection() {
-    chapterService.addSection(chapter.getId(), section.getId());
     assertEquals(1, chapter.getSections().size());
     UUID cId = chapter.getId();
 
