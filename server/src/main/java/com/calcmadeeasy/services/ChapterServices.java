@@ -11,6 +11,7 @@ import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -89,14 +90,25 @@ public class ChapterServices {
     return new ChapterResponseDTO(c);
   }
 
-  public ChapterDTO addSection(UUID chapterId, UUID sectionId) {
-    Chapter c = getChapterEntity(chapterId);
+  public ChapterDTO moveSection(UUID chapterId, UUID sectionId) {
+    Chapter target = getChapterEntity(chapterId);
     Section s = sectionRepo.findById(sectionId)
-        .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
-    s.setChapter(c);
-    c.addSection(s);
-    repo.save(c);
-    return new ChapterDTO(c);
+        .orElseThrow(() -> new EntityNotFoundException("No section is found with id: " + sectionId));
+    Chapter current = s.getChapter();
+
+    if (current == null)
+      throw new IllegalStateException("Section is not attached to courseId" + chapterId);
+
+    if (current.getId().equals(chapterId))
+      return new ChapterDTO(current);
+
+    current.getSections().remove(s);
+
+    s.setChapter(target);
+    target.addSection(s);
+    repo.save(target);
+    repo.save(current);
+    return new ChapterDTO(target);
   }
 
   // ==================== DELETE ====================

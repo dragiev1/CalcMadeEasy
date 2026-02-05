@@ -138,26 +138,6 @@ public class Chapter {
     section.setChapter(this);
   }
 
-  // Can either add one or more sections as once.
-  public void addSections(List<Section> newSections) {
-    if (newSections == null || newSections.isEmpty())
-      throw new IllegalArgumentException("Cannot add a null or no sections");
-    if (sections == null)
-      sections = new ArrayList<>();
-    for (Section s : newSections)
-      addSection(s);
-  }
-
-  // Fully replaces section list with new sections.
-  public void setSectionList(Section... newSections) {
-    if (newSections == null || newSections.length == 0)
-      throw new IllegalArgumentException("Cannot add a null or no sections");
-    if (sections == null)
-      sections = new ArrayList<>();
-    for (Section s : newSections)
-      addSection(s);
-  }
-
   public void setCourse(Course course) {
     this.course = course;
     if (course != null && !course.getChapters().contains(this)) {

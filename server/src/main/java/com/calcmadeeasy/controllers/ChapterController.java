@@ -65,7 +65,7 @@ public class ChapterController {
     @PathVariable UUID chapterId,
     @PathVariable UUID sectionId
   ) {
-    ChapterDTO c = chapterService.addSection(chapterId, sectionId);
+    ChapterDTO c = chapterService.moveSection(chapterId, sectionId);
     return ResponseEntity.ok(c);
   }
 
