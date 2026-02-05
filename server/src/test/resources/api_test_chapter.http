@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "description": "NEW DESCRIPTION",
   "title": "NEW TITLE",
-  "courseId": "2f08d30a-4a54-41f0-acd1-1c78fb5e8a43"
+  "courseId": "057f5ffc-01d3-4f65-a67b-accd42e64d7d"
 }
 
 
@@ -36,5 +36,5 @@ DELETE http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac2
 
 
 ### Remove chapter
-DELETE http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28
+DELETE http://localhost:8080/api/v1/chapters/e29061d6-285b-4ecb-90a1-38178a8aa851
 

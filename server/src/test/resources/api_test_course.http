@@ -1,0 +1,33 @@
+### Create new course
+POST http://localhost:8080/api/v1/courses
+Content-Type: application/json
+
+{
+  "description": "DESCRIPTION",
+  "title": "title"
+}
+
+
+### Get all courses
+GET http://localhost:8080/api/v1/courses
+Content-Type: application/json
+
+### Get unique course by ID
+GET http://localhost:8080/api/v1/courses/057f5ffc-01d3-4f65-a67b-accd42e64d7d
+Content-Type: application/json
+
+
+### Update course
+PUT http://localhost:8080/api/v1/courses/057f5ffc-01d3-4f65-a67b-accd42e64d7d
+Content-Type: application/json
+
+{
+  "description": "CHANGED",
+  "title": "CHANGED"
+}
+
+### Move a chapter to new course
+PUT http://localhost:8080/api/v1/courses/move-chapter-to/16bf2af8-7ea0-47fb-b5b8-a4fb5ca9fe62/2f08d30a-4a54-41f0-acd1-1c78fb5e8a43
+Content-Type: application/json
+
+

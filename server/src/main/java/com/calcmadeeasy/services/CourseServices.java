@@ -89,15 +89,16 @@ public class CourseServices {
     if (chapter.getCourse().getId().equals(courseId))
       return new CourseDTO(current);  // Chapter does not move; return original course.
 
+    target.addChapter(chapter);
+    
     current.getChapters().remove(chapter);
 
-    target.addChapter(chapter);
     repo.save(target);
     repo.save(current);
     return new CourseDTO(target);
   }
 
-  // ==================== DELETE ====================
+  // ==================== REMOVE ====================
 
   @Transactional
   public void removeCourse(UUID courseId) {
@@ -108,12 +109,13 @@ public class CourseServices {
     repo.deleteById(courseId);
   }
 
-  public void removeChapter(UUID courseId, UUID chapterId) {
+  public CourseDTO removeChapter(UUID courseId, UUID chapterId) {
     Course c = getCourseEntity(courseId);
     boolean removed = c.getChapters().removeIf(ch -> ch.getId().equals(chapterId));
     if (!removed)
       throw new IllegalArgumentException("Chapter does not exist in course, could not remove");
     repo.save(c);
+    return new CourseDTO(c);
   }
   
 }
