@@ -14,11 +14,11 @@ GET http://localhost:8080/api/v1/chapters
 Content-Type: application/json
 
 ### Get chapter by id
-GET http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99
+GET http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28
 Content-Type: application/json
 
 ### Update chapter
-PUT http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99
+PUT http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28
 Content-Type: application/json
 
 {
@@ -27,14 +27,14 @@ Content-Type: application/json
 }
 
 ### Add section to chapter
-PUT http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99/add-section/1c01cf43-c0dd-4026-94a8-759d5c9570da
+PUT http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28/add-section/aaab4afa-732b-4d45-a5ca-1f6f234aa762
 Content-Type: application/json
 
 
 ### Remove section from chapter
-DELETE http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99/remove-section/1c01cf43-c0dd-4026-94a8-759d5c9570da
+DELETE http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28/remove-section/aaab4afa-732b-4d45-a5ca-1f6f234aa762
 
 
 ### Remove chapter
-DELETE http://localhost:8080/api/v1/chapters/8bec3bca-0d0c-4c7b-bb79-37c51338bb99
+DELETE http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28
 

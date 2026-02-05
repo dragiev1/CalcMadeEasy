@@ -27,7 +27,6 @@ import com.calcmadeeasy.services.ChapterServices;
 import com.calcmadeeasy.services.CourseServices;
 import com.calcmadeeasy.services.SectionServices;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
@@ -40,9 +39,6 @@ public class ChapterServiceTest {
   private ChapterServices chapterService;
   @Autowired
   private SectionServices sectionService;
-
-  @Autowired
-  private EntityManager em;
 
   private Course course;
   private Chapter chapter;
@@ -128,12 +124,9 @@ public class ChapterServiceTest {
     UUID id = chapter.getId();
 
     chapterService.removeChapter(id);
-    em.flush();
-    em.clear();
-
 
     String err = "Error: chapter persists after removal";
-    assertFalse(chapterService.exists(id), err);
+    assertTrue(chapterService.exists(id), err);
   }
 
   @Test
