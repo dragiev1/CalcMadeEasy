@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### Add section to chapter
-PUT http://localhost:8080/api/v1/chapters/7c0a1442-0e83-4d7c-8242-72a03f5bac28/add-section/aaab4afa-732b-4d45-a5ca-1f6f234aa762
+PUT http://localhost:8080/api/v1/chapters/move-section-to/7c0a1442-0e83-4d7c-8242-72a03f5bac28/aaab4afa-732b-4d45-a5ca-1f6f234aa762
 Content-Type: application/json
 
 

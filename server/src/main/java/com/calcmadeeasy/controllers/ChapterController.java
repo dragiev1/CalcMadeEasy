@@ -60,7 +60,7 @@ public class ChapterController {
       return ResponseEntity.ok(c);
   } 
 
-  @PutMapping("/{chapterId}/add-section/{sectionId}")
+  @PutMapping("/move-section-to/{chapterId}/{sectionId}")
   public ResponseEntity<ChapterDTO> addSection(
     @PathVariable UUID chapterId,
     @PathVariable UUID sectionId
