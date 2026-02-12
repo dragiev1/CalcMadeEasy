@@ -61,10 +61,12 @@ public class PageController {
       return ResponseEntity.ok(p);
   }
 
-  @PutMapping("/add-problem")
+  @PutMapping("/{pageId}/add-problem/{problemId}")
   public ResponseEntity<PageDTO> addProblem(
-    @RequestBody PageProblemDTO pageProblemDTO) {
-      PageDTO p = pageService.addProblem(pageProblemDTO);
+    @PathVariable UUID pageId,
+    @PathVariable UUID problemId,
+    @RequestBody PageProblemDTO dto) {
+      PageDTO p = pageService.addProblem(pageId, problemId, dto);
       return ResponseEntity.ok(p);
     }
 
@@ -76,7 +78,7 @@ public class PageController {
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping("/{pageId}/problems/{problemId}")
+  @DeleteMapping("/{pageId}/remove-problem/{problemId}")
   public ResponseEntity<PageDTO> removeProblemFromPage(
     @PathVariable UUID pageId,
     @PathVariable UUID problemId

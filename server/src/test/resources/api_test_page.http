@@ -3,22 +3,23 @@ POST http://localhost:8080/api/v1/pages
 Content-Type: application/json
 
 {
-  "content": "CONTENT"
+  "content": "CONTENT",
+  "position": 1
 }
 
 
-### Get existing problem
+### Get existing page
 GET http://localhost:8080/api/v1/pages/70e57384-008e-4c7c-9666-96f3d0eb2ac4
 Content-Type: application/json
 
 
-### Get all problems
+### Get all pages
 GET http://localhost:8080/api/v1/pages
 Content-Type: application/json
 
 
-### Update content
-PUT http://localhost:8080/api/v1/pages/6f1aa526-3dbe-406c-9d23-d5113239448d
+### Update page
+PUT http://localhost:8080/api/v1/pages/e9c12909-70d0-4d3b-b26c-b5b99b9d78c1
 Content-Type: application/json
 
 {
@@ -26,20 +27,18 @@ Content-Type: application/json
 }
 
 ### Add problem
-PUT http://localhost:8080/api/v1/pages/add-problem
+PUT http://localhost:8080/api/v1/pages/309681c4-dfeb-4fa3-a653-03bc22e52c0a/add-problem/f8c626df-dfcc-4b31-8bda-9e9aaa8ec145
 Content-Type: application/json
 
 {
-  "pageId": "6f1aa526-3dbe-406c-9d23-d5113239448d",
-  "problemId": "f8c626df-dfcc-4b31-8bda-9e9aaa8ec145",
-  "problemType": "EXERCISE"
+  "problemType": "HOMEWORK"
 }
 
 
 ### Remove problem from existing page.
-DELETE http://localhost:8080/api/v1/pages/6f1aa526-3dbe-406c-9d23-d5113239448d/problems/f8c626df-dfcc-4b31-8bda-9e9aaa8ec145
+DELETE http://localhost:8080/api/v1/pages/e9c12909-70d0-4d3b-b26c-b5b99b9d78c1/remove-problem/f8c626df-dfcc-4b31-8bda-9e9aaa8ec145
 Content-Type: application/json
 
 ### Delete a page
-DELETE http://localhost:8080/api/v1/pages/6f1aa526-3dbe-406c-9d23-d5113239448d
+DELETE http://localhost:8080/api/v1/pages/e9c12909-70d0-4d3b-b26c-b5b99b9d78c1
 Content-Type: application/json

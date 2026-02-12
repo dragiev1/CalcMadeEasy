@@ -8,7 +8,6 @@ import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
-import com.calcmadeeasy.models.Problems.ProblemType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -95,11 +94,10 @@ public class PageServices {
     return new PageResponseDTO(page);
   }
 
-  public PageDTO addProblem(PageProblemDTO dto) {
-    Page page = getPageEntity(dto.getPageId());
-    Problem problem = problemService.getProblemEntity(dto.getProblemId());
-    ProblemType pType = dto.getProblemType();
-    page.addProblem(problem, pType);
+  public PageDTO addProblem(UUID pageId, UUID problemId, PageProblemDTO dto) {
+    Page page = getPageEntity(pageId);
+    Problem problem = problemService.getProblemEntity(problemId);
+    page.addProblem(problem, dto.getProblemType());
 
     repo.save(page);
     return new PageDTO(page);
