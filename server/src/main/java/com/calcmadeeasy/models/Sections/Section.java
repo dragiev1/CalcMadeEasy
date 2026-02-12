@@ -138,14 +138,8 @@ public class Section {
     this.title = newTitle;
   }
 
-  public void setPage(Page newPage) {
-    this.pages.add(Objects.requireNonNull(newPage));
-  }
-
-  public void setPageList(Page... newPages) {
-    this.pages = new ArrayList<Page>();
-    for (Page p : newPages)
-      this.pages.add(p);
+  public void addPage(Page newPage) {
+    pages.add(Objects.requireNonNull(newPage));
   }
 
   public void setChapter(Chapter chapter) {

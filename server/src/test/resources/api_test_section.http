@@ -15,12 +15,12 @@ GET http://localhost:8080/api/v1/sections
 Content-Type: application/json
 
 ### Get an existing section
-GET http://localhost:8080/api/v1/sections/045522b9-833f-4bf7-bd0d-bc390704b94c
+GET http://localhost:8080/api/v1/sections/f616916a-fbd7-4d12-b389-d7244e036f51
 Content-Type: application/json
 
 
 ### Update a section
-PUT http://localhost:8080/api/v1/sections/aaab4afa-732b-4d45-a5ca-1f6f234aa762
+PUT http://localhost:8080/api/v1/sections/f616916a-fbd7-4d12-b389-d7244e036f51
 Content-Type: application/json
 
 {
@@ -29,6 +29,13 @@ Content-Type: application/json
 }
 
 ### Add new page
-PUT http://localhost:8080/api/v1/sections/aaab4afa-732b-4d45-a5ca-1f6f234aa762/add-page/
+PUT http://localhost:8080/api/v1/sections/f616916a-fbd7-4d12-b389-d7244e036f51/add-page/309681c4-dfeb-4fa3-a653-03bc22e52c0a
+Content-Type: application/json
 
 
+### Remove page from section
+DELETE http://localhost:8080/api/v1/sections/f616916a-fbd7-4d12-b389-d7244e036f51/remove-page/309681c4-dfeb-4fa3-a653-03bc22e52c0a
+Content-Type: application/json
+
+### Remove section
+DELETE

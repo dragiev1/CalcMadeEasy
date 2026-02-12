@@ -14,19 +14,18 @@ import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.repository.ChapterRepo;
-import com.calcmadeeasy.repository.PageRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
 @Service
 public class SectionServices {
   private final ChapterRepo chapterRepo;
   private final SectionRepo repo;
-  private final PageRepo pageRepo;
+  private final PageServices pageServices;
 
-  public SectionServices(ChapterRepo chapterRepo, SectionRepo repo, PageRepo pageRepo, ChapterServices chapterService) {
+  public SectionServices(ChapterRepo chapterRepo, SectionRepo repo, PageServices pageServices) {
     this.chapterRepo = chapterRepo;
     this.repo = repo;
-    this.pageRepo = pageRepo;
+    this.pageServices = pageServices;
   }
 
   // ==================== CREATE ====================
@@ -99,11 +98,10 @@ public class SectionServices {
 
   public SectionDTO addPage(UUID sectionId, UUID pageId) {
     Section s = getSectionEntity(sectionId);
-    Page p = pageRepo.findById(pageId)
-        .orElseThrow(() -> new IllegalArgumentException("Page does not exist to add to section"));
+    Page p = pageServices.getPageEntity(pageId);
     p.setPosition(s.getPages().size() + 1);
-    s.getPages().add(p);
-
+    s.addPage(p);
+    p.setSection(s);
     repo.save(s);
 
     return new SectionDTO(s);
@@ -112,6 +110,7 @@ public class SectionServices {
   // ==================== DELETE ====================
 
   public void removeSection(UUID sectionId) {
+    getSectionEntity(sectionId).getChapter().removeSection(sectionId);
     repo.deleteById(sectionId);
 
     if (exists(sectionId))
@@ -123,11 +122,11 @@ public class SectionServices {
       throw new IllegalArgumentException("Section does not exist, cannot remove page");
 
     Section s = getSectionEntity(sectionId);
-    boolean removed = s.getPages().removeIf(p -> p.getId().equals(pageId));
+    Page p = pageServices.getPageEntity(pageId);
+    s.removePage(pageId);
+    p.setSection(s);
 
-    if (!removed)
-      throw new IllegalArgumentException("Section was found but page was not removed");
-
+    repo.save(s);
     return new SectionDTO(s);
   }
 }

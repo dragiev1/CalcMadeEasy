@@ -24,7 +24,6 @@ public class CreateSectionDTO {
     return chapterId;
   }
 
-
   // Setters
 
   public void setDescription(String description) {
