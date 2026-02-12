@@ -120,6 +120,10 @@ public class Chapter {
     return updatedAt;
   }
 
+  public int getSectionQuantity() {
+    return sections.size();
+  }
+
   // Setters
   public void setDescription(String newDescription) {
     this.description = newDescription;
@@ -130,7 +134,8 @@ public class Chapter {
   }
 
   public void addSection(Section section) {
-    if(section.getChapter() == this) return;
+    if (section.getChapter() == this)
+      return;
     this.sections.add(section);
     section.setChapter(this);
   }
@@ -142,15 +147,15 @@ public class Chapter {
     }
   }
 
-  // Remove
-  
-  public void removeSectionById(UUID id) {
+  // Removers
+
+  public void removeSection(UUID id) {
     Section section = sections.stream()
-      .filter(s -> s.getId().equals(id))
-      .findFirst()
-      .orElseThrow(() -> new IllegalArgumentException("Section was not found"));
-    
-      sections.remove(section);
+        .filter(s -> s.getId().equals(id))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Section was not found"));
+
+    sections.remove(section);
   }
 
   // Helper Methods

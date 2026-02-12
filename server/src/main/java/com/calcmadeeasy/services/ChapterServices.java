@@ -34,9 +34,6 @@ public class ChapterServices {
   // ==================== CREATE ====================
 
   public ChapterResponseDTO createChapter(CreateChapterDTO chapter) {
-    if (chapter == null)
-      throw new IllegalArgumentException("Cannot save null chapter");
-
     Chapter c = Chapter.builder()
         .description(chapter.getDescription())
         .title(chapter.getTitle())

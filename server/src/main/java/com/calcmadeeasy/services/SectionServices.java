@@ -36,12 +36,12 @@ public class SectionServices {
         .title(section.getTitle())
         .description(section.getDescription())
         .build();
-    
-    Chapter c = chapterRepo.findById(section.getChapterId()).orElseThrow(() -> new IllegalArgumentException("Cannot find chapter to assign section to"));
+
+    Chapter c = chapterRepo.findById(section.getChapterId())
+        .orElseThrow(() -> new IllegalArgumentException("Cannot find chapter to assign section to"));
     s.setChapter(c);
 
     repo.save(s);
-
     return new SectionResponseDTO(s);
   }
 
@@ -56,13 +56,15 @@ public class SectionServices {
   // ==================== READ ====================
 
   public SectionDTO getSectionDTO(UUID sectionId) {
-    Section s = repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
+    Section s = repo.findById(sectionId)
+        .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
 
     return new SectionDTO(s);
   }
 
   public Section getSectionEntity(UUID sectionId) {
-    return repo.findById(sectionId).orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
+    return repo.findById(sectionId)
+        .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
   }
 
   public List<SectionDTO> getAllSections() {
@@ -97,7 +99,8 @@ public class SectionServices {
 
   public SectionDTO addPage(UUID sectionId, UUID pageId) {
     Section s = getSectionEntity(sectionId);
-    Page p = pageRepo.findById(pageId).orElseThrow(() -> new IllegalArgumentException("Page does not exist to add to section"));
+    Page p = pageRepo.findById(pageId)
+        .orElseThrow(() -> new IllegalArgumentException("Page does not exist to add to section"));
     p.setPosition(s.getPages().size() + 1);
     s.getPages().add(p);
 
@@ -111,7 +114,8 @@ public class SectionServices {
   public void removeSection(UUID sectionId) {
     repo.deleteById(sectionId);
 
-    if(exists(sectionId)) throw new IllegalArgumentException("Section persists after deletion");
+    if (exists(sectionId))
+      throw new IllegalArgumentException("Section persists after deletion");
   }
 
   public SectionDTO removePage(UUID sectionId, UUID pageId) {

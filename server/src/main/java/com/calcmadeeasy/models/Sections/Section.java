@@ -150,6 +150,8 @@ public class Section {
 
   public void setChapter(Chapter chapter) {
     this.chapter = chapter;
+    if (chapter != null && !chapter.getSections().contains(this))
+      chapter.getSections().add(this);
   }
 
   // Removers
@@ -186,7 +188,7 @@ public class Section {
         "id=" + id +
         ", description=" + description +
         ", title=" + title +
-        ", pageQuantity=" + pages.size() +
+        ", pageQuantity=" + getPageQuantity() +
         ", updatedAt=" + updatedAt +
         ", createdAt=" + createdAt +
         '}';
