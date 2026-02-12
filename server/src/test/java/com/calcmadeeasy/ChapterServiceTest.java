@@ -65,6 +65,7 @@ public class ChapterServiceTest {
     SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
     section = sectionService.getSectionEntity(sectionResponse.getId());
 
+    assertTrue(chapter.getSectionQuantity() == 1);
   }
 
   // Create
@@ -138,7 +139,7 @@ public class ChapterServiceTest {
 
   @Test
   public void testRemoveSection() {
-    assertEquals(1, chapter.getSections().size());
+    assertEquals(1, chapter.getSectionQuantity());
     UUID cId = chapter.getId();
 
     chapterService.removeSection(cId, section.getId());
