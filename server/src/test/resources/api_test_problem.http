@@ -16,12 +16,12 @@ GET http://localhost:8080/api/v1/problems
 Content-Type: application/json
 
 ### Get an existing problem
-GET http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301
+GET http://localhost:8080/api/v1/problems/f8c626df-dfcc-4b31-8bda-9e9aaa8ec145
 Content-Type: application/json
 
 
-### Add a new tag to an existing problem
-PUT http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301
+### Updates an existing problem
+PUT http://localhost:8080/api/v1/problems/88ad103e-4ff1-4b9b-8653-a35126128433
 Content-Type: application/json
 
 {
@@ -31,14 +31,14 @@ Content-Type: application/json
 }
 
 ### Adds a tag to an existing problem
-PUT http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301/add-tag/757fbbc4-29f4-40fa-90cf-5eba3d39bd28
+PUT http://localhost:8080/api/v1/problems/88ad103e-4ff1-4b9b-8653-a35126128433/add-tag/757fbbc4-29f4-40fa-90cf-5eba3d39bd28
 Content-Type: application/json
 
 
 ### Removes a tag appended to an existing problem
-DELETE http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301/remove-tag/757fbbc4-29f4-40fa-90cf-5eba3d39bd28
+DELETE http://localhost:8080/api/v1/problems/88ad103e-4ff1-4b9b-8653-a35126128433/remove-tag/757fbbc4-29f4-40fa-90cf-5eba3d39bd28
 Content-Type: application/json
 
 ### Deletes a problem
-DELETE http://localhost:8080/api/v1/problems/a369cbd8-f904-4bdd-b79b-faa5eb200301
+DELETE http://localhost:8080/api/v1/problems/88ad103e-4ff1-4b9b-8653-a35126128433
 Content-Type: application/json
