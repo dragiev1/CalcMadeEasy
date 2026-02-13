@@ -30,7 +30,7 @@ public class UserCourseEnrollment {
   @Id
   @GeneratedValue
   private UUID id;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
@@ -48,7 +48,6 @@ public class UserCourseEnrollment {
   protected UserCourseEnrollment() {}
 
   public UserCourseEnrollment(User user, Course course) {
-    this.user = Objects.requireNonNull(user);
     this.course = Objects.requireNonNull(course);
   }
 
@@ -56,10 +55,6 @@ public class UserCourseEnrollment {
 
   public UUID getId() {
     return id;
-  }
-
-  public User getUser() {
-    return user;
   }
 
   public Course getCourse() {
@@ -78,21 +73,17 @@ public class UserCourseEnrollment {
 
   // Useful methods
 
-  public boolean isEnrolledFor(User user, Course course) {
-    return this.user.equals(user) && this.course.equals(course);
-  }
-
   @Override
   public boolean equals(Object o) {
     if(this == o) return true;
     if(!(o instanceof UserCourseEnrollment)) return false;
     UserCourseEnrollment that = (UserCourseEnrollment) o;
-    return user.equals(that.user) && course.equals(that.course);
+    return course.equals(that.course);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(user, course);
+    return Objects.hash(course);
   } 
 
 }

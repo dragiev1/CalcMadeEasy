@@ -9,14 +9,12 @@ import com.calcmadeeasy.models.Users.UserCourseEnrollment;
 public class CourseEnrollmentDTO {
   
   private UUID id;
-  private UserResponseDTO user;
   private CourseResponseDTO course;
 
   public CourseEnrollmentDTO() {}
 
   public CourseEnrollmentDTO(UserCourseEnrollment uce) {
     this.id = uce.getId();
-    this.user = new UserResponseDTO(uce.getUser());
     this.course = new CourseResponseDTO(uce.getCourse());
   }
 
@@ -24,10 +22,6 @@ public class CourseEnrollmentDTO {
 
   public UUID getId() {
     return id;
-  }
-
-  public UserResponseDTO getUser() {
-    return user;
   }
 
   public CourseResponseDTO getCourse() {
