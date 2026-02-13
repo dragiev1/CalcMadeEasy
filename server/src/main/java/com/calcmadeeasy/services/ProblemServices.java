@@ -157,10 +157,11 @@ public class ProblemServices {
   public void removeTagFromProblem(UUID tagId, UUID problemId) {
     if (!exists(problemId))
       throw new IllegalArgumentException("Problem to be removed does not exist");
+    
     Problem p = getProblemEntity(problemId);
-    boolean removed = p.getTags().removeIf(t -> t.getId().equals(tagId));
-    if (!removed)
-      throw new IllegalArgumentException("Problem was found but tag was not removed");
+    p.removeTag(tagId);
+   
+    repo.save(p);
   }
 
 }

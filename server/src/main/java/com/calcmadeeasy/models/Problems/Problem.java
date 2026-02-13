@@ -192,13 +192,14 @@ public class Problem {
   }
 
   // Removers
-  public void removeTag(Tag tag) {
-    if (this.tags.contains(tag)) {
-      this.tags.remove(tag);
 
-      return;
-    } else
-      System.out.println(tag + " not found in list.");
+  public void removeTag(UUID tagId) {
+    Tag tag = tags.stream()
+        .filter(t -> t.getId().equals(tagId))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Page not found"));
+
+    tags.remove(tag);
   }
 
   @Override
