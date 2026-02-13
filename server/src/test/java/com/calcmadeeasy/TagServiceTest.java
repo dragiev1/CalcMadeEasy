@@ -34,7 +34,7 @@ public class TagServiceTest {
   public void setup() {
     CreateTagDTO dto = new CreateTagDTO();
     dto.setDifficulty(0.9);
-    dto.setName("NAME");
+    dto.setTagName("NAME");
     tagDTO = tagServices.createTag(dto);
   }
 
@@ -78,7 +78,7 @@ public class TagServiceTest {
     String ogName = tagDTO.getTagName();
     UpdateTagDTO update = new UpdateTagDTO();
     update.setDifficulty(0.0);
-    update.setName("CHANGED");
+    update.setTagName("CHANGED");
 
     TagDTO retrieved = tagServices.updateTag(tagDTO.getId(), update);
     Double newDiff = retrieved.getDifficulty();

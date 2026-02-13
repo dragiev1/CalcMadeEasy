@@ -56,7 +56,7 @@ public class Tag {
 
   public void setTagName(String tagName) {
     if (tagName.equals("") || tagName.equals(" "))
-      throw new IllegalArgumentException("ERROR: Cannot make empty tag");
+      throw new IllegalArgumentException("ERROR: Cannot make an empty tag");
     this.tagName = tagName;
   }
 

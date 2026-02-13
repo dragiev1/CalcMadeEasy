@@ -47,7 +47,7 @@ public class ProblemServiceTest {
   @BeforeEach
   public void setup() {
     CreateTagDTO tag1 = new CreateTagDTO();
-    tag1.setName("Tag1");
+    tag1.setTagName("Tag1");
     tag1.setDifficulty(Double.valueOf(0));
     TagDTO tag1DTO = tagService.createTag(tag1);
     tagEntity1 = tagService.getTagEntity(tag1DTO.getId());

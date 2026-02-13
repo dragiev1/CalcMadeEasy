@@ -21,7 +21,7 @@ public class CreateTagDTO {
 
   // Setters
 
-  public void setName(String tagName) {
+  public void setTagName(String tagName) {
     this.tagName = tagName;
   }
 
