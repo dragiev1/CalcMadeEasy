@@ -1,5 +1,19 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  /* GLOBAL COLORS */
+  --bg-primary: #black;
+  --bg-secondary: #8A8B91;
+
+  --txt-primary: #EAE5D9;
+  --txt-secondary: #C4B6A6;
+
+  --accent-primary: #B7C9B3;
+  --accent-secondary: #A1C6EA;
+  
+  --divider-primary: #D8D3C1;
+  --divider-secondary: rgb(120, 120, 120);
+
+  font-family: 'Times New Roman', Times, serif;
   line-height: 1.5;
   font-weight: 400;
 
