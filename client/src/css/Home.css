@@ -1,0 +1,15 @@
+/* CalcMadeEasy Long Logo */
+.full-logo {
+  size: 3rem;
+}
+
+.hero-container {
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.animation-player {
+  background: none;
+}
