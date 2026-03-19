@@ -1,23 +1,56 @@
 /* CalcMadeEasy Long Logo */
 .full-logo {
   width: 90rem;
-  padding-bottom: 5rem;;
+  padding-bottom: 5rem;
   opacity: 1;
   animation: 
-    1.5s fadeIn ease,
-    shrinkMoveLeft 1.5s ease 2s forwards;
+    1.2s fadeIn ease,
+    shrinkMoveLeft 1.2s ease 2s forwards;
 }
 
+.subtitle {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 1.75rem;
+  letter-spacing: 1.5px;
+  margin: 0;
+  opacity: 0;
+  
+  color: var(--txt-secondary);
+  animation: fadeUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s forwards;
+}
+
+
 .hero-container {
-  width: 80vw;
+  width: 90vw;
   max-width: 100%;
   display: flex;
   align-items: center;
   position: relative;
   justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.full-logo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY((20px));
+    opacity: 0;
+  } to {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
 }
 
 .animation-player {
+  margin-top: 0;
   background-color: none;
   background: none;
   border-color: none;
@@ -28,7 +61,7 @@
   animation: fadeIn 5s ease 1.5s forwards;
   flex: 1;
   max-width: 60vw;
-  scale: 1.25;
+  scale: 1;
 }
 
 .lorenz-animation {
@@ -40,6 +73,7 @@
 
   animation: fadeIn 0.5s ease;
 }
+
 
 @keyframes fadeIn {
   from{
@@ -56,6 +90,20 @@
   } to {
     width: 47rem;
     margin-right: 0;
-    transform: translateX(-13rem);
+    transform: translateX(-6rem);
   }
 }
+
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--accent-primary);
+  transform: translateY(150px);
+  position: sticky;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fadeIn 5s ease 1.5s forwards;
+}
+
+

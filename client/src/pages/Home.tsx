@@ -13,7 +13,6 @@ const mathAnimations = [
   ]
 
 function Home() {
-
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
   const handleVideoEnd = () => {
@@ -25,7 +24,11 @@ function Home() {
       <Navbar />
 
       <div className="hero-container">
-        <img src={'src/assets/full_logo.svg'} className="full-logo" alt="CalcMadeEasy Logo" />
+        <div className="full-logo-container">
+          <img src={'src/assets/full_logo.svg'} className="full-logo" alt="CalcMadeEasy Logo" ></img>
+          <div className="subtitle">Where math clicks. </div>
+        </div>
+        
         <div className="animation-player">
           <video 
             key={currentVideoIndex}
@@ -39,6 +42,10 @@ function Home() {
           </video>
         </div>
       </div>
+
+
+      <div className="divider" />
+      
     </>
   );
 };
