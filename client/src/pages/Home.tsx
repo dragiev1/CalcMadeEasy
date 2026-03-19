@@ -1,22 +1,40 @@
 import Navbar from "../components/Navbar";
 import "../css/Home.css";
-import lorenzVideo from "../assets/RiemannSums.mp4";
+import {useState} from "react";
+
+import gaussianIntegral from "../assets/math-animations/GaussianIntegral.mp4";
+import riemannSums from "../assets/math-animations/RiemannSums.mp4";
+import lorenzAttractor from "../assets/math-animations/LorenzAttractorWithEquations.mp4";
+
+const mathAnimations = [
+    gaussianIntegral,
+    lorenzAttractor,
+    riemannSums,
+  ]
 
 function Home() {
+
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+  const handleVideoEnd = () => {
+    setCurrentVideoIndex((prev) => (prev + 1) % mathAnimations.length);
+  };
+
   return ( 
     <>
       <Navbar />
 
       <div className="hero-container">
-        <img src={'src/assets/full_logo.svg'} className="full-logo" />
+        <img src={'src/assets/full_logo.svg'} className="full-logo" alt="CalcMadeEasy Logo" />
         <div className="animation-player">
           <video 
-            src={lorenzVideo}
+            key={currentVideoIndex}
+            src={mathAnimations[currentVideoIndex]}
             autoPlay
-            loop
             muted
             playsInline
             className="lorenz-animation" 
+            onEnded={handleVideoEnd}
           > Your browser does not support the video tag.
           </video>
         </div>

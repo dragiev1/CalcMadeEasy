@@ -1,10 +1,11 @@
 /* CalcMadeEasy Long Logo */
 .full-logo {
   width: 90rem;
+  padding-bottom: 5rem;;
   opacity: 1;
   animation: 
-    2s fadeIn ease,
-    shrinkMoveLeft 1.3s ease 2s forwards;
+    1.5s fadeIn ease,
+    shrinkMoveLeft 1.5s ease 2s forwards;
 }
 
 .hero-container {
@@ -34,6 +35,10 @@
   width: 100%;
   height: auto;
   object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+
+  animation: fadeIn 0.5s ease;
 }
 
 @keyframes fadeIn {

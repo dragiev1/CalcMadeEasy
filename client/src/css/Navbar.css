@@ -42,6 +42,10 @@
   opacity: 1;
 }
 
+.logo:hover {
+  color: var(--accent-primary);
+}
+
 @keyframes fadeIn {
   from{
     opacity: 0;
