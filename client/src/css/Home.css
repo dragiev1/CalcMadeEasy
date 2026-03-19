@@ -1,15 +1,56 @@
 /* CalcMadeEasy Long Logo */
 .full-logo {
-  size: 3rem;
+  width: 90rem;
+  opacity: 1;
+  animation: 
+    2s fadeIn ease,
+    shrinkMoveLeft 1.3s ease 2s forwards;
 }
 
 .hero-container {
   width: 80vw;
+  max-width: 100%;
   display: flex;
   align-items: center;
+  position: relative;
   justify-content: space-between;
 }
 
 .animation-player {
+  background-color: none;
   background: none;
+  border-color: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeIn 5s ease 1.5s forwards;
+  flex: 1;
+  max-width: 60vw;
+  scale: 1.25;
+}
+
+.lorenz-animation {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+@keyframes fadeIn {
+  from{
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+}
+
+@keyframes shrinkMoveLeft {
+  from {
+    width: 90rem;
+    transform: translateX(0);
+  } to {
+    width: 47rem;
+    margin-right: 0;
+    transform: translateX(-13rem);
+  }
 }
