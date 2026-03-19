@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: rgb(0, 0, 0, 0.2);
+  background-color: var(--bg-primary);
   box-shadow: none;
   padding: 0.75rem;
   margin-bottom: 0.5rem;
@@ -20,16 +20,21 @@
 }
 
 .nav-text {
+  font-weight: 100;
   font-family: 'Times New Roman', Times, serif;
-  font-weight: 300;
-  letter-spacing: 2px;
-  font-size: 1.5rem;
-  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 1.6rem;
+  margin: 2rem;
 }
 
 .nav-link {
   display: flex;
   gap: 3.25rem;
   align-items: flex-start;
-  color: white;
+  color: var(--txt-secondary);
+}
+
+.logo {
+  height: 40px;
+  width: auto;
 }
