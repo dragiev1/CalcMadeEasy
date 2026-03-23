@@ -5,6 +5,9 @@ import { useState } from "react";
 import gaussianIntegral from "../assets/math-animations/GaussianIntegral.mp4";
 import riemannSums from "../assets/math-animations/RiemannSums.mp4";
 import lorenzAttractor from "../assets/math-animations/LorenzAttractorWithEquations.mp4";
+import BeginButton from "../components/BeginButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const mathAnimations = [riemannSums, gaussianIntegral, lorenzAttractor];
 
@@ -27,6 +30,7 @@ function Home() {
             alt="CalcMadeEasy Logo"
           ></img>
           <div className="subtitle">Where math clicks. </div>
+          <BeginButton />
         </div>
 
         <div className="animation-player">
@@ -45,7 +49,11 @@ function Home() {
         </div>
       </div>
 
-      <div className="divider" />
+      <div className="divider">
+        <h3>
+          <FontAwesomeIcon icon={faArrowDown} /> Learn More <FontAwesomeIcon icon={faArrowDown} />
+        </h3>
+      </div>
     </>
   );
 }

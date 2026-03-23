@@ -14,7 +14,6 @@
   letter-spacing: 1.5px;
   margin: 0;
   opacity: 0;
-  
   color: var(--txt-secondary);
   animation: fadeUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s forwards;
 }
@@ -98,13 +97,21 @@
 
 .divider {
   width: 100%;
-  height: 1px;
-  background-color: var(--accent-primary);
+  height: 30px;
+  border-bottom: 1px solid var(--txt-secondary);
+  background-color: none;
   transform: translateY(150px);
   display: block;
-  margin-top: 2rem;
   opacity: 0;
   animation: fadeIn 5s ease 1.5s forwards;
 }
 
-
+h3 {
+  width: 100%;
+  height: 5px;
+  font-size: 15px;
+  text-transform: uppercase;
+  color: var(--txt-secondary);
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
