@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import "../css/Navbar.css";
 import logo from "../assets/logo.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import GoogleSignIn from "./GoogleSignIn";
 
 function Navbar() {
   return (
@@ -11,7 +10,9 @@ function Navbar() {
         <Link to={"/"} className="nav-text nav-link">
           <img src={logo} alt="logo" className="logo" />
         </Link>
-        <Link to={"/dashboard"} className="nav-text nav-link"><FontAwesomeIcon icon={faGoogle} /></Link>
+        <Link to={"/dashboard"} className="nav-text nav-link">
+          <GoogleSignIn />
+        </Link>
       </div>
     </div>
   )
