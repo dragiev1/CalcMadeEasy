@@ -8,6 +8,7 @@ import lorenzAttractor from "../assets/math-animations/LorenzAttractorWithEquati
 import BeginButton from "../components/BeginButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import LearnMoreSection from "../components/LearnMoreSection";
 
 const mathAnimations = [riemannSums, gaussianIntegral, lorenzAttractor];
 
@@ -54,6 +55,8 @@ function Home() {
           <FontAwesomeIcon icon={faArrowDown} /> Learn More <FontAwesomeIcon icon={faArrowDown} />
         </h3>
       </div>
+
+      <LearnMoreSection />
     </>
   );
 }

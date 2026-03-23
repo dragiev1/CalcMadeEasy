@@ -8,7 +8,7 @@
   background: var(--bg-primary);
   color: var(--txt-primary);
   margin-top: 3rem;
-  animation: FadeIn ease 2s 4s forwards;
+  animation: FadeIn ease 2s 2s forwards;
 }
 
 .text {
