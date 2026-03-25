@@ -99,7 +99,7 @@ const LearnMoreSection = () => {
           </div>
           <div className="explanation">
             <div className="explanation-title">
-              We Measure Growth, Not Only Grades
+              We Measure Growth, Not Just Grades
             </div>
 
             <div className="explanation-body">
