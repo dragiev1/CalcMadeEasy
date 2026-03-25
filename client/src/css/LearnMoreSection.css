@@ -1,6 +1,99 @@
-.hero-container {
+.divider {
   width: 100%;
-  height: auto;
+  height: 30px;
+  border-bottom: 1px solid var(--txt-secondary);
+  background-color: none;
+  transform: translateY(150px);
+  display: block;
+  opacity: 1;
+  animation: fadeIn 5s ease;
+}
+
+h3 {
+  width: 100%;
+  height: 5px;
+  font-size: 15px;
+  text-transform: uppercase;
+  color: var(--txt-secondary);
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.learn-container {
   display: flex;
   margin: auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 90%;
+  max-width: 1200px;
+  height: auto;
+  position: relative;
+  padding: 20px;
+  margin-top: 15rem;
+}
+
+.section {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 60px;
+  justify-content: space-between;
+  align-items: flex-start; /* Prevents stretching if content heights differ. */
+  margin: 20px auto;
+}
+
+.demo,
+.explanation {
+  flex: 1;
+  min-width: 0;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.explanation {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 8px;
+}
+
+.explanation-title {
+  font-size: 2.5rem;
+  letter-spacing: 1px;
+  color: var(--txt-primary);
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+  font-weight: normal;
+}
+
+.explanation-body {
+  font-size: 1.5rem;
+  color: var(--txt-secondary);
+  line-height: 1.8;
+  margin: 0;
+  max-width: 90%;
+}
+
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+  }
+}
+
+.demo {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.divider-bottom {
+  width: 100%;
+  height: 2px;
+  border-bottom: 1px solid var(--txt-secondary);
+  background-color: none;
+  opacity: 1;
 }
