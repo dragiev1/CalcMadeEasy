@@ -68,7 +68,7 @@ const UserStats = () => {
               Confidence Score: <span>97%</span>
             </p>
             <p>
-              Longest Streak: <span>3 Days</span>
+              Longest Streak: <span>31 Days</span>
             </p>
           </div>
         </div>
