@@ -1,4 +1,5 @@
 import "../css/UserStats.css";
+import InteractiveRadialGraph from "./InteractiveRadialGraph";
 
 const UserStats = () => {
   return (
@@ -57,41 +58,8 @@ const UserStats = () => {
 
         <div className="stats-info">
           <div className="graph-container">
-            <div className="percent">
-              <svg viewBox="0 0 36 36" className="circular-chart">
-                <path
-                  className="circle"
-                  stroke-dasharray="100, 100"
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <path
-                  className="circle"
-                  stroke-dasharray="85, 100"
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <path
-                  className="circle"
-                  stroke-dasharray="60, 100"
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <path
-                  className="circle"
-                  stroke-dasharray="30, 100"
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-              </svg>
-            </div>
-            <p><span>4.0</span></p>
+            <InteractiveRadialGraph />
           </div>
-
           <div className="info">
             <p>
               Current GPA: <span>4.0</span><br />

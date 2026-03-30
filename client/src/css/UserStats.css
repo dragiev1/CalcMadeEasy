@@ -17,7 +17,6 @@
 	overflow-x: auto;
 }
 
-/* SCROLL BAR STYLE (ONLY WORKS IN CHROME) */
 /* Width */
 ::-webkit-scrollbar {
 	height: 5px;
@@ -61,7 +60,7 @@
 
 .month-group:hover p,
 .selected p {
-	color: #fff;
+	color: var(--txt-primary);
 }
 
 .h-0 {
@@ -86,8 +85,7 @@
 	margin-top: 10px;
   color: var(--txt-secondary);
 	display: flex;
-	align-items: center;
-	justify-content: space-around;
+	justify-content: space-evenly;
 	position: relative;
   text-align: left;
 }
@@ -122,10 +120,6 @@
 
 .circle:nth-child(4) {
 	stroke: var(--bg-secondary);
-}
-
-.circle:hover {
-	scale: 1.2;
 }
 
 .graph-container p {

@@ -1,0 +1,10 @@
+.radial-graph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: x-large;
+  margin-bottom: 5px;
+  color: var(--txt-secondary);
+}

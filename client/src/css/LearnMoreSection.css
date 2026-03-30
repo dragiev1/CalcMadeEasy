@@ -39,7 +39,7 @@ h3 {
   width: 100%;
   gap: 60px;
   justify-content: space-between;
-  align-items: flex-start; /* Prevents stretching if content heights differ. */
+  align-items: center; 
   margin: 20px auto;
 }
 
