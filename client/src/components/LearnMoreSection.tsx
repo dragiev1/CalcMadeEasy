@@ -36,6 +36,7 @@ import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/LearnMoreSection.css";
 import UserStats from "./UserStats";
+import TagComponent from "./TagComponent";
 
 const LearnMoreSection = () => {
   return (
@@ -89,7 +90,10 @@ const LearnMoreSection = () => {
               Every homework problem is hand-designed with purposeful tags, calibrated difficulty, and intelligent confidence scoring. The system learns your patterns, records, and displays it.
             </div>
           </div>
-          <div className="demo">DEMO : Screenshot/mockup of two problem cards</div>
+          <div className="demo">
+
+            <TagComponent id={0} name={"Integration By Parts"} difficulty={0.65} />
+          </div>
         </div>
 
         {/* Section 4 */}
