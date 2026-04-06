@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import "../css/RadialGraph.css"
+import React, { useState, useEffect, useCallback } from 'react';
+import '../css/RadialGraph.css';
 
-
-interface RadialGraphProps {
+export interface RadialGraphProps {
   value: number;
   maxValue?: number;
   size?: number;
@@ -14,92 +13,84 @@ interface RadialGraphProps {
   label?: string;
   animated?: boolean;
   className?: string;
+  'aria-label'?: string;
 }
 
 const RadialGraph: React.FC<RadialGraphProps> = ({
   value,
   maxValue = 100,
-  size = 150,
-  strokeWidth = 15,
-  primaryColor = 'var(--accent-primary)',
-  secondaryColor = 'var(--txt-secondary)',
-  textColor = 'var(--txt-primary)',
+  size = 60,
+  strokeWidth = 6,
+  primaryColor = 'var(--accent-primary, #3b82f6)',
+  secondaryColor = 'var(--txt-secondary, #cbd5e1)',
+  textColor = 'var(--txt-primary, #1e293b)',
   showLabel = true,
-  label = '%',
+  label = '',
   animated = true,
   className = '',
+  'aria-label': ariaLabel,
 }) => {
   const [displayValue, setDisplayValue] = useState<number>(0);
+  
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
 
-  const radius: number = (size - strokeWidth) / 2;
-  const circumference: number = 2 * Math.PI * radius;
-  const percentage: number = Math.min(Math.max(value, 0), maxValue) / maxValue;
-  const strokeDashoffset: number = circumference - percentage * circumference;
-
-  const centerX: number = size / 2;
-  const centerY: number = size / 2;
+  const clampedPercentage = Math.min(Math.max(value, 0), maxValue) / maxValue;
+  const targetOffset = circumference - clampedPercentage * circumference;
 
   useEffect(() => {
     if (animated) {
-      const timer = setTimeout(() => {
-        setDisplayValue(value);
-      }, 100);
+      const timer = setTimeout(() => setDisplayValue(value), 50);
       return () => clearTimeout(timer);
-    } else {
-      setDisplayValue(value);
     }
+    setDisplayValue(value);
   }, [value, animated]);
 
-  const currentPercentage: number = Math.min(
-    Math.max(displayValue, 0),
-    maxValue
-  ) / maxValue;
-  const currentStrokeDashoffset: number =
-    circumference - currentPercentage * circumference;
+  const currentPercentage = Math.min(Math.max(displayValue, 0), maxValue) / maxValue;
+  const currentOffset = circumference - currentPercentage * circumference;
 
   return (
-    <div className={`relative inline-flex items-center justify-center ${className}`}>
+    <div 
+      className={`radial-graph ${className}`} 
+      style={{ width: size, height: size }}
+      role="progressbar"
+      aria-valuenow={Math.round(currentPercentage * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={ariaLabel ?? `Confidence: ${Math.round(currentPercentage * 100)}%`}
+    >
       <svg
         width={size}
         height={size}
-        className="transform -rotate-90"
+        className="radial-graph-svg"
         viewBox={`0 0 ${size} ${size}`}
       >
-        {/* Background Circle */}
         <circle
-          cx={centerX}
-          cy={centerY}
+          cx={size / 2}
+          cy={size / 2}
           r={radius}
           fill="none"
           stroke={secondaryColor}
           strokeWidth={strokeWidth}
         />
-
-        {/* Progress Circle */}
         <circle
-          cx={centerX}
-          cy={centerY}
+          cx={size / 2}
+          cy={size / 2}
           r={radius}
           fill="none"
           stroke={primaryColor}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
-          strokeDashoffset={currentStrokeDashoffset}
+          strokeDashoffset={currentOffset}
           strokeLinecap="round"
-          className={animated ? 'transition-all duration-1000 ease-out' : ''}
+          className="radial-graph-progress"
         />
       </svg>
 
-      {/* Center Label */}
       {showLabel && (
-        <div
-          className="radial-graph"
-          style={{ color: textColor }}
-        >
-          <span className="text-3xl font-bold">
-            {currentPercentage * 100}
-          </span>
-          <span className="text-sm opacity-70">{label}</span>
+        <div className="radial-graph-label" style={{ color: textColor, fontSize: size * 0.3 }}>
+          <span>{Math.round(currentPercentage * 100)}</span>
+          <span className="radial-graph-suffix">{label}</span>
         </div>
       )}
     </div>

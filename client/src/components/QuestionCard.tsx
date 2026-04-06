@@ -1,18 +1,12 @@
 import "../css/QuestionCard.css";
 import type { TagProps } from "../types/Tag";
 import TagComponent from "../components/TagComponent";
+import type { ProblemProps } from "../types/Problem";
+import RadialGraph from "./RadialGraph";
 
-interface ProblemCardProps {
-  question: string;
-  confidenceScore?: number;
-  showQuestion?: boolean;
-  solved: boolean;
-  tags: TagProps[];
-}
-
-const ProblemCard: React.FC<ProblemCardProps> = ({
+const ProblemCard: React.FC<ProblemProps> = ({
   question,
-  confidenceScore,
+  confidenceScore = 95,
   showQuestion = true,
   solved = false,
   tags = [], // Default to empty array.
@@ -22,7 +16,7 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
   }
 
   const mockTags: TagProps[] = [
-    { name: "Algebra", difficulty: 0.4, id: 1 },
+    { name: "Algebra", difficulty: 0.2, id: 1 },
     { name: "Derivative", difficulty: 0.65, id: 2 },
     { name: "Integration By Parts", difficulty: 0.9, id: 3 },
   ];
@@ -33,13 +27,14 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
     <>
       <div className="card-container">
         <div className="card-header">
-          <div className="confidence-score">
-            {/* Confidence Score */}
-            {confidenceScore !== undefined && <span>{confidenceScore}%</span>}
-          </div>
           <div className="question">
             {/* Question */}
-            {showQuestion && <p>{question}</p>}
+            {showQuestion && question}
+          </div>
+          <div className="">
+            {/* Confidence Score */}
+            <RadialGraph value={50} size={70} strokeWidth={5} secondaryColor={"black"}/>
+            {/* {confidenceScore !== undefined && <span>{confidenceScore}</span>} */}
           </div>
         </div>
         <div className="card-tags">

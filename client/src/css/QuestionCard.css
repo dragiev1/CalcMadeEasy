@@ -1,6 +1,44 @@
 .card-container {
-  height: 50px;
+  height: auto;
+  min-height: 110px;
   width: auto;
-  background-color: var(--bg-secondary);
-  
+  min-width: 40rem;
+  padding: 2rem 1.5rem;
+  /* background-color: var(--txt-secondary); */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+
+.confidence-score {
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 1.2rem;
+  border: 3px solid var(--accent-primary);
+
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.question {
+  color: var(--txt-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-right: 1rem;
+  line-height: 1.4;
 }

@@ -2,8 +2,8 @@ import RadialGraph from './RadialGraph';
 
 function InteractiveRadialGraph() {
   return (
-      <div className="p-6 rounded-lg shadow-md">
-        <RadialGraph value={93.4} />
+      <div className="rounded-lg shadow-md">
+        <RadialGraph value={93.4} size={110} strokeWidth={9} secondaryColor='black'/>
       </div>
   );
 }

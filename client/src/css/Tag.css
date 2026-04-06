@@ -9,17 +9,19 @@
 .tag-container {
   display: inline-flex;
   margin: auto;
+  margin-right: 0.5rem;
   justify-content: center;
   align-items: center;
-  opacity: 0.9;
+  opacity: 0.8;
   border-radius: 100px;
   font-size: 1.2rem;
   font-weight: 500;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   transition:  0.2s ease-in-out;
   cursor: default;
   min-width: 50px;
   min-height: 20px;
-  padding: 3px 10px 3px 10px;
+  padding: 5px 10px 5px 10px;
 
   background: linear-gradient(
     to right,
@@ -39,7 +41,7 @@
 
 .tag-name {
   color: var(--txt-primary);
-  text-shadow: 0 1px 2px rgb(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgb(0, 0, 0, 0.5);
   white-space: nowrap;
   display: inline-block;  
   line-height: 1;

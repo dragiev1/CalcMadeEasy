@@ -1,10 +1,34 @@
+/* RadialGraph.css */
 .radial-graph {
-  position: absolute;
-  inset: 0;
+  position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: x-large;
-  margin-bottom: 5px;
-  color: var(--txt-secondary);
+  justify-content: center;
+  flex-shrink: 0; /* Prevents squishing in flex containers */
+}
+
+.radial-graph-svg {
+  display: block;
+  transform: rotate(-0deg); /* Starts at 12 o'clock */
+}
+
+.radial-graph-progress {
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.radial-graph-label {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.radial-graph-suffix {
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-top: 2px;
 }
