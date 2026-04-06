@@ -57,7 +57,7 @@ const UserStats = () => {
         </div>
 
         <div className="stats-info">
-          <div className="graph-container">
+          <div className="graph-container" style={{marginTop: "0.75em"}}>
             <InteractiveRadialGraph />
           </div>
           <div className="info">

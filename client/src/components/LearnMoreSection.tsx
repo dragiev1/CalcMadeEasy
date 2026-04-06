@@ -35,8 +35,10 @@ RIGHT - Feature:
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/LearnMoreSection.css";
+
 import UserStats from "./UserStats";
-import TagComponent from "./TagComponent";
+import QuestionCard from "./QuestionCard";
+import Latex from "./Latex/Latex";
 
 const LearnMoreSection = () => {
   return (
@@ -61,38 +63,59 @@ const LearnMoreSection = () => {
               into intuitive understanding that sticks.
             </div>
           </div>
-          <div className="demo">DEMO : Show an animation of a derivative being built up from secant lines approaching a tangent, with the limit process visualized smoothly.</div>
+          <div className="demo">
+            DEMO : Show an animation of a derivative being built up from secant
+            lines approaching a tangent, with the limit process visualized
+            smoothly.
+          </div>
         </div>
 
         {/* Section 2 */}
         <div className="section">
-          <div className="demo">DEMO :Split-screen animation: Left side shows chaotic, rushed textbook-style explanation. Right side shows my calm, methodical visual breakdown of the same concept (e.g., integration as area accumulation)</div>
+          <div className="demo">
+            DEMO :Split-screen animation: Left side shows chaotic, rushed
+            textbook-style explanation. Right side shows my calm, methodical
+            visual breakdown of the same concept (e.g., integration as area
+            accumulation)
+          </div>
           <div className="explanation">
             <div className="explanation-title text-right">
               Learn at the Speed of Understanding
             </div>
 
             <div className="explanation-body">
-              No rushing. No stress. Just clear, professional explanations that respect your intelligence. Master mathematics deeply at your own pace.
+              No rushing. No stress. Just clear, professional explanations that
+              respect your intelligence. Master mathematics deeply at your own
+              pace.
             </div>
           </div>
         </div>
 
         {/* Section 3 */}
         <div className="section">
-          
           <div className="explanation">
             <div className="explanation-title">
               Problems Crafted by Educators, Not AI
             </div>
 
             <div className="explanation-body">
-              Every homework problem is hand-designed with purposeful tags, calibrated difficulty, and intelligent confidence scoring. The system learns your patterns, records, and displays it.
+              Every homework problem is hand-designed with purposeful tags,
+              calibrated difficulty, and intelligent confidence scoring. The
+              system learns your patterns, records, and displays it.
             </div>
           </div>
           <div className="demo">
-
-            <TagComponent id={0} name={"Integration By Parts"} difficulty={0.65} />
+            <QuestionCard
+              question={
+                <>
+                  17.{")"}{""} Integrate the following:{" "}
+                  <Latex>
+                    {"\\int_0^{\\pi} \\sin^2(x)\\,dx = \\frac{\\pi}{2}"}
+                  </Latex>
+                </>
+              }
+              solved={false}
+            />
           </div>
         </div>
 
@@ -107,7 +130,9 @@ const LearnMoreSection = () => {
             </div>
 
             <div className="explanation-body">
-              See your readiness by topic. See improvements. Every exam is a checkpoint in your journey. It is not a judgment, but a map forward.
+              See your readiness by topic. See improvements. Every exam is a
+              checkpoint in your journey. It is not a judgment, but a map
+              forward.
             </div>
           </div>
         </div>
