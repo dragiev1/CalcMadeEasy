@@ -39,8 +39,37 @@ import "../css/LearnMoreSection.css";
 import UserStats from "./UserStats";
 import QuestionCard from "./QuestionCard";
 import Latex from "./Latex/Latex";
+import type { ProblemProps } from "../types/Problem";
 
 const LearnMoreSection = () => {
+  const mockProblems: ProblemProps[] = [
+    {
+      question: <>
+                  17.{")"}
+                  {""} Integrate the following:{" "}
+                  <Latex>{"\\int_0^{\\pi} \\sec^2(x)\\,dx"}</Latex>
+                </>,
+      solved: false,
+      tags: [
+        { name: "Algebra", difficulty: 0.15, id: 1 },
+        { name: "Trig Identity", difficulty: 0.34, id: 2 },
+        { name: "Integration By Parts", difficulty: 0.9, id: 3 },
+      ],
+      confidenceScore: 93,
+    },
+    {
+      question: <>
+                  {""} Let <Latex>{"f(x) = x^2"}</Latex>. Using the limit definition of the derivative, find <Latex>{"f'"}</Latex>{" "}:
+                </>,
+      solved: true,
+      tags: [
+        { name: "Limit", difficulty: 0.4, id: 4 },
+        { name: "Algebra", difficulty: 0.2, id: 5 },
+      ],
+      confidenceScore: 68,
+    },
+  ];
+
   return (
     <>
       <div className="divider">
@@ -105,17 +134,15 @@ const LearnMoreSection = () => {
             </div>
           </div>
           <div className="demo">
-            <QuestionCard
-              question={
-                <>
-                  17.{")"}{""} Integrate the following:{" "}
-                  <Latex>
-                    {"\\int_0^{\\pi} \\sin^2(x)\\,dx = \\frac{\\pi}{2}"}
-                  </Latex>
-                </>
-              }
-              solved={false}
-            />
+            {mockProblems.map((problem, index) => (
+              <QuestionCard
+                key={index}
+                question={problem.question}
+                solved={problem.solved}
+                confidenceScore={problem.confidenceScore}
+                tags={problem.tags}
+              />
+            ))}
           </div>
         </div>
 
