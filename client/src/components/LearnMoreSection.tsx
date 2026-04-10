@@ -45,9 +45,8 @@ const LearnMoreSection = () => {
   const mockProblems: ProblemProps[] = [
     {
       question: <>
-                  17.{")"}
                   {""} Integrate the following:{" "}
-                  <Latex>{"\\int_0^{\\pi} \\sec^2(x)\\,dx"}</Latex>
+                  <Latex>{"\\int_0^{\\pi/4} \\sec^2(x)\\,dx"}</Latex>
                 </>,
       solved: false,
       tags: [
@@ -129,8 +128,8 @@ const LearnMoreSection = () => {
 
             <div className="explanation-body">
               Every homework problem is hand-designed with purposeful tags,
-              calibrated difficulty, and intelligent confidence scoring. The
-              system learns your patterns, records, and displays it.
+              calibrated difficulty, and intelligent confidence scoring. We
+              learn your patterns, record, and display it.
             </div>
           </div>
           <div className="demo">
@@ -138,6 +137,7 @@ const LearnMoreSection = () => {
               <QuestionCard
                 key={index}
                 question={problem.question}
+                position={index + 1}
                 solved={problem.solved}
                 confidenceScore={problem.confidenceScore}
                 tags={problem.tags}
