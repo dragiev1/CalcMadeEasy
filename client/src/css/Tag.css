@@ -1,9 +1,9 @@
 :root {
-  --difficulty-1: #22c55e; /* green - easiest */
-  --difficulty-2: #eab308; /* yellow */
-  --difficulty-3: #f97316; /* orange */
-  --difficulty-4: #ef4444; /* red */
-  --difficulty-5: #a855f7; /* purple - hardest */
+  --difficulty-1: #6dc475; /* soft green */
+  --difficulty-2: #d5be3a; /* muted gold */
+  --difficulty-3: #e68a3d; /* softened orange */
+  --difficulty-4: #dc2d2d; /* muted red */
+  --difficulty-5: #a873d1;
 }
 
 .tag-container {
@@ -17,8 +17,8 @@
   border-radius: 100px;
   font-size: 1.2rem;
   font-weight: 500;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  transition:  0.2s ease-in-out;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  transition: 0.2s ease-in-out;
   cursor: pointer;
   min-width: 50px;
   min-height: 20px;
@@ -26,11 +26,11 @@
 
   background: linear-gradient(
     to right,
-    #22c55e 0%, /* 0% - green */
-    #eab308 25%, /* 25% - yellow */
-    #f97316 50%, /* 50% - orange */
-    #e70b0b 75%, /* 75% - red */
-    #a855f7 100%  /* 100% - purple */
+    var(--difficulty-1) 0%,
+    /* 0% - green */ var(--difficulty-2) 25%,
+    /* 25% - yellow */ var(--difficulty-3) 50%,
+    /* 50% - orange */ var(--difficulty-4) 75%,
+    /* 75% - red */ var(--difficulty-5) 100% /* 100% - purple */
   );
   background-size: 1000% 100%;
   background-position: 0% 0%; /* default, overridden inline */
@@ -39,12 +39,11 @@
   backface-visibility: hidden;
 }
 
-
 .tag-name {
   color: var(--txt-primary);
   text-shadow: 1px 2px 2px rgb(0, 0, 0, 0.6);
   white-space: nowrap;
-  display: inline-block;  
+  display: inline-block;
   line-height: 1;
   transform: translateZ(0);
 }
@@ -63,6 +62,3 @@
     box-shadow: none;
   }
 }
-
-
-
