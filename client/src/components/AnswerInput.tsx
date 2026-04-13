@@ -1,13 +1,14 @@
-import React, { useState, type KeyboardEvent, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faCheck, 
-  faArrowRightToBracket, 
+import React, { useState, type KeyboardEvent, useCallback } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faArrowRightToBracket,
   faSquareRootVariable, // LaTeX symbol icon
   faX,
-  faSpinner
-} from '@fortawesome/free-solid-svg-icons';
-import '../css/AnswerInput.css';
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
+import "../css/AnswerInput.css";
+import LatexInputModal from "./LatexInputDropdown";
 
 export interface AnswerInputProps {
   value: string;
@@ -16,49 +17,64 @@ export interface AnswerInputProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
-  'aria-label'?: string;
+  "aria-label"?: string;
   onLaTeXMenuOpen?: () => void; // Callback for LaTeX menu
-  evaluationStatus?: 'idle' | 'checking' | 'correct' | 'incorrect'
+  evaluationStatus?: "idle" | "checking" | "correct" | "incorrect";
 }
 
 const AnswerInput: React.FC<AnswerInputProps> = ({
   value,
   onChange,
   onSubmit,
-  placeholder = 'Type your answer...',
+  placeholder = "Type your answer...",
   disabled = false,
-  className = '',
-  'aria-label': ariaLabel = 'Math answer input',
+  className = "",
+  "aria-label": ariaLabel = "Math answer input",
   onLaTeXMenuOpen,
-  evaluationStatus = 'idle',
+  evaluationStatus = "idle",
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLaTeXInsert = (latex: string) => {
+    onChange(value + (value ? " " : "") + `\\(${latex}\\)`);
+    setIsModalOpen(false);
+  };
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         if (value.trim() && !disabled) onSubmit();
       }
     },
-    [value, disabled, onSubmit]
+    [value, disabled, onSubmit],
   );
 
   const hasValue = value.trim().length > 0;
-  const isSubmitted = evaluationStatus === 'correct' || evaluationStatus === 'incorrect';
+  const isSubmitted =
+    evaluationStatus === "correct" || evaluationStatus === "incorrect";
 
-  const getButtonState  = () => {
-    if(evaluationStatus === 'checking') return { className: 'checking', icon: faSpinner, label: 'Checking...'};
-    if(evaluationStatus === 'correct') return { className: 'correct', icon: faCheck, label: 'Checking...'};
-    if(evaluationStatus === 'incorrect') return { className: 'incorrect', icon: faX, label: 'Checking...'};
-    if(evaluationStatus === 'idle') return { className: 'idle', icon: faArrowRightToBracket, label: 'Checking...'};
-  }
+  const getButtonState = () => {
+    if (evaluationStatus === "checking")
+      return { className: "checking", icon: faSpinner, label: "Checking..." };
+    if (evaluationStatus === "correct")
+      return { className: "correct", icon: faCheck, label: "Checking..." };
+    if (evaluationStatus === "incorrect")
+      return { className: "incorrect", icon: faX, label: "Checking..." };
+    if (evaluationStatus === "idle")
+      return {
+        className: "idle",
+        icon: faArrowRightToBracket,
+        label: "Checking...",
+      };
+  };
 
   return (
     <div className={`answer-input-wrapper ${className}`}>
-      <div className={`answer-input-container ${isFocused ? 'focused' : ''} ${hasValue ? 'has-value' : ''}`}>
-        
-
+      <div
+        className={`answer-input-container ${isFocused ? "focused" : ""} ${hasValue ? "has-value" : ""}`}
+      >
         {/* Input Field */}
         <input
           type="text"
@@ -77,7 +93,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         <button
           type="button"
           className="input-action-btn latex-btn"
-          onClick={onLaTeXMenuOpen}
+          onClick={() => setIsModalOpen(true)}
           aria-label="Insert LaTeX symbol"
           title="LaTeX Symbols"
         >
@@ -86,23 +102,28 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
 
         {/* Actions */}
         <div className="input-right-actions">
-          
-
           {/* Submit Button */}
           <button
             type="button"
             onClick={onSubmit}
             disabled={disabled || !value.trim()}
-            className={`submit-btn ${disabled || !value.trim() ? 'disabled' : 'active'}`}
+            className={`submit-btn ${disabled || !value.trim() ? "disabled" : "active"}`}
             aria-label={hasValue ? "Submit answer" : "Answer complete"}
           >
-            <FontAwesomeIcon 
-              className={`submit-icon`} 
-              icon={disabled || !value.trim() ? faArrowRightToBracket : faCheck} 
+            <FontAwesomeIcon
+              className={`submit-icon`}
+              icon={disabled || !value.trim() ? faArrowRightToBracket : faCheck}
             />
           </button>
-          
         </div>
+
+        {/* LaTeX Modal */}
+        {isModalOpen && (
+          <LatexInputModal
+            onClose={() => setIsModalOpen(false)}
+            onInsert={handleLaTeXInsert}
+          />
+        )}
       </div>
     </div>
   );

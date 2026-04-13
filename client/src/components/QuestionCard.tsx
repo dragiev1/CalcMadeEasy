@@ -20,10 +20,9 @@ const ProblemCard: React.FC<ProblemProps> = ({
   const handleSubmit = () => {
     if(!userAnswer.trim() || isSubmitting) return;
     setIsSubmitting(true);
-
-    console.log('Checking answer:' , userAnswer);
-
-    setTimeout(() => {
+    console.log('Checking answer:' , userAnswer);  
+    // TODO: delete line after testing.
+    setTimeout(() => { 
       setIsSubmitting(false);
       setUserAnswer('');
     }, 800);

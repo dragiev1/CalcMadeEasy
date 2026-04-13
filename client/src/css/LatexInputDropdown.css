@@ -1,0 +1,224 @@
+/* ===== Dropdown Wrapper ===== */
+.latex-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* ===== LaTeX Button ===== */
+.latex-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+}
+
+.latex-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+}
+
+.latex-btn.active {
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.latex-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.latex-icon {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.dropdown-arrow {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  transition: transform 0.2s;
+}
+
+.dropdown-arrow.up {
+  transform: rotate(180deg);
+}
+
+/* ===== Dropdown Panel ===== */
+.latex-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(100, 116, 139, 0.1);
+  padding: 12px;
+  z-index: 100;
+  animation: dropdownSlide 0.15s ease-out;
+  border: 1px solid #e2e8f0;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Snippet Grid ===== */
+.snippet-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.snippet-chip {
+  padding: 8px 4px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: #334155;
+  text-align: center;
+  font-family: 'Fira Code', monospace;
+}
+
+.snippet-chip:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  transform: translateY(-1px);
+}
+
+/* ===== Input Row ===== */
+.dropdown-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.latex-inline-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  background: #fafbfc;
+}
+
+.latex-inline-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-insert-small {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.btn-insert-small:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-insert-small:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Mini Preview ===== */
+.mini-preview {
+  padding: 8px 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #475569;
+  border-left: 3px solid #667eea;
+}
+
+.preview-text {
+  color: #64748b;
+  margin-right: 4px;
+}
+
+.preview-code {
+  font-family: 'Fira Code', monospace;
+  background: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #1e293b;
+}
+
+/* ===== Responsive Tweaks ===== */
+@media (max-width: 640px) {
+  .latex-dropdown-panel {
+    width: 280px;
+    right: -20px; /* Adjust for small screens */
+  }
+  
+  .snippet-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+  }
+  
+  .snippet-chip {
+    padding: 6px 2px;
+    font-size: 0.8rem;
+  }
+  
+  .answer-section {
+    flex-wrap: wrap;
+  }
+  
+  .latex-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .latex-dropdown-panel {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+}
+
+/* ===== Reduce Motion Preference ===== */
+@media (prefers-reduced-motion: reduce) {
+  .latex-dropdown-panel {
+    animation: none;
+  }
+  .latex-btn,
+  .snippet-chip,
+  .btn-insert-small {
+    transition: none;
+  }
+}
