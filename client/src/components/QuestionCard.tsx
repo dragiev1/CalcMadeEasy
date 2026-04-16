@@ -4,7 +4,6 @@ import type { ProblemProps } from "../types/Problem";
 import RadialGraph from "./RadialGraph";
 import AnswerInput from "./AnswerInput";
 import { useState } from "react";
-import { MathfieldElement } from "mathlive";
 
 const ProblemCard: React.FC<ProblemProps> = ({
   question,
@@ -56,6 +55,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
           ))}
         </div>
 
+        
         <AnswerInput 
           value={userAnswer} 
           onChange={setUserAnswer}
@@ -63,6 +63,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
           disabled={isSubmitting || solved}
           aria-label={`Answer for: ${question}`} 
         />
+
       </div>
     </>
   );

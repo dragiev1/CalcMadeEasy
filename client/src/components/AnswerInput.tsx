@@ -1,15 +1,17 @@
-import React, { useState, type KeyboardEvent, useCallback } from "react";
-import { MathfieldElement } from "mathlive";
+// AnswerInput.tsx
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import type { MathfieldElement } from "mathlive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
   faArrowRightToBracket,
-  faSquareRootVariable, // LaTeX symbol icon
   faX,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import "../css/AnswerInput.css";
-import LatexDropdown from "./LatexInputDropdown";
+
+// Import mathlive once to register the custom element
+import "mathlive";
 
 export interface AnswerInputProps {
   value: string;
@@ -19,7 +21,7 @@ export interface AnswerInputProps {
   disabled?: boolean;
   className?: string;
   "aria-label"?: string;
-  onLaTeXMenuOpen?: () => void; // Callback for LaTeX menu
+  onLaTeXMenuOpen?: () => void;
   evaluationStatus?: "idle" | "checking" | "correct" | "incorrect";
 }
 
@@ -27,106 +29,105 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   value,
   onChange,
   onSubmit,
-  placeholder = "Type your answer...",
   disabled = false,
   className = "",
   "aria-label": ariaLabel = "Math answer input",
-  onLaTeXMenuOpen,
   evaluationStatus = "idle",
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [isModalOpen, setIsDropdownOpen] = useState(false);
-  const mfe = new MathfieldElement();
-  mfe.value = "\\pi/4"
+  
+  // Ref to access the actual <math-field> DOM element
+  const mathFieldRef = useRef<MathfieldElement>(null);
 
-  const handleLaTeXInsert = (latex: string) => {
-    onChange(value + (value ? " " : "") + `\\(${latex}\\)`);
-    setIsDropdownOpen(false);
-  };
+  // Sync external `value` prop to math-field (e.g., when reset after submit)
+  useEffect(() => {
+    const mf = mathFieldRef.current;
+    if (mf && mf.value !== value) {
+      mf.setValue(value, { silenceNotifications: true });
+    }
+  }, [value]);
 
+  // Handle Enter key submission on the math-field
   const handleKeyDown = useCallback(
-    (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
+    (evt: KeyboardEvent) => {
+      if (evt.key === "Enter" && !evt.shiftKey) {
+        evt.preventDefault();
         if (value.trim() && !disabled) onSubmit();
       }
     },
     [value, disabled, onSubmit],
   );
 
+  // Attach/detach native keydown listener to math-field
+  useEffect(() => {
+    const mf = mathFieldRef.current;
+    if (!mf) return;
+
+    mf.addEventListener("keydown", handleKeyDown as EventListener);
+    return () => {
+      mf.removeEventListener("keydown", handleKeyDown as EventListener);
+    };
+  }, [handleKeyDown]);
+
   const hasValue = value.trim().length > 0;
-  const isSubmitted =
-    evaluationStatus === "correct" || evaluationStatus === "incorrect";
 
   const getButtonState = () => {
     if (evaluationStatus === "checking")
       return { className: "checking", icon: faSpinner, label: "Checking..." };
     if (evaluationStatus === "correct")
-      return { className: "correct", icon: faCheck, label: "Checking..." };
+      return { className: "correct", icon: faCheck, label: "Correct!" };
     if (evaluationStatus === "incorrect")
-      return { className: "incorrect", icon: faX, label: "Checking..." };
-    if (evaluationStatus === "idle")
-      return {
-        className: "idle",
-        icon: faArrowRightToBracket,
-        label: "Checking...",
-      };
+      return { className: "incorrect", icon: faX, label: "Try again" };
+    return {
+      className: "idle",
+      icon: faArrowRightToBracket,
+      label: "Submit answer",
+    };
   };
 
+  const buttonState = getButtonState();
+
   return (
-    <div className={`answer-input-wrapper ${className}`}>
+    <div 
+      className={`answer-input-wrapper ${className}`}
+    >
       <div
-        className={`answer-input-container ${isFocused ? "focused" : ""} ${hasValue ? "has-value" : ""}`}
+        className={`answer-input-container ${isFocused ? "focused" : ""} ${hasValue ? "has-value" : ""} ${evaluationStatus}`}
       >
-        {/* Input Field */}
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={handleKeyDown}
+        {/* Math Field Input */}
+        <math-field
+          ref={mathFieldRef}
+          className="answer-input-field"
+          onInput={(evt) => {
+            const target = evt.target as MathfieldElement;
+            onChange(target.value);
+          }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder={placeholder}
-          disabled={disabled}
-          className="answer-input-field"
           aria-label={ariaLabel}
-          autoComplete="off"
-        />
-
-        <button
-          type="button"
-          className="input-action-btn latex-btn"
-          onClick={() => setIsDropdownOpen(true)}
-          aria-label="Insert LaTeX symbol"
-          title="LaTeX Symbols"
+          aria-disabled={disabled}
         >
-          <FontAwesomeIcon icon={faSquareRootVariable} />
-        </button>
+          {value}
+        </math-field>
 
-        {/* Actions */}
+
+        {/* Submit Button */}
         <div className="input-right-actions">
-          {/* Submit Button */}
           <button
             type="button"
             onClick={onSubmit}
-            disabled={disabled || !value.trim()}
-            className={`submit-btn ${disabled || !value.trim() ? "disabled" : "active"}`}
-            aria-label={hasValue ? "Submit answer" : "Answer complete"}
+            disabled={disabled || !value.trim() || evaluationStatus === "checking"}
+            className={`submit-btn ${buttonState.className} ${disabled || !value.trim() ? "disabled" : "active"}`}
+            aria-label={buttonState.label}
+            title={buttonState.label}
           >
             <FontAwesomeIcon
-              className={`submit-icon`}
-              icon={disabled || !value.trim() ? faArrowRightToBracket : faCheck}
+              className={`submit-icon ${evaluationStatus === "checking" ? "spinning" : ""}`}
+              icon={buttonState.icon}
+              spin={evaluationStatus === "checking"}
             />
           </button>
         </div>
-
-        {/* LaTeX Modal */}
-        {isModalOpen && (
-          <LatexDropdown
-            onClose={() => setIsDropdownOpen(false)}
-            onInsert={handleLaTeXInsert}
-          />
-        )}
       </div>
     </div>
   );

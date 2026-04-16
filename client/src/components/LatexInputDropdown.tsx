@@ -51,26 +51,6 @@ const LatexDropdown: React.FC<LatexDropdownProps> = ({ onInsert, onClose }) => {
           </button>
         ))}
       </div>
-
-      {/* Input Row
-      <div className="dropdown-input-row">
-        <input
-          type="text"
-          className="latex-inline-input"
-          value={latexInput}
-          onChange={(e) => setLatexInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Type LaTeX... (Ctrl/Cmd + Enter to insert)"
-          autoFocus
-        />
-        <button 
-          className="btn-insert-small" 
-          onClick={handleInsert}
-          disabled={!latexInput.trim()}
-        >
-          Insert
-        </button>
-      </div> */}
     </div>
   );
 };
