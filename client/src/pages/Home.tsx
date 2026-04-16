@@ -19,7 +19,7 @@ function Home() {
 
   return (
     <>
-      <Navbar />np
+      <Navbar />
 
       <div className="hero-container">
         <div className="full-logo-container">
