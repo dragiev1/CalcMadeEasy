@@ -1,5 +1,5 @@
 :root {
-  --difficulty-1: #6dc475; /* soft green */
+  --difficulty-1: #1fb62e; /* soft green */
   --difficulty-2: #d5be3a; /* muted gold */
   --difficulty-3: #e68a3d; /* softened orange */
   --difficulty-4: #dc2d2d; /* muted red */
@@ -41,7 +41,7 @@
 
 .tag-name {
   color: var(--txt-primary);
-  text-shadow: 1px 2px 2px rgb(0, 0, 0, 0.6);
+  text-shadow: 2px 2px 2px rgb(0, 0, 0, 0.6);
   white-space: nowrap;
   display: inline-block;
   line-height: 1;

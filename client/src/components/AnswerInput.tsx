@@ -35,13 +35,13 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   evaluationStatus = "idle",
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-  
+
   // Ref to access the actual <math-field> DOM element
-  const mathFieldRef = useRef<MathfieldElement>(null);
+  const mfref = useRef<MathfieldElement>(null);
 
   // Sync external `value` prop to math-field (e.g., when reset after submit)
   useEffect(() => {
-    const mf = mathFieldRef.current;
+    const mf = mfref.current;
     if (mf && mf.value !== value) {
       mf.setValue(value, { silenceNotifications: true });
     }
@@ -60,7 +60,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
 
   // Attach/detach native keydown listener to math-field
   useEffect(() => {
-    const mf = mathFieldRef.current;
+    const mf = mfref.current;
     if (!mf) return;
 
     mf.addEventListener("keydown", handleKeyDown as EventListener);
@@ -88,46 +88,57 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   const buttonState = getButtonState();
 
   return (
-    <div 
-      className={`answer-input-wrapper ${className}`}
-    >
+    <div className={`answer-input-wrapper ${className}`}>
       <div
         className={`answer-input-container ${isFocused ? "focused" : ""} ${hasValue ? "has-value" : ""} ${evaluationStatus}`}
       >
         {/* Math Field Input */}
-        <math-field
-          ref={mathFieldRef}
-          className="answer-input-field"
-          onInput={(evt) => {
-            const target = evt.target as MathfieldElement;
-            onChange(target.value);
-          }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          aria-label={ariaLabel}
-          aria-disabled={disabled}
-        >
-          {value}
-        </math-field>
-
-
-        {/* Submit Button */}
-        <div className="input-right-actions">
-          <button
-            type="button"
-            onClick={onSubmit}
-            disabled={disabled || !value.trim() || evaluationStatus === "checking"}
-            className={`submit-btn ${buttonState.className} ${disabled || !value.trim() ? "disabled" : "active"}`}
-            aria-label={buttonState.label}
-            title={buttonState.label}
+        {disabled ? (
+          // READ-ONLY DISPLAY MODE (After submission / disabled)
+          <div
+            className="answer-display-field"
+            aria-label="Submitted answer"
+            role="textbox"
+            aria-readonly="true"
           >
-            <FontAwesomeIcon
-              className={`submit-icon ${evaluationStatus === "checking" ? "spinning" : ""}`}
-              icon={buttonState.icon}
-              spin={evaluationStatus === "checking"}
-            />
-          </button>
-        </div>
+            {value || "No answer submitted"}
+          </div>
+        ) : (
+          <>
+            <math-field
+              ref={mfref}
+              className="answer-input-field"
+              onInput={(evt) => {
+                const target = evt.target as MathfieldElement;
+                onChange(target.value);
+              }}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              aria-label={ariaLabel}
+            >
+              {value}
+            </math-field>
+            
+            <div className="input-right-actions">
+              <button
+                type="button"
+                onClick={onSubmit}
+                disabled={
+                  disabled || !value.trim() || evaluationStatus === "checking"
+                }
+                className={`submit-btn ${buttonState.className} ${disabled || !value.trim() ? "disabled" : "active"}`}
+                aria-label={buttonState.label}
+                title={buttonState.label}
+              >
+                <FontAwesomeIcon
+                  className={`submit-icon ${evaluationStatus === "checking" ? "spinning" : ""}`}
+                  icon={buttonState.icon}
+                  spin={evaluationStatus === "checking"}
+                />
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
