@@ -32,16 +32,7 @@ const LatexDropdown: React.FC<LatexDropdownProps> = ({ onInsert, onClose }) => {
 
   const handleSnippetClick = (value: string) => {
     setLatexInput(prev => prev + value + " ");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      handleInsert();
-    }
-    if (e.key === "Escape") {
-      onClose();
-    }
+    handleInsert();
   };
 
   return (
@@ -61,7 +52,7 @@ const LatexDropdown: React.FC<LatexDropdownProps> = ({ onInsert, onClose }) => {
         ))}
       </div>
 
-      {/* Input Row */}
+      {/* Input Row
       <div className="dropdown-input-row">
         <input
           type="text"
@@ -79,15 +70,7 @@ const LatexDropdown: React.FC<LatexDropdownProps> = ({ onInsert, onClose }) => {
         >
           Insert
         </button>
-      </div>
-
-      {/* Mini Preview */}
-      {latexInput && (
-        <div className="mini-preview">
-          <span className="preview-text">Preview: </span>
-          <code className="preview-code">{latexInput}</code>
-        </div>
-      )}
+      </div> */}
     </div>
   );
 };

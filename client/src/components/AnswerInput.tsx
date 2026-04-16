@@ -1,4 +1,5 @@
 import React, { useState, type KeyboardEvent, useCallback } from "react";
+import { MathfieldElement } from "mathlive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -8,7 +9,7 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import "../css/AnswerInput.css";
-import LatexInputModal from "./LatexInputDropdown";
+import LatexDropdown from "./LatexInputDropdown";
 
 export interface AnswerInputProps {
   value: string;
@@ -34,11 +35,13 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   evaluationStatus = "idle",
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsDropdownOpen] = useState(false);
+  const mfe = new MathfieldElement();
+  mfe.value = "\\pi/4"
 
   const handleLaTeXInsert = (latex: string) => {
     onChange(value + (value ? " " : "") + `\\(${latex}\\)`);
-    setIsModalOpen(false);
+    setIsDropdownOpen(false);
   };
 
   const handleKeyDown = useCallback(
@@ -93,7 +96,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
         <button
           type="button"
           className="input-action-btn latex-btn"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsDropdownOpen(true)}
           aria-label="Insert LaTeX symbol"
           title="LaTeX Symbols"
         >
@@ -119,8 +122,8 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
 
         {/* LaTeX Modal */}
         {isModalOpen && (
-          <LatexInputModal
-            onClose={() => setIsModalOpen(false)}
+          <LatexDropdown
+            onClose={() => setIsDropdownOpen(false)}
             onInsert={handleLaTeXInsert}
           />
         )}
