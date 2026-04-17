@@ -40,6 +40,7 @@ import UserStats from "./UserStats";
 import QuestionCard from "./QuestionCard";
 import Latex from "./Latex/Latex";
 import type { ProblemProps } from "../types/Problem";
+import StressAnimation from "./StressedAnimation";
 
 const LearnMoreSection = () => {
   const mockProblems: ProblemProps[] = [
@@ -101,10 +102,7 @@ const LearnMoreSection = () => {
         {/* Section 2 */}
         <div className="section">
           <div className="demo">
-            DEMO :Split-screen animation: Left side shows chaotic, rushed
-            textbook-style explanation. Right side shows my calm, methodical
-            visual breakdown of the same concept (e.g., integration as area
-            accumulation)
+            <StressAnimation alt="Stressed Person Animation"/>
           </div>
           <div className="explanation">
             <div className="explanation-title text-right">
