@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { getLetterGrade } from '../utils/getLetterGrade';
 import '../css/RadialGraph.css';
 
 export interface RadialGraphProps {
@@ -31,13 +32,14 @@ const RadialGraph: React.FC<RadialGraphProps> = ({
   'aria-label': ariaLabel,
 }) => {
   const [displayValue, setDisplayValue] = useState<number>(0);
+  const gradeLetter = getLetterGrade(value);
   
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
   const clampedPercentage = Math.min(Math.max(value, 0), maxValue) / maxValue;
   const targetOffset = circumference - clampedPercentage * circumference;
-
+  
   useEffect(() => {
     if (animated) {
       const timer = setTimeout(() => setDisplayValue(value), 50);
@@ -89,7 +91,7 @@ const RadialGraph: React.FC<RadialGraphProps> = ({
 
       {showLabel && (
         <div className="radial-graph-label" style={{ color: textColor, fontSize: size * 0.3 }}>
-          <span>{Math.round(currentPercentage * 100)}</span>
+          <span>{gradeLetter}</span>
           <span className="radial-graph-suffix">{label}</span>
         </div>
       )}
