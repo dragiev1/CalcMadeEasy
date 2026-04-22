@@ -102,7 +102,7 @@ const LearnMoreSection = () => {
         {/* Section 2 */}
         <div className="section">
           <div className="demo">
-            {/* <StressAnimation alt="Stressed Person Animation"/> */}
+            <StressAnimation alt="Stressed Person Animation"/>
           </div>
           <div className="explanation">
             <div className="explanation-title text-right">

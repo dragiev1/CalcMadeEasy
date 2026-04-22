@@ -2,7 +2,7 @@
   width: 100%;
   height: 30px;
   border-bottom: 1px solid var(--txt-secondary);
-  background-color: none;
+  background-color: transparent;
   transform: translateY(150px);
   display: block;
   opacity: 1;
@@ -10,7 +10,7 @@
 }
 
 .learn-more-wrapper {
-  position: relative;
+  position: sticky;
 }
 
 h3 {
@@ -105,4 +105,10 @@ h3 {
 .demo {
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .learn-container {
+    padding: 2px;
+  }
 }
