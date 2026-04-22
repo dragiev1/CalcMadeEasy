@@ -37,10 +37,10 @@ const StressAnimation: React.FC<StressedAnimationProps> = ({
         {/* Text Fallback */}
         <p className="sr-only">{alt}</p>
       </video>
-      <div className="bar"></div>
+      <div className="bar-divider"></div>
       <video 
         src={stressedAnim2}
-        className={`stressed-animation ${className}`}
+        className={`stressed-animation right-animation ${className}`}
         autoPlay={autoPlay}
         loop={loop}
         muted={muted}

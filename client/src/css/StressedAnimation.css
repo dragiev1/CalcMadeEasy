@@ -10,11 +10,15 @@
   margin: 2rem;
 }
 
-.bar {
+.right-animation {
+  margin-top: 4rem;
+}
+
+.bar-divider {
   height: 300px;
   width: 2px;
   background-color: var(--bg-secondary);
-  margin: 0 2rem 0 2rem;
+  margin: 1rem 2rem 0 2rem;
 }
 
 .animation-wrapper {
