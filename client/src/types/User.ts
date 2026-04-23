@@ -4,6 +4,7 @@ export interface UserProps {
   email: string;
   profilePic: string;
   // courses: Course[];
+  // grades: UserProgress[];
   createdAt: Date;
 }
 
