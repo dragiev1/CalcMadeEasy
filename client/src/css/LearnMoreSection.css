@@ -3,14 +3,22 @@
   height: 30px;
   border-bottom: 1px solid var(--txt-secondary);
   background-color: transparent;
-  transform: translateY(150px);
   display: block;
   opacity: 1;
   animation: fadeIn 5s ease;
 }
 
+@keyframes translateDown {
+  from  {
+    transform: translateY(0px);
+  } to {
+    transform: translateY(150px);
+  }
+}
+
 .learn-more-wrapper {
   position: sticky;
+  margin-top: 10rem;
 }
 
 h3 {
@@ -33,7 +41,7 @@ h3 {
   height: auto;
   position: relative;
   padding: 20px;
-  margin-top: 15rem;
+  margin-top: 2rem;
 }
 
 .section {
