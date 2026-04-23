@@ -41,8 +41,14 @@ import QuestionCard from "./QuestionCard";
 import Latex from "./Latex/Latex";
 import type { ProblemProps } from "../types/Problem";
 import StressAnimation from "./StressedAnimation";
+import { useScrollReveal } from "../utils/useScrollReveal";
 
 const LearnMoreSection = () => {
+  const [sec1Ref, sec1Visible] =useScrollReveal();
+  const [sec2Ref, sec2Visible] =useScrollReveal();
+  const [sec3Ref, sec3Visible] =useScrollReveal();
+  const [sec4Ref, sec4Visible] =useScrollReveal();
+
   const mockProblems: ProblemProps[] = [
     {
       question: <>
@@ -70,6 +76,8 @@ const LearnMoreSection = () => {
     },
   ];
 
+  
+
   return (
     <div className="learn-more-wrapper">
       <div className="divider">
@@ -80,12 +88,9 @@ const LearnMoreSection = () => {
       </div>
       <div className="learn-container">
         {/* Section 1 */}
-        <div className="section">
+        <div className={`section ${sec1Visible ? 'visible' : ''}`} ref={sec1Ref}>
           <div className="explanation">
-            <div className="explanation-title">
-              See Math; Be Comfortable With It.
-            </div>
-
+            <div className="explanation-title">See Math; Be Comfortable With It.</div>
             <div className="explanation-body">
               Stop memorizing formulas. Our interactive animations reveal the{" "}
               <i>why</i> behind "alien" concepts, transforming abstract symbols
@@ -100,7 +105,7 @@ const LearnMoreSection = () => {
         </div>
 
         {/* Section 2 */}
-        <div className="section">
+        <div className={`section ${sec2Visible ? 'visible' : ''}`} ref={sec2Ref}>
           <div className="demo">
             <StressAnimation alt="Stressed Person Animation"/>
           </div>
@@ -118,7 +123,7 @@ const LearnMoreSection = () => {
         </div>
 
         {/* Section 3 */}
-        <div className="section">
+        <div className={`section ${sec3Visible ? 'visible' : ''}`} ref={sec3Ref}>
           <div className="explanation">
             <div className="explanation-title">
               Problems Crafted by Educators, Not AI
@@ -145,7 +150,7 @@ const LearnMoreSection = () => {
         </div>
 
         {/* Section 4 */}
-        <div className="section">
+        <div className={`section ${sec4Visible ? 'visible' : ''}`} ref={sec4Ref}>
           <div className="demo">
             <UserStats />
           </div>
