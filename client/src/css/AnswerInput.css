@@ -6,7 +6,29 @@
   --input-action-bg: #2a2a2a;
   --input-action-hover: #333333;
   --submit-disabled: #374151;
+
+  --incorrect: rgba(202, 45, 45, 0.8);
+  --correct: rgba(44, 171, 44, 0.8);
 }
+
+math-field {
+  --caret-color: var(--txt-secondary);
+}
+math-field::part(virtual-keyboard-toggle),
+math-field::part(menu-toggle) {
+  color: var(--bg-secondary);
+}
+
+
+.incorrect {
+  border: 2px solid var(--incorrect);
+  border-radius: 15px;
+}
+.correct {
+  border: 2px solid var(--correct);
+  border-radius: 15px;
+}
+
 
 .answer-input-wrapper {
   width: 100%;
@@ -17,6 +39,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
   background: var(--input-bg); 
   border-radius: 16px;
@@ -87,20 +110,61 @@
 }
 
 .submit-btn.disabled {
-  background: #374151;
-  color: #6b7280;
+  background: var(--submit-disabled);
+  color: #9ca3af;
   cursor: default;
+  opacity: 0.8;
 }
 
 .submit-icon {
   font-size: 1.125rem;
   transition: transform 0.2s ease;
+  color: currentColor;
+  display: block;
+}
+
+.submit-btn.correct {
+  background: var(--correct);
+  cursor: default;
+  color: var(--txt-primary);
+}
+.submit-btn.correct:hover {
+  background-color: var(--correct);
+  color: var(--txt-primary);
+  transform: none;
+  box-shadow: 0 0 12px rgba(44, 171, 44, 0.3);
+}
+
+/* Button state: INCORRECT */
+.submit-btn.incorrect {
+  background: var(--incorrect); /* Your red rgba */
+  color: #ffffff; /* White icon for contrast */
+  cursor: default;
+}
+.submit-btn.incorrect:hover {
+  transform: none;
+  box-shadow: 0 0 12px rgba(202, 45, 45, 0.3);
+}
+
+.submit-btn.disabled.correct,
+.submit-btn.disabled.incorrect {
+  opacity: 1; /* Full visibility when showing result */
+}
+
+/* Button state: CHECKING (spinner) */
+.submit-btn.checking {
+  background: var(--input-action-bg);
+  color: var(--txt-primary);
+  cursor: wait;
 }
 
 .submit-btn.active:hover .submit-icon {
   transform: scale(1.1);
 }
 
+.answer-input-container {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
 
 @media (max-width: 640px) {
   .tools-label {

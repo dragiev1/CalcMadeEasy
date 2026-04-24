@@ -8,19 +8,20 @@ export interface UserProps {
   createdAt: Date;
 }
 
-export interface UserProgress {
+export interface UserProgressProps {
   id: number;
   userId: number;
   problemId: number;
   pageId: number;
 
-  isChallenge: boolean;
+  answer: string;
+  isCorrect: boolean;
   points: number;
   attempts?: number;
   pointsEarned?: number;
-  lastAttempted: Date;
+  lastAttempted?: number;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
 }
 

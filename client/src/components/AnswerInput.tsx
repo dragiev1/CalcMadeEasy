@@ -12,6 +12,7 @@ import "../css/AnswerInput.css";
 
 // Import mathlive once to register the custom element
 import "mathlive";
+import Latex from "./Latex/Latex";
 
 export interface AnswerInputProps {
   value: string;
@@ -72,17 +73,24 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   const hasValue = value.trim().length > 0;
 
   const getButtonState = () => {
-    if (evaluationStatus === "checking")
-      return { className: "checking", icon: faSpinner, label: "Checking..." };
-    if (evaluationStatus === "correct")
-      return { className: "correct", icon: faCheck, label: "Correct!" };
-    if (evaluationStatus === "incorrect")
-      return { className: "incorrect", icon: faX, label: "Try again" };
-    return {
-      className: "idle",
-      icon: faArrowRightToBracket,
-      label: "Submit answer",
-    };
+    switch (evaluationStatus) {
+      case "checking":
+        return { className: "checking", icon: faSpinner, label: "Checking..." };
+      case "correct":
+        return { className: "correct", icon: faCheck, label: "Correct!" };
+      case "incorrect":
+        return {
+          className: "incorrect",
+          icon: faX,
+          label: disabled ? "" : "Try again", // Only hide label when disabled
+        };
+      default:
+        return {
+          className: "idle",
+          icon: faArrowRightToBracket,
+          label: "Submit answer",
+        };
+    }
   };
 
   const buttonState = getButtonState();
@@ -101,12 +109,13 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
             role="textbox"
             aria-readonly="true"
           >
-            {value || "No answer submitted"}
+            <Latex>{value}</Latex>
           </div>
         ) : (
           <>
             <math-field
               ref={mfref}
+              defaultValue={value}
               className="answer-input-field"
               onInput={(evt) => {
                 const target = evt.target as MathfieldElement;
@@ -118,27 +127,26 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
             >
               {value}
             </math-field>
-            
-            <div className="input-right-actions">
-              <button
-                type="button"
-                onClick={onSubmit}
-                disabled={
-                  disabled || !value.trim() || evaluationStatus === "checking"
-                }
-                className={`submit-btn ${buttonState.className} ${disabled || !value.trim() ? "disabled" : "active"}`}
-                aria-label={buttonState.label}
-                title={buttonState.label}
-              >
-                <FontAwesomeIcon
-                  className={`submit-icon ${evaluationStatus === "checking" ? "spinning" : ""}`}
-                  icon={buttonState.icon}
-                  spin={evaluationStatus === "checking"}
-                />
-              </button>
-            </div>
           </>
         )}
+        <div className="input-right-actions">
+          <button
+            type="button"
+            onClick={onSubmit}
+            disabled={
+              disabled || !value.trim() || evaluationStatus === "checking"
+            }
+            className={`submit-btn ${buttonState.className} ${disabled || !value.trim() ? "disabled" : "active"}`}
+            aria-label={buttonState.label}
+            title={buttonState.label}
+          >
+            <FontAwesomeIcon
+              className={`submit-icon ${evaluationStatus === "checking" ? "spinning" : ""}`}
+              icon={buttonState.icon}
+              spin={evaluationStatus === "checking"}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

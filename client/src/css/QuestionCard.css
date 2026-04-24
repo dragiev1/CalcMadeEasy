@@ -20,10 +20,47 @@
 .card-tags {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .confidence-score {
-  transform: translateY(17px) translateX(-5px)
+  transform: translateY(17px) translateX(-5px);
+}
+
+/* Tag toggle button */
+.tag-toggle-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+@keyframes fadeDown {
+  from { transform: translateY(-10px); }
+  to { transform: translateY(0px); }
+}
+
+.tag-toggle-btn:hover {
+  transform: scale(1.05);
+}
+
+.tag-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.tag-icon {
+  color: var(--txt-secondary, #6b7280);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.tag-icon.active {
+  color: var(--txt-primary, #ffffff);
 }
 
 .question-text {
@@ -63,4 +100,17 @@
   flex-shrink: 0;
 }
 
+.tag-icon {
+  margin: 7px 10px 0 0;
+  color: var(--bg-secondary);
+  height: 18px;
+  width: 18px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  opacity: 0.8;
+}
 
+.tag-icon:hover {
+  color: var(--accent-primary);
+  opacity: 1;
+}
