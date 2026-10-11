@@ -17,17 +17,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class UserServices {
+public class UserService {
   private final UserRepo repo;
   private UserProgressService upService;
-  private CourseServices courseService;
-  private UserGradeServices gradeServices;
+  private CourseService courseService;
+  private UserGradeService gradeServices;
 
-  public UserServices(
+  public UserService(
       UserRepo repo,
       UserProgressService upService,
-      CourseServices courseService,
-      UserGradeServices gradeServices) {
+      CourseService courseService,
+      UserGradeService gradeServices) {
     this.repo = repo;
     this.upService = upService;
     this.courseService = courseService;

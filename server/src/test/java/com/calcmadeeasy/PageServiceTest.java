@@ -5,7 +5,7 @@ import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
 import com.calcmadeeasy.models.Pages.Page;
-import com.calcmadeeasy.services.PageServices;
+import com.calcmadeeasy.services.PageService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PageServiceTest {
 
     @Autowired
-    private PageServices pageService;
+    private PageService pageService;
 
     private PageDTO pageDTO;
 

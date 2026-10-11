@@ -17,14 +17,14 @@ import com.calcmadeeasy.dto.Users.CreateUserDTO;
 import com.calcmadeeasy.dto.Users.UserDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
 
-import com.calcmadeeasy.services.UserServices;
+import com.calcmadeeasy.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-  private final UserServices userService;
+  private final UserService userService;
 
-  public UserController(UserServices userService) {
+  public UserController(UserService userService) {
     this.userService = userService;
   }
 

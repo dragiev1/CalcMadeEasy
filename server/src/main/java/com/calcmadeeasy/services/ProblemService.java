@@ -18,12 +18,12 @@ import com.calcmadeeasy.repository.ProblemRepo;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProblemServices {
+public class ProblemService {
 
   private final ProblemRepo repo;
-  private final TagServices tagService;
+  private final TagService tagService;
 
-  public ProblemServices(ProblemRepo repo, TagServices tagService) {
+  public ProblemService(ProblemRepo repo, TagService tagService) {
     this.repo = repo;
     this.tagService = tagService;
   }

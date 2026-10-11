@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.calcmadeeasy.dto.Tags.CreateTagDTO;
 import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.dto.Tags.UpdateTagDTO;
-import com.calcmadeeasy.services.TagServices;
+import com.calcmadeeasy.services.TagService;
 
 @RestController
 @RequestMapping("/api/v1/tags")
 public class TagController {
-  private final TagServices tagService;
+  private final TagService tagService;
 
-  public TagController(TagServices tagService) {
+  public TagController(TagService tagService) {
     this.tagService = tagService;
   }
 

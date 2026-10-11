@@ -18,7 +18,7 @@ import com.calcmadeeasy.dto.Tags.CreateTagDTO;
 import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.dto.Tags.UpdateTagDTO;
 import com.calcmadeeasy.models.Tags.Tag;
-import com.calcmadeeasy.services.TagServices;
+import com.calcmadeeasy.services.TagService;
 
 @SpringBootTest
 @Transactional
@@ -26,7 +26,7 @@ import com.calcmadeeasy.services.TagServices;
 public class TagServiceTest {
 
   @Autowired
-  private TagServices tagServices;
+  private TagService tagServices;
 
   private TagDTO tagDTO;
 

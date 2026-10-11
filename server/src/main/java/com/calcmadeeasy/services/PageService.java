@@ -16,11 +16,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PageServices {
+public class PageService {
   private final PageRepo repo;
-  private ProblemServices problemService;
+  private ProblemService problemService;
 
-  public PageServices(PageRepo repo, ProblemServices problemService) {
+  public PageService(PageRepo repo, ProblemService problemService) {
     this.repo = repo;
     this.problemService = problemService;
   }

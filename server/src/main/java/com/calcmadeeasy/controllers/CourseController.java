@@ -17,15 +17,15 @@ import com.calcmadeeasy.dto.Courses.CourseDTO;
 import com.calcmadeeasy.dto.Courses.CourseResponseDTO;
 import com.calcmadeeasy.dto.Courses.CreateCourseDTO;
 import com.calcmadeeasy.dto.Courses.UpdateCourseDTO;
-import com.calcmadeeasy.services.CourseServices;
+import com.calcmadeeasy.services.CourseService;
 
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseController {
   
-  private CourseServices courseService;
+  private CourseService courseService;
 
-  public CourseController(CourseServices courseService) {
+  public CourseController(CourseService courseService) {
     this.courseService = courseService;
   }
 

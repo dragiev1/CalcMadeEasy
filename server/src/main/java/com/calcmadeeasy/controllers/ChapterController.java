@@ -17,14 +17,14 @@ import com.calcmadeeasy.dto.Chapters.ChapterDTO;
 import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
 import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
 import com.calcmadeeasy.dto.Chapters.UpdateChapterDTO;
-import com.calcmadeeasy.services.ChapterServices;
+import com.calcmadeeasy.services.ChapterService;
 
 @RestController
 @RequestMapping("/api/v1/chapters")
 public class ChapterController {
-  private ChapterServices chapterService;
+  private ChapterService chapterService;
 
-  public ChapterController(ChapterServices chapterService) {
+  public ChapterController(ChapterService chapterService) {
     this.chapterService = chapterService;
   }
   

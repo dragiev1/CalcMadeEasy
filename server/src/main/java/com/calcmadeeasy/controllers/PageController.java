@@ -18,14 +18,14 @@ import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageProblemDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
-import com.calcmadeeasy.services.PageServices;
+import com.calcmadeeasy.services.PageService;
 
 @RestController
 @RequestMapping("/api/v1/pages")
 public class PageController {
-  private PageServices pageService;
+  private PageService pageService;
 
-  public PageController(PageServices pageServices) {
+  public PageController(PageService pageServices) {
     this.pageService = pageServices;
   }
 

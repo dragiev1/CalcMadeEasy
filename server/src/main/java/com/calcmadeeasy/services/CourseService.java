@@ -18,11 +18,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CourseServices {
+public class CourseService {
   private final CourseRepo repo;
   private final ChapterRepo chapterRepo;
 
-  public CourseServices(CourseRepo repo, ChapterRepo chapterRepo) {
+  public CourseService(CourseRepo repo, ChapterRepo chapterRepo) {
     this.repo = repo;
     this.chapterRepo = chapterRepo;
   }

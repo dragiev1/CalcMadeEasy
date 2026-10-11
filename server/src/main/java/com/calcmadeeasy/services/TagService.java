@@ -15,10 +15,10 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TagServices {
+public class TagService {
   private final TagRepo repo;
 
-  public TagServices(TagRepo repo) {
+  public TagService(TagRepo repo) {
     this.repo = repo;
   }
 

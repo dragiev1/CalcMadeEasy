@@ -17,12 +17,12 @@ import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
 @Service
-public class SectionServices {
+public class SectionService {
   private final ChapterRepo chapterRepo;
   private final SectionRepo repo;
-  private final PageServices pageServices;
+  private final PageService pageServices;
 
-  public SectionServices(ChapterRepo chapterRepo, SectionRepo repo, PageServices pageServices) {
+  public SectionService(ChapterRepo chapterRepo, SectionRepo repo, PageService pageServices) {
     this.chapterRepo = chapterRepo;
     this.repo = repo;
     this.pageServices = pageServices;

@@ -21,8 +21,8 @@ import com.calcmadeeasy.dto.Courses.CreateCourseDTO;
 import com.calcmadeeasy.dto.Courses.UpdateCourseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
-import com.calcmadeeasy.services.ChapterServices;
-import com.calcmadeeasy.services.CourseServices;
+import com.calcmadeeasy.services.ChapterService;
+import com.calcmadeeasy.services.CourseService;
 
 import jakarta.transaction.Transactional;
 
@@ -32,9 +32,9 @@ import jakarta.transaction.Transactional;
 public class CourseServiceTest {
 
   @Autowired
-  private CourseServices courseService;
+  private CourseService courseService;
   @Autowired
-  private ChapterServices chapterService;
+  private ChapterService chapterService;
 
   private Course course;
   private Chapter chapter;

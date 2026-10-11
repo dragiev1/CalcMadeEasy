@@ -1,6 +1,7 @@
 /* CalcMadeEasy Long Logo */
 .full-logo {
-  width: 47rem;
+  width: 48rem;
+  letter-spacing: 1px;
   margin-bottom: 2rem;
   transform: translateX(-6rem);
   opacity: 1;

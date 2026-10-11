@@ -20,12 +20,12 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChapterServices {
+public class ChapterService {
   private final CourseRepo courseRepo;
   private final ChapterRepo repo;
   private final SectionRepo sectionRepo;
 
-  public ChapterServices(CourseRepo courseRepo, ChapterRepo repo, SectionRepo sectionRepo) {
+  public ChapterService(CourseRepo courseRepo, ChapterRepo repo, SectionRepo sectionRepo) {
     this.courseRepo = courseRepo;
     this.repo = repo;
     this.sectionRepo = sectionRepo;

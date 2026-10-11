@@ -9,8 +9,8 @@ import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Tags.Tag;
-import com.calcmadeeasy.services.ProblemServices;
-import com.calcmadeeasy.services.TagServices;
+import com.calcmadeeasy.services.ProblemService;
+import com.calcmadeeasy.services.TagService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -34,9 +34,9 @@ import jakarta.transaction.Transactional;
 @ActiveProfiles("test")
 public class ProblemServiceTest {
   @Autowired
-  private ProblemServices problemService;
+  private ProblemService problemService;
   @Autowired
-  private TagServices tagService;
+  private TagService tagService;
 
   private CreateTagDTO tag1;
   private CreateTagDTO tag2;

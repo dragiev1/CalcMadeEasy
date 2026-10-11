@@ -22,9 +22,9 @@ import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
-import com.calcmadeeasy.services.ChapterServices;
-import com.calcmadeeasy.services.CourseServices;
-import com.calcmadeeasy.services.SectionServices;
+import com.calcmadeeasy.services.ChapterService;
+import com.calcmadeeasy.services.CourseService;
+import com.calcmadeeasy.services.SectionService;
 
 import jakarta.transaction.Transactional;
 
@@ -33,11 +33,11 @@ import jakarta.transaction.Transactional;
 @ActiveProfiles("test")
 public class ChapterServiceTest {
   @Autowired
-  private CourseServices courseService;
+  private CourseService courseService;
   @Autowired
-  private ChapterServices chapterService;
+  private ChapterService chapterService;
   @Autowired
-  private SectionServices sectionService;
+  private SectionService sectionService;
 
   private Course course;
   private Chapter chapter;

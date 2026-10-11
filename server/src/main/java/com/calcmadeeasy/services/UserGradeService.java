@@ -27,13 +27,13 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserGradeServices {
+public class UserGradeService {
   private final UserProgressRepo upRepo;
   private final ChapterGradeRepo chapterGradeRepo;
   private final SectionGradeRepo sectionGradeRepo;
   private final CourseEnrollmentRepo courseEnrollmentRepo;
 
-  public UserGradeServices(
+  public UserGradeService(
       UserProgressRepo upRepo,
       ChapterGradeRepo chapterGradeRepo,
       SectionGradeRepo sectionGradeRepo,

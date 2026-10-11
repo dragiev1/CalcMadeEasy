@@ -17,14 +17,14 @@ import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.dto.Sections.UpdateSectionDTO;
-import com.calcmadeeasy.services.SectionServices;
+import com.calcmadeeasy.services.SectionService;
 
 @RestController
 @RequestMapping("/api/v1/sections")
 public class SectionController {
-  private SectionServices sectionService;
+  private SectionService sectionService;
 
-  public SectionController(SectionServices sectionServices) {
+  public SectionController(SectionService sectionServices) {
     this.sectionService = sectionServices;
   }
 

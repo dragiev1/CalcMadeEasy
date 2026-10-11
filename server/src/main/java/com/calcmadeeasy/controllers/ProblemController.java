@@ -17,14 +17,14 @@ import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
 import com.calcmadeeasy.dto.Problems.UpdateProblemDTO;
-import com.calcmadeeasy.services.ProblemServices;
+import com.calcmadeeasy.services.ProblemService;
 
 @RestController
 @RequestMapping("/api/v1/problems")
 public class ProblemController {
-  private ProblemServices problemService;
+  private ProblemService problemService;
 
-  public ProblemController(ProblemServices problemService) {
+  public ProblemController(ProblemService problemService) {
     this.problemService = problemService;
   }
 
