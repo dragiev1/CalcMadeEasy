@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getLetterGrade } from '../utils/getLetterGrade';
 import '../css/RadialGraph.css';
 
