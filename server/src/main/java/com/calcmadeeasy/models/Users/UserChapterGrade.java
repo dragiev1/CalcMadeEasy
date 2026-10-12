@@ -17,6 +17,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  * Contains grade information about a unique chapter a user is studying.
@@ -24,6 +28,10 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = { "user_id", "chapter_id" })})
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserChapterGrade {
   @Id
   @GeneratedValue
@@ -46,44 +54,4 @@ public class UserChapterGrade {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  protected UserChapterGrade() {}
-
-  public UserChapterGrade(User user, Chapter chapter, float grade) {
-    this.user = user;
-    this.chapter = chapter;
-    this.grade = grade;
-  }
-
-  // Getters
-
-  public UUID getId() {
-    return id;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public Chapter getChapter() {
-    return chapter;
-  }
-
-  public float getGrade() {
-    return grade;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
-  // Setters
-
-  public void setGrade(float grade) {
-    this.grade = grade;
-  }
-  
 }

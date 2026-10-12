@@ -17,6 +17,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  * Entity for storing a section grade for a unique user. 
@@ -24,6 +28,10 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "section_id" }) })
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserSectionGrade {
   @Id
   @GeneratedValue
@@ -46,43 +54,4 @@ public class UserSectionGrade {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  protected UserSectionGrade() {}
-
-  public UserSectionGrade(User user, Section section, float grade) {
-    this.user = user;
-    this.section = section;
-    this.grade = grade;
-  }
-
-  // Getters
-
-  public UUID getId() {
-    return id;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public Section getSection() {
-    return section;
-  }
-
-  public float getGrade() {
-    return grade;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-  
-  // Setters
-
-  public void setGrade(float grade) {
-    this.grade = grade;
-  }
 }

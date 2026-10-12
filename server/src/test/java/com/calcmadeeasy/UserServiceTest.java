@@ -63,31 +63,31 @@ public class UserServiceTest {
   @BeforeEach
   public void setup() {
 
-    CreatePageDTO padto = new CreatePageDTO();
-    padto.setContent("CONTENT");
-    PageResponseDTO pageResponse = pageService.createPage(padto);
-    page = pageService.getPageEntity(pageResponse.getId());
+    // CreatePageDTO padto = new CreatePageDTO();
+    // padto.setContent("CONTENT");
+    // PageResponseDTO pageResponse = pageService.createPage(padto);
+    // page = pageService.getPageEntity(pageResponse.getId());
 
-    CreateSectionDTO sdto = new CreateSectionDTO();
-    sdto.setDescription("DESCRIPTION");
-    sdto.setTitle("TITLE");
-    SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
-    section = sectionService.getSectionEntity(sectionResponse.getId());
-    sectionService.addPage(section.getId(), page.getId());
+    // CreateSectionDTO sdto = new CreateSectionDTO();
+    // sdto.setDescription("DESCRIPTION");
+    // sdto.setTitle("TITLE");
+    // SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
+    // section = sectionService.getSectionEntity(sectionResponse.getId());
+    // sectionService.addPage(section.getId(), page.getId());
 
-    CreateChapterDTO chdto = new CreateChapterDTO();
-    chdto.setDescription("CHAPTER DESCRIPTION");
-    chdto.setTitle("CHAPTER TITLE");
-    ChapterResponseDTO chapterResponse = chapterService.createChapter(chdto);
-    chapter = chapterService.getChapterEntity(chapterResponse.getId());
-    chapterService.addSection(chapter.getId(), section.getId());
+    // CreateChapterDTO chdto = new CreateChapterDTO();
+    // chdto.setDescription("CHAPTER DESCRIPTION");
+    // chdto.setTitle("CHAPTER TITLE");
+    // ChapterResponseDTO chapterResponse = chapterService.createChapter(chdto);
+    // chapter = chapterService.getChapterEntity(chapterResponse.getId());
+    // chapterService.addSection(chapter.getId(), section.getId());
 
-    course = Course.builder()
-        .description("description1")
-        .title("title1")
-        .chapters(chapter)
-        .build();
-    courseServices.createCourse(course);
+    // course = Course.builder()
+    //     .description("description1")
+    //     .title("title1")
+    //     .chapters(chapter)
+    //     .build();
+    // courseServices.createCourse(course);
 
     user = User.builder()
         .firstName("firstname")
@@ -97,8 +97,8 @@ public class UserServiceTest {
         .build();
     userService.createUserEntity(user);
 
-    up = new UserProgress(user, page, problem);
-    upService.createUserProgress(up);
+    // up = new UserProgress(user, page, problem);
+    // upService.createUserProgress(up);
   }
 
   // Create

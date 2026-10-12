@@ -19,6 +19,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  * An object for storing progress with a many-to-many relationship including unique users and problems.  
@@ -27,6 +31,10 @@ import jakarta.persistence.UniqueConstraint;
 */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "page_id", "problem_id" }))
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProgress {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,57 +64,6 @@ public class UserProgress {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  // No-args constructor for JPA
-  protected UserProgress() {}
-
-  public UserProgress(User user, Page page, Problem problem) {
-    this.user = user;
-    this.page = page;
-    this.problem = problem;
-    this.attempts = 0;
-    this.solved = false;
-    this.pointsEarned = 0;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public Problem getProblem() {
-    return problem;
-  }
-
-  public Page getPage() {
-    return page;
-  }
-
-  public int getAttempts() {
-    return attempts;
-  }
-
-  public boolean isSolved() {
-    return solved;
-  }
-
-  public int getPointsEarned() {
-    return pointsEarned;
-  }
-
-  public Instant getLastAttemptedAt() {
-    return lastAttempted;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
 
   // Setters
   public void recordAttempt(boolean isCorrect, Problem p) {
@@ -133,18 +90,4 @@ public class UserProgress {
     this.lastAttempted = null;
   }
 
-  public String toString() {
-    return "\nUserProgress{\n" +
-        "id=" + id +
-        ", UserId=" + user.toString() +
-        ", ProblemId=" + problem.toString() +
-        ", PageId=" + page.toString() +
-        ", pointsGiven=" + pointsEarned +
-        ", solved=" + solved +
-        ", attempts=" + attempts +
-        ", lastAttemptedAt=" + lastAttempted +
-        ", createdAt=" + createdAt +
-        ", updatedAt=" + updatedAt +
-        "\n}";
-  }
 }

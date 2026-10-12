@@ -55,7 +55,7 @@ public class UserGradeService {
     // Section grade logic.
     float sectionGrade = computeSectionGrade(user.getId(), section.getId());
     UserSectionGrade sg = sectionGradeRepo.findByUserIdAndSectionId(user.getId(), section.getId())
-        .orElse(new UserSectionGrade(user, section, sectionGrade));
+        .orElse(UserSectionGrade.builder().user(user).section(section).grade(sectionGrade).build());
     sg.setGrade(sectionGrade);
     sectionGradeRepo.save(sg);
 
@@ -63,7 +63,7 @@ public class UserGradeService {
     // Chapter grade logic.
     float chapterGrade = computeChapterGrade(user.getId(), chapter.getId());
     UserChapterGrade cg = chapterGradeRepo.findByUserIdAndChapterId(user.getId(), chapter.getId())
-        .orElse(new UserChapterGrade(user, chapter, chapterGrade));
+        .orElse(UserChapterGrade.builder().grade(chapterGrade).user(user).chapter(chapter).build());
     cg.setGrade(chapterGrade);
     chapterGradeRepo.save(cg);
 
@@ -72,7 +72,7 @@ public class UserGradeService {
     float courseGrade = computeCourseGrade(user.getId(), course.getId());
     UserCourseEnrollment uce = courseEnrollmentRepo.findByUserIdAndCourseId(user.getId(), course.getId())
         .orElseThrow(() -> new IllegalArgumentException("User is not enrolled in a course"));
-    uce.setGrade(courseGrade);
+    uce.setFinal_grade(courseGrade);
     courseEnrollmentRepo.save(uce);
 
   }
