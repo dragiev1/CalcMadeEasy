@@ -44,7 +44,7 @@ import lombok.NoArgsConstructor;
 public class Problem {
   @Id
   @EqualsAndHashCode.Include
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   @NotBlank(message = "Problem cannot be blank.")

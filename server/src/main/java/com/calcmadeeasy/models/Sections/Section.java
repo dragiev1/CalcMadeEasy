@@ -42,7 +42,7 @@ import lombok.NoArgsConstructor;
 public class Section {
   @Id
   @EqualsAndHashCode.Include
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   private String description;

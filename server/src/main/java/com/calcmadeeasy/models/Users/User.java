@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor  // Required for @Builder to work properly
 public class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   private String firstName;

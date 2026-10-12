@@ -1,17 +1,12 @@
 package com.calcmadeeasy.models.Tags;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
-
-import com.calcmadeeasy.models.Problems.Problem;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -35,7 +30,7 @@ import lombok.NoArgsConstructor;
 public class Tag {
   @Id
   @EqualsAndHashCode.Include
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   @NotBlank(message = "Tag name cannot be empty or blank")

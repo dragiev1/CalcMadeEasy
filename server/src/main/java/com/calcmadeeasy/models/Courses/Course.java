@@ -2,9 +2,8 @@ package com.calcmadeeasy.models.Courses;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,18 +19,35 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Course {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @EqualsAndHashCode.Include
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
+
+  @EqualsAndHashCode.Include
+  @NotBlank(message = "Title cannot be empty.")
   private String title;
+
   private String description;
 
+  @Builder.Default
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true) // Many chapters in one course.
   @JsonManagedReference
-  private List<Chapter> chapters;
+  private List<Chapter> chapters = new ArrayList<>();
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -40,61 +56,7 @@ public class Course {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  protected Course() {
-    this.chapters = new ArrayList<>();
-  }
-
-  public static class Builder {
-    private String title;
-    private String description;
-    private List<Chapter> chapters = new ArrayList<>();
-
-    public Builder title(String title) {
-      this.title = title;
-      return this;
-    }
-
-    public Builder description(String description) {
-      this.description = description;
-      return this;
-    }
-
-    public Builder chapters(Chapter... chapters) {
-      this.chapters = new ArrayList<>(Arrays.asList(chapters));
-      return this;
-    }
-
-    public Course build() {
-      Course c = new Course(this);
-      if (c.chapters != null) {
-        for (Chapter chapter : c.chapters)
-          chapter.setCourse(c);
-      }
-      return c;
-    }
-  }
-
-  private Course(Builder b) {
-    this.title = b.title;
-    this.description = b.description;
-    this.chapters = b.chapters == null ? new ArrayList<>() : new ArrayList<>(b.chapters);
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public List<Chapter> getChapters() {
-    return chapters;
-  }
+  // Getters
 
   public Chapter getChapterById(UUID chapterId) {
     return chapters.stream()
@@ -104,58 +66,25 @@ public class Course {
   }
 
   public int getChapterQuantity() {
-    return chapters.size();
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
+    return this.chapters == null ? 0 : chapters.size();
   }
 
   // Setters
 
-  public void setTitle(String newTitle) {
-    this.title = newTitle;
-  }
-
-  public void setDescription(String newDescrip) {
-    this.description = newDescrip;
-  }
-
   public void addChapter(Chapter chapter) {
+    Objects.requireNonNull(chapter, "Chapter cannot be null");
     if(chapter.getCourse() == this) return;
     this.chapters.add(chapter);
     chapter.setCourse(this);
   }
 
   public void removeChapterById(UUID chapterId) {
-  Iterator<Chapter> iterator = chapters.iterator();
-  while (iterator.hasNext()) {
-    Chapter chapter = iterator.next();
-    if (chapter.getId().equals(chapterId)) {
-      iterator.remove();
-      chapter.setCourse(null); 
-      return;
-    }
-  }
-}
-
-  public String toString() {
-    return "\nChapter{\n" +
-        "id=" + id +
-        ", description=" + description +
-        ", title=" + title +
-        ", chaptersQuantity=" + chapters.size() +
-        ", createdAt=" + createdAt +
-        ", updatedAt=" + updatedAt +
-        "\n}";
-  }
-
-  // Allows for simplicity when creating a new Course object
-  public static Builder builder() {
-    return new Builder();
+    this.chapters.removeIf(chapter -> {
+      if(chapter.getId().equals(chapterId)) {
+        chapter.setCourse(null);
+        return true;
+      }
+      return false;
+    });
   }
 }
