@@ -90,7 +90,7 @@ public class UserService {
   public UserDTO enrollCourse(UUID userId, UUID courseId) {
     User u = getUser(userId);
     Course c = courseService.getCourseEntity(courseId);
-    UserCourseEnrollment uce = new UserCourseEnrollment(u, c);
+    UserCourseEnrollment uce = UserCourseEnrollment.builder().course(c).user(u).build();
     u.enrollNewCourse(uce);
     repo.save(u);
     return new UserDTO(u);
