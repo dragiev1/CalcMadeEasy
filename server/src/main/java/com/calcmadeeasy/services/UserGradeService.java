@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
@@ -19,14 +20,13 @@ import com.calcmadeeasy.repository.CourseEnrollmentRepo;
 import com.calcmadeeasy.repository.SectionGradeRepo;
 import com.calcmadeeasy.repository.UserProgressRepo;
 
-import jakarta.transaction.Transactional;
+
 
 /*
  * Service for handling grade aggregation, caching, and retrieval.
  */
 
 @Service
-@Transactional
 public class UserGradeService {
   private final UserProgressRepo upRepo;
   private final ChapterGradeRepo chapterGradeRepo;
@@ -47,6 +47,7 @@ public class UserGradeService {
   // ==================== UPDATE ====================
 
   // Called when new problem is solved.
+  @Transactional
   public void updateGrades(User user, Page page) {
     Section section = page.getSection();
     Chapter chapter = section.getChapter();
@@ -55,38 +56,46 @@ public class UserGradeService {
     // Section grade logic.
     float sectionGrade = computeSectionGrade(user.getId(), section.getId());
     UserSectionGrade sg = sectionGradeRepo.findByUserIdAndSectionId(user.getId(), section.getId())
-        .orElse(UserSectionGrade.builder().user(user).section(section).grade(sectionGrade).build());
-    sg.setGrade(sectionGrade);
-    sectionGradeRepo.save(sg);
+        .orElse(UserSectionGrade.builder().user(user).section(section).build());
+    if(Float.compare(sg.getGrade(), sectionGrade) != 0) {
+      sg.setGrade(sectionGrade);
+      sectionGradeRepo.save(sg);
+    }
 
 
     // Chapter grade logic.
     float chapterGrade = computeChapterGrade(user.getId(), chapter.getId());
     UserChapterGrade cg = chapterGradeRepo.findByUserIdAndChapterId(user.getId(), chapter.getId())
-        .orElse(UserChapterGrade.builder().grade(chapterGrade).user(user).chapter(chapter).build());
-    cg.setGrade(chapterGrade);
-    chapterGradeRepo.save(cg);
+        .orElse(UserChapterGrade.builder().user(user).chapter(chapter).build());
+    if(Float.compare(cg.getGrade(), chapterGrade) != 0) {
+      cg.setGrade(chapterGrade);
+      chapterGradeRepo.save(cg);
+    }
 
 
     // Course grade logic.
     float courseGrade = computeCourseGrade(user.getId(), course.getId());
     UserCourseEnrollment uce = courseEnrollmentRepo.findByUserIdAndCourseId(user.getId(), course.getId())
         .orElseThrow(() -> new IllegalArgumentException("User is not enrolled in a course"));
-    uce.setFinal_grade(courseGrade);
-    courseEnrollmentRepo.save(uce);
-
+    if(Float.compare(uce.getFinal_grade(), courseGrade) != 0) {
+      uce.setFinal_grade(courseGrade);
+      courseEnrollmentRepo.save(uce);
+    }
   }
 
+  @Transactional(readOnly = true)
   public float computeSectionGrade(UUID userId, UUID sectionId) {
     List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Id(userId, sectionId);
     return calculateGrade(progresses);
   }
 
+  @Transactional(readOnly = true)
   public float computeChapterGrade(UUID userId, UUID chapterId) {
     List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_Id(userId, chapterId);
     return calculateGrade(progresses);
   }
 
+  @Transactional(readOnly = true)
   public float computeCourseGrade(UUID userId, UUID courseId) {
     List<UserProgress> progresses = upRepo.findByUserIdAndPage_Section_Chapter_Course_Id(userId, courseId);
     return calculateGrade(progresses);
@@ -109,6 +118,7 @@ public class UserGradeService {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeAllGrades(UUID userId, UUID courseId) {
     sectionGradeRepo.deleteByUserIdAndSection_Chapter_Course_Id(userId, courseId);
     chapterGradeRepo.deleteByUserIdAndChapter_Course_Id(userId, courseId);

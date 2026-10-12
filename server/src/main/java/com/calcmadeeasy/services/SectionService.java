@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
@@ -30,6 +31,7 @@ public class SectionService {
 
   // ==================== CREATE ====================
 
+  @Transactional
   public SectionResponseDTO createSection(CreateSectionDTO section) {
     Section s = Section.builder()
         .title(section.getTitle())
@@ -44,16 +46,19 @@ public class SectionService {
     return new SectionResponseDTO(s);
   }
 
+  @Transactional
   public List<Section> createSections(Section... sections) {
     return repo.saveAll(Arrays.asList(sections));
   }
 
+  @Transactional
   public List<Section> createSections(List<Section> sections) {
     return repo.saveAll(sections);
   }
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public SectionDTO getSectionDTO(UUID sectionId) {
     Section s = repo.findById(sectionId)
         .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
@@ -61,11 +66,13 @@ public class SectionService {
     return new SectionDTO(s);
   }
 
+  @Transactional(readOnly = true)
   public Section getSectionEntity(UUID sectionId) {
     return repo.findById(sectionId)
         .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
   }
 
+  @Transactional(readOnly = true)
   public List<SectionDTO> getAllSections() {
     return repo.findAll()
         .stream()
@@ -73,16 +80,19 @@ public class SectionService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
   public List<Section> getAllSectionEntities() {
     return repo.findAll();
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID sectionId) {
     return repo.existsById(sectionId);
   }
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public SectionResponseDTO updateSection(UUID sectionId, UpdateSectionDTO request) {
     Section s = getSectionEntity(sectionId);
 
@@ -96,6 +106,7 @@ public class SectionService {
     return new SectionResponseDTO(s);
   }
 
+  @Transactional
   public SectionDTO addPage(UUID sectionId, UUID pageId) {
     Section s = getSectionEntity(sectionId);
     Page p = pageServices.getPageEntity(pageId);
@@ -109,6 +120,7 @@ public class SectionService {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeSection(UUID sectionId) {
     getSectionEntity(sectionId).getChapter().removeSection(sectionId);
     repo.deleteById(sectionId);
@@ -117,6 +129,7 @@ public class SectionService {
       throw new IllegalArgumentException("Section persists after deletion");
   }
 
+  @Transactional
   public SectionDTO removePage(UUID sectionId, UUID pageId) {
     if (!exists(sectionId))
       throw new IllegalArgumentException("Section does not exist, cannot remove page");

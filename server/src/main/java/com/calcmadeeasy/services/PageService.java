@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PageService {
@@ -27,6 +28,7 @@ public class PageService {
 
   // ==================== CREATE ====================
 
+  @Transactional
   public PageResponseDTO createPage(CreatePageDTO page) {
     Page p = Page.builder()
         .content(page.getContent())
@@ -38,20 +40,24 @@ public class PageService {
     return new PageResponseDTO(p);
   }
 
+  @Transactional
   public List<Page> createPages(List<Page> pages) {
     return repo.saveAll(pages);
   }
 
+  @Transactional
   public List<Page> createPages(Page... pages) {
     return repo.saveAll(Arrays.asList(pages));
   }
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public List<Page> getAllPageEntities() {
     return repo.findAll();
   }
 
+  @Transactional(readOnly = true)
   public List<PageDTO> getAllPages() {
     return repo.findAll()
         .stream()
@@ -59,16 +65,19 @@ public class PageService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
   public Page getPageEntity(UUID pageId) {
     return repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found with id: " + pageId));
   }
 
+  @Transactional(readOnly = true)
   public PageDTO getPageDTO(UUID pageId) {
     Page page = repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found with id: " + pageId));
 
     return new PageDTO(page);
   }
 
+  @Transactional(readOnly = true)
   public List<Page> getPagesBySection(UUID sectionId) {
     List<Page> pages = repo.findBySectionId(sectionId);
     if (pages.isEmpty())
@@ -76,12 +85,14 @@ public class PageService {
     return pages;
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID pageId) {
     return repo.existsById(pageId);
   }
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public PageResponseDTO updatePage(UUID pageId, UpdatePageDTO request) {
     Page page = getPageEntity(pageId);
 
@@ -94,6 +105,7 @@ public class PageService {
     return new PageResponseDTO(page);
   }
 
+  @Transactional
   public PageDTO addProblem(UUID pageId, UUID problemId, PageProblemDTO dto) {
     Page page = getPageEntity(pageId);
     Problem problem = problemService.getProblemEntity(problemId);
@@ -106,6 +118,7 @@ public class PageService {
   // ==================== DELETE ====================
 
   // REMOVES the page from pages table.
+  @Transactional
   public void removePage(UUID pageId) {
     if (!repo.existsById(pageId)) {
       throw new RuntimeException("CANNOT REMOVE - page not found with id: " + pageId);
@@ -114,6 +127,7 @@ public class PageService {
 
   }
 
+  @Transactional
   public PageDTO removeProblemFromPage(UUID pageId, UUID problemId) {
     Page page = getPageEntity(pageId);
     page.removeProblem(problemId);
@@ -122,6 +136,7 @@ public class PageService {
     return new PageDTO(page);
   }
 
+  @Transactional
   public PageDTO removeAllProblems(UUID pageId) {
     Page page = getPageEntity(pageId);
     page.removeAllProblems();

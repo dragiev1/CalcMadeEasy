@@ -16,6 +16,7 @@ import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.ProblemRepo;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProblemService {
@@ -30,6 +31,7 @@ public class ProblemService {
 
   // ==================== CREATE ====================
 
+  @Transactional
   public ProblemResponseDTO createProblem(CreateProblemDTO problem) {
     Problem p = Problem.builder()
         .description(problem.getDescription())
@@ -46,10 +48,12 @@ public class ProblemService {
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public List<Problem> getAllProblem() {
     return repo.findAll();
   }
 
+  @Transactional(readOnly = true)
   public List<ProblemDTO> getAllProblemDTOs() {
     return repo.findAll()
         .stream()
@@ -57,10 +61,12 @@ public class ProblemService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
   public Problem getProblemEntity(UUID id) {
-    return repo.findById(id).orElse(null);
+    return repo.findById(id).orElseThrow(() -> new IllegalAccessError("Problem cannot be found with id + " + id));
   }
 
+  @Transactional(readOnly = true)
   public ProblemDTO getProblemDTO(UUID pId) {
     ProblemDTO p = new ProblemDTO(getProblemEntity(pId));
     return p;
@@ -111,12 +117,14 @@ public class ProblemService {
     }
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID problemId) {
     return repo.existsById(problemId);
   }
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public ProblemResponseDTO updateProblem(UUID pId, UpdateProblemDTO request) {
     Problem p = getProblemEntity(pId);
 
@@ -136,6 +144,7 @@ public class ProblemService {
     return new ProblemResponseDTO(p);
   }
 
+  @Transactional
   public ProblemDTO addTag(UUID problemId, UUID tagId) {
     Problem p = getProblemEntity(problemId);
     Tag tag = tagService.getTagEntity(tagId);
@@ -148,12 +157,14 @@ public class ProblemService {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeProblem(UUID problemId) {
     if (!exists(problemId))
       throw new IllegalArgumentException("Problem to be removed does not exist");
     repo.deleteById(problemId);
   }
 
+  @Transactional
   public void removeTagFromProblem(UUID tagId, UUID problemId) {
     if (!exists(problemId))
       throw new IllegalArgumentException("Problem to be removed does not exist");

@@ -24,6 +24,9 @@ public class TagService {
 
   // ==================== CREATE ====================
 
+  /* @Transactional should be used when creating/modifying data. So when transactions do not fully complete, e.g.
+                    DB write didn't complete, it does not corrupt anything as it was not saved yet. */
+
   @Transactional
   public Tag getOrCreateTag(String tagName, Double difficulty) {
     return repo.findByTagName(tagName).orElseGet(() -> repo.save(Tag.builder().difficulty(difficulty).tagName(tagName).build()));
@@ -40,23 +43,26 @@ public class TagService {
     return new TagDTO(t);
   }
 
-
+  @Transactional
   public List<Tag> createTags(List<Tag> tags) {
     return repo.saveAll(tags);
   }
-
+  
+  @Transactional
   public List<Tag> createTags(Tag... tags) {
     return repo.saveAll(Arrays.asList(tags));
   }
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public List<TagDTO> getAllTags() {
     return repo.findAll().stream()
         .map(TagDTO::new)
         .toList();
   }
 
+  @Transactional(readOnly = true)
   public TagDTO getTag(UUID tagId) {
     Tag t = repo.findById(tagId)
         .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
@@ -64,11 +70,13 @@ public class TagService {
     return new TagDTO(t);
   }
 
+  @Transactional(readOnly = true)
   public Tag getTagEntity(UUID tagId) {
     return repo.findById(tagId)
         .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
   }
 
+  @Transactional(readOnly = true)
   public List<Tag> getTagsByDifficultyRange(Double lowerBound, Double upperBound) {
     if (upperBound > 1 || lowerBound < 0)
       throw new IllegalArgumentException("Unacceptable bounds range inputted");
@@ -77,12 +85,14 @@ public class TagService {
     return repo.findByDifficultyBetween(lowerBound, upperBound);
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID tagId) {
     return repo.existsById(tagId);
   }
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public TagDTO updateTag(UUID tagId, UpdateTagDTO request) {
     Tag tag = getTagEntity(tagId);
     
@@ -101,6 +111,7 @@ public class TagService {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeTagById(UUID tagId) {
     if (!(repo.existsById(tagId)))
       throw new RuntimeException("CANNOT REMOVE - tag does not exist with id: " + tagId);

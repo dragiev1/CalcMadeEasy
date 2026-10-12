@@ -10,12 +10,12 @@ import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.CourseRepo;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CourseService {
@@ -29,6 +29,7 @@ public class CourseService {
 
   // ==================== CREATE ====================
 
+  @Transactional
   public CourseResponseDTO createCourse(CreateCourseDTO course) {
     Course c = Course.builder()
         .description(course.getDescription())
@@ -40,11 +41,13 @@ public class CourseService {
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public Course getCourseEntity(UUID courseId) {
     return repo.findById(courseId)
         .orElseThrow(() -> new IllegalArgumentException("No course found with id: " + courseId));
   }
 
+  @Transactional(readOnly = true)
   public CourseDTO getCourseDTO(UUID courseId) {
     Course c = repo.findById(courseId)
         .orElseThrow(() -> new IllegalArgumentException("No course found with id: " + courseId));
@@ -52,16 +55,19 @@ public class CourseService {
     return new CourseDTO(c);
   }
 
+  @Transactional(readOnly = true)
   public List<CourseDTO> getAllCoursesDTO() {
     return repo.findAll().stream().map(CourseDTO::new).toList();
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID courseId) {
     return repo.existsById(courseId);
   }
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public CourseResponseDTO updateCourse(UUID courseId, UpdateCourseDTO request) {
     if (request == null)
       throw new IllegalArgumentException("Data sent is null; did not update course.");
@@ -77,6 +83,7 @@ public class CourseService {
     return new CourseResponseDTO(c);
   }
 
+  @Transactional
   public CourseDTO moveChapter(UUID courseId, UUID chapterId) {
     Course target = getCourseEntity(courseId);
     Chapter chapter = chapterRepo.findById(chapterId)
@@ -109,6 +116,7 @@ public class CourseService {
     repo.deleteById(courseId);
   }
 
+  @Transactional
   public CourseDTO removeChapter(UUID courseId, UUID chapterId) {
     Course c = getCourseEntity(courseId);
     boolean removed = c.getChapters().removeIf(ch -> ch.getId().equals(chapterId));

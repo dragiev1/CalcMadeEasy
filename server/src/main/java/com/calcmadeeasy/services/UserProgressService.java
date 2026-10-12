@@ -4,20 +4,19 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.dto.Users.UserProgressDTO;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
 
-import jakarta.transaction.Transactional;
 
 /*
  * Service for handling raw progress updates. 
  */
 
 @Service
-@Transactional
 public class UserProgressService {
   private UserProgressRepo repo;
 
@@ -27,23 +26,27 @@ public class UserProgressService {
 
   // ==================== CREATE ====================
 
+  @Transactional
   public UserProgress createUserProgress(UserProgress up) {
     return repo.save(up);
   }
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public UserProgressDTO getUserProgressDTO(UUID upId) {
 
     return new UserProgressDTO(repo.findById(upId)
         .orElseThrow(() -> new RuntimeException("UserProgress could not be found with id: " + upId)));
   }
 
+  @Transactional(readOnly = true)
   public UserProgress getUserProgressEntity(UUID upId) {
     return repo.findById(upId)
         .orElseThrow(() -> new RuntimeException("UserProgress does not exists with id: " + upId));
   }
 
+  @Transactional(readOnly = true)
   public List<UserProgressDTO> getProgressForUserDTO(UUID userId) {
     return getProgressForUserEntity(userId)
         .stream()
@@ -51,6 +54,7 @@ public class UserProgressService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
   public List<UserProgress> getProgressForUserEntity(UUID userId) {
     if (userId == null)
       throw new IllegalArgumentException("");
@@ -58,6 +62,7 @@ public class UserProgressService {
     return repo.findByUserId(userId);
   }
 
+  @Transactional(readOnly = true)
   public List<UserProgressDTO> getAllProgressDTO() {
     return getAllProgresses()
         .stream()
@@ -65,16 +70,19 @@ public class UserProgressService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
   private List<UserProgress> getAllProgresses() {
     return repo.findAll();
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID upId) {
     return repo.existsById(upId);
   }
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public void recordAttempt(UUID upId, boolean isCorrect, Problem p) {
     UserProgress up = getUserProgressEntity(upId);
     up.recordAttempt(isCorrect, p);
@@ -84,9 +92,10 @@ public class UserProgressService {
    * Resets user progress for one specfic problem on one page.
    * Does not remove the object from DB
    */
+  @Transactional
   public void resetProgress(UUID upId) {
     if (!exists(upId))
-      throw new IllegalArgumentException("Section does not exist, cannot remove");
+      throw new IllegalArgumentException("UserProgress does not exist, cannot reset");
 
     UserProgress up = getUserProgressEntity(upId);
     up.resetProgress();
@@ -97,6 +106,7 @@ public class UserProgressService {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeProgress(UUID upId) {
     if (!exists(upId))
       throw new IllegalArgumentException("UserProgress does not exist with id," + upId + ", cannot remove");
@@ -108,10 +118,12 @@ public class UserProgressService {
       throw new IllegalArgumentException("UserProgress persists despite being removed");
   }
 
+  @Transactional
   public void removeAllProgressByUserAndCourseId(UUID userId, UUID courseId) {
     repo.deleteByUserIdAndPage_Section_Chapter_Course_Id(userId, courseId);
   }
 
+  @Transactional
   public void removeAll(List<UUID> ups) {
     repo.deleteAllById(ups);
 

@@ -12,12 +12,12 @@ import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.SectionRepo;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChapterService {
@@ -33,6 +33,7 @@ public class ChapterService {
 
   // ==================== CREATE ====================
 
+  @Transactional
   public ChapterResponseDTO createChapter(CreateChapterDTO chapter) {
     Chapter c = Chapter.builder()
         .description(chapter.getDescription())
@@ -49,6 +50,7 @@ public class ChapterService {
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public ChapterDTO getChapterDTO(UUID chapterId) {
     Chapter c = repo.findById(chapterId)
         .orElseThrow(() -> new IllegalArgumentException("Cannot find chapter with id: " + chapterId));
@@ -56,22 +58,26 @@ public class ChapterService {
     return new ChapterDTO(c);
   }
 
+  @Transactional(readOnly = true)
   public Chapter getChapterEntity(UUID chapterId) {
     return repo.findById(chapterId)
         .orElseThrow(() -> new IllegalArgumentException("Cannot find chapter with id: " + chapterId));
   }
 
+  @Transactional(readOnly = true)
   public List<ChapterDTO> getAllChapters() {
     return repo.findAll().stream()
         .map(ChapterDTO::new).toList();
   }
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID chapterId) {
     return repo.existsById(chapterId);
   }
 
   // ==================== UPDATE ====================
-
+  
+  @Transactional
   public ChapterResponseDTO updateChapter(UUID chapterId, UpdateChapterDTO request) {
     if (!exists(chapterId))
       throw new IllegalArgumentException("Chapter does not exist");
@@ -87,6 +93,7 @@ public class ChapterService {
     return new ChapterResponseDTO(c);
   }
 
+  @Transactional
   public ChapterDTO moveSection(UUID chapterId, UUID sectionId) {
     Chapter target = getChapterEntity(chapterId);
     Section s = sectionRepo.findById(sectionId)
@@ -111,18 +118,22 @@ public class ChapterService {
 
   @Transactional
   public void removeChapter(UUID chapterId) {
+    if(!exists(chapterId)) throw new IllegalAccessError("Cannot delete: Chapter not found with id: "  + chapterId);
     repo.deleteById(chapterId);
   }
 
+  @Transactional
   public ChapterDTO removeSection(UUID chapterId, UUID sectionId) {
     if (!exists(chapterId))
       throw new RuntimeException("Chapter does not exist");
     Chapter c = getChapterEntity(chapterId);
+
     boolean removed = c.getSections().removeIf(s -> s.getId().equals(sectionId));
+
     if (!removed)
       throw new IllegalArgumentException("Section does not exist in Chapter, could not remove");
+
     repo.save(c);
     return new ChapterDTO(c);
   }
-
 }

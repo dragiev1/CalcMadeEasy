@@ -8,12 +8,11 @@ import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserCourseEnrollment;
 import com.calcmadeeasy.repository.UserRepo;
 
-import jakarta.transaction.Transactional;
-
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -37,6 +36,7 @@ public class UserService {
   // ==================== CREATE ====================
 
   // Production method for user creation.
+  @Transactional
   public UserResponseDTO createUser(CreateUserDTO user) {
     if (user == null)
       throw new IllegalArgumentException("Cannot save null user");
@@ -54,6 +54,7 @@ public class UserService {
   }
 
   // Internal only method for user creation.
+  @Transactional
   public User createUserEntity(User user) {
     if (user == null)
       throw new IllegalArgumentException("Cannot save null user");
@@ -62,10 +63,12 @@ public class UserService {
 
   // ==================== READ ====================
 
+  @Transactional(readOnly = true)
   public boolean exists(UUID userId) {
     return repo.existsById(userId);
   }
 
+  @Transactional(readOnly = true)
   public UserDTO getUserDTO(UUID userId) {
     User u = repo.findById(userId)
         .orElseThrow(() -> new RuntimeException("User does not exist with id: " + userId));
@@ -73,10 +76,12 @@ public class UserService {
     return new UserDTO(u);
   }
 
+  @Transactional(readOnly = true)
   public User getUser(UUID userId) {
     return repo.findById(userId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + userId));
   }
 
+  @Transactional(readOnly = true)
   public List<UserDTO> getAllUsers() {
     List<User> users = repo.findAll();
 
@@ -87,6 +92,7 @@ public class UserService {
 
   // ==================== UPDATE ====================
 
+  @Transactional
   public UserDTO enrollCourse(UUID userId, UUID courseId) {
     User u = getUser(userId);
     Course c = courseService.getCourseEntity(courseId);
@@ -96,6 +102,7 @@ public class UserService {
     return new UserDTO(u);
   }
 
+  @Transactional
   public UserDTO unenrollCourse(UUID userId, UUID courseId) {
     User u = getUser(userId);
 
@@ -115,6 +122,7 @@ public class UserService {
 
   // ==================== DELETE ====================
 
+  @Transactional
   public void removeUser(UUID userId) {
     repo.deleteById(userId);
     if(exists(userId)) throw new IllegalAccessError("User was not properly removed");
