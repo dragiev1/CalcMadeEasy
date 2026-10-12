@@ -2,7 +2,6 @@ package com.calcmadeeasy.models.Sections;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -25,23 +24,42 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "sections")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Section {
   @Id
+  @EqualsAndHashCode.Include
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
+
   private String description;
+  
+  @NotBlank(message = "A section must have a title.")
+  @EqualsAndHashCode.Include
   private String title;
 
   @ManyToOne(fetch = FetchType.LAZY) // Many Sections in a one chapter.
   @JoinColumn(name = "chapter_id", nullable = false)
-  @JsonBackReference
+  @JsonBackReference  // Prevents infinite JSON recursion.
   private Chapter chapter;
 
   @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
-  private List<Page> pages;
+  @Builder.Default
+  private List<Page> pages = new ArrayList<>();
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -50,100 +68,24 @@ public class Section {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  // No-argument constructor for JPA
-  protected Section() {
-    this.pages = new ArrayList<>();
-  }
-
-  public static class Builder {
-    private String description;
-    private String title;
-    private List<Page> pages;
-
-    public Builder description(String description) {
-      this.description = description;
-      return this;
-    }
-
-    public Builder title(String title) {
-      this.title = title;
-      return this;
-    }
-
-    public Builder pages(Page... pages) {
-      this.pages = new ArrayList<>(Arrays.asList(pages));
-      return this;
-    }
-
-    public Section build() {
-      Section s = new Section(this);
-      if (pages != null) {
-        for (Page p : pages)
-          p.setSection(s);
-      }
-      return s;
-    }
-  }
-
-  private Section(Builder b) {
-    this.description = b.description;
-    this.title = b.title;
-    this.pages = b.pages == null ? new ArrayList<>() : new ArrayList<>(b.pages);
-  }
-
   // Getters
-  public UUID getId() {
-    return id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getTitle() {
-    return title;
-  }
 
   public int getPageQuantity() {
-    return pages.size();
-  }
-
-  public List<Page> getPages() {
-    return pages;
-  }
-
-  public UUID getChapterId() {
-    return chapter.getId();
-  }
-
-  public Chapter getChapter() {
-    return chapter;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
+    return this.pages == null ? 0 : pages.size();
   }
 
   // Setters
-
-  public void setDescription(String newDescription) {
-    this.description = newDescription;
-  }
-
-  public void setTitle(String newTitle) {
-    this.title = newTitle;
-  }
-
+ 
   public void addPage(Page newPage) {
-    pages.add(Objects.requireNonNull(newPage));
+    Objects.requireNonNull(newPage, "Page cannot be null");
+    this.pages.add(newPage);
+    // Maintain bidirectional relationship.
+    newPage.setSection(this);
   }
 
   public void setChapter(Chapter chapter) {
     this.chapter = chapter;
+    // Maintain bidirectional relationship.
     if (chapter != null && !chapter.getSections().contains(this))
       chapter.getSections().add(this);
   }
@@ -156,40 +98,8 @@ public class Section {
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("Page not found"));
 
-    pages.remove(page);
-  }
-
-  // Helper Method
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (!(o instanceof Section))
-      return false;
-    Section that = (Section) o;
-    return id != null && id.equals(that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
-
-  @Override
-  public String toString() {
-    return "\nSection{" +
-        "id=" + id +
-        ", description=" + description +
-        ", title=" + title +
-        ", pageQuantity=" + getPageQuantity() +
-        ", updatedAt=" + updatedAt +
-        ", createdAt=" + createdAt +
-        '}';
-  }
-
-  // Allows for simplicity when creating a new Section object
-  public static Builder builder() {
-    return new Builder();
+    this.pages.remove(page);
+    // Breaks back-reference so Hibernate knows it's been orphaned.
+    page.setSection(null);
   }
 }
