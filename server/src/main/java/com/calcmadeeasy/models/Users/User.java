@@ -16,21 +16,31 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 // TODO: Tie in with google auth 2.0 eventually to allow users to sign in with their google accounts.
 
 @Entity
 @Table(name = "app_user") // Because apparently user is not allowed as a table name.
+@Data // Generates getters, setters, toString, equals, hashCode methods
+@Builder  // Generates the builder pattern automatically
+@NoArgsConstructor  // Required for JPA/Hibernate
+@AllArgsConstructor  // Required for @Builder to work properly
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
+
   private String firstName;
   private String lastName;
   private String email;
   private String profilePicUrl; 
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
   private Set<UserCourseEnrollment> coursesEnrolled = new HashSet<>();
 
   @CreationTimestamp
@@ -40,95 +50,16 @@ public class User {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  // No-argument constructor for JPA
-  protected User() {
-    this.coursesEnrolled = new HashSet<>();
-  }
-
-  // Inner class for building the User object
-  public static class Builder {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String profilePicUrl;
-
-    public Builder firstName(String firstName) {
-      this.firstName = firstName;
-      return this;
-    }
-
-    public Builder lastName(String lastName) {
-      this.lastName = lastName;
-      return this;
-    }
-
-    public Builder email(String email) {
-      this.email = email;
-      return this;
-    }
-
-    public Builder profilePicUrl(String profilePicUrl) {
-      this.profilePicUrl = profilePicUrl;
-      return this;
-    }
-
-    public User build() {
-      return new User(this);
-    }
-  }
-
-  private User(Builder b) {
-    this.firstName = b.firstName;
-    this.lastName = b.lastName;
-    this.email = b.email;
-    this.profilePicUrl = b.profilePicUrl;
-  }
-
   // Getters
-  public UUID getId() {
-    return id;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public String getProfilePicUrl() {
-    return profilePicUrl;
-  }
 
   public int getNumCoursesTaking() {
     return coursesEnrolled.size();
-  }
-
-  public Set<UserCourseEnrollment> getCoursesEnrolled() {
-    return coursesEnrolled;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
   }
 
   // Setters
 
   public void enrollNewCourse(UserCourseEnrollment newCourse) {
     this.coursesEnrolled.add(newCourse);
-  }
-
-  public void setProfilePicUrl(String newUrl) {
-    this.profilePicUrl = newUrl;
   }
 
   public void unenrollCourse(UUID courseId) {
@@ -148,19 +79,4 @@ public class User {
         .anyMatch(c -> c.getCourse().getId().equals(courseId));
   }
 
-  public String toString() {
-    return "\nUser{\n" +
-        "id=" + id +
-        ", name=" + firstName + " " + lastName +
-        ", email=" + email +
-        ", profilePicUrl=" + profilePicUrl +
-        ", numOfCourses=" + getNumCoursesTaking() +
-        ", createdAt=" + createdAt +
-        ", updatedAt=" + updatedAt +
-        "\n}";
-  }
-
-  public static Builder builder() {
-    return new Builder();
-  }
 }

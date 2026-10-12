@@ -22,7 +22,6 @@ public class CalcMadeEasyApplication {
 
         public static void main(String[] args) {
                 SpringApplication.run(CalcMadeEasyApplication.class, args);
-
         }
 
         @Bean
