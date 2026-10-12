@@ -20,4 +20,7 @@ public interface ProblemRepo extends JpaRepository<Problem, UUID> {
     WHERE pp.page.id = :pageId
   """)
   List<Problem> findByProblemsByPageId(@Param("pageId") UUID pageId);
+
+  @Query("SELECT p FROM Problem p JOIN p.tags t WHERE t.tagName = :tagName")
+  List<Problem> findByTagName(@Param("tagName") String tagName);
 }

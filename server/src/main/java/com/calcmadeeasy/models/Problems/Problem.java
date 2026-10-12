@@ -2,7 +2,6 @@ package com.calcmadeeasy.models.Problems;
 
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -25,14 +24,34 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "problems")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Problem {
   @Id
+  @EqualsAndHashCode.Include
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
+  @NotBlank(message = "Problem cannot be blank.")
   private String description;
+ 
+  @NotNull(message = "Points cannot be null.")
+  @PositiveOrZero(message = "Points must be 0 or greater postive integer.")
   private Integer points;
   private Boolean isChallenge;
   private String solution;
@@ -41,12 +60,14 @@ public class Problem {
   @Enumerated(EnumType.STRING)
   private ProblemSolutionType solutionType;
 
+  @Builder.Default
   @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   @JoinTable(name = "problem_tag", 
             joinColumns = @JoinColumn(name = "problem_id"), 
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
   private Set<Tag> tags = new HashSet<>();
 
+  @Builder.Default
   @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<PageProblem> pageProblems = new HashSet<>();
 
@@ -57,88 +78,7 @@ public class Problem {
   @UpdateTimestamp
   private Instant updatedAt;
 
-  // No-argument constructor for JPA.
-  protected Problem() {
-    this.tags = new HashSet<>();
-  }
-
-  // Builder inner class
-  public static class Builder {
-    private String description;
-    private String solution;
-    private ProblemSolutionType solutionType;
-    private Boolean isChallenge;
-    private Set<Tag> tags = new HashSet<>();
-    private Integer points;
-
-    public Builder description(String description) {
-      this.description = description;
-      return this;
-    }
-
-    public Builder solution(String solution) {
-      this.solution = solution;
-      return this;
-    }
-
-    public Builder solutionType(ProblemSolutionType solutionType) {
-      this.solutionType = solutionType;
-      return this;
-    }
-
-    public Builder isChallenge(Boolean isChallenge) {
-      this.isChallenge = isChallenge;
-      return this;
-    }
-
-    public Builder tags(Tag... tags) {
-      this.tags.addAll(List.of(tags));
-      return this;
-    }
-
-    public Builder points(int points) {
-      this.points = points;
-      return this;
-    }
-
-    public Problem build() {
-      return new Problem(this);
-    }
-  }
-
-  private Problem(Builder b) {
-    this.description = b.description;
-    this.solution = b.solution;
-    this.solutionType = b.solutionType;
-    this.isChallenge = b.isChallenge;
-    this.tags = b.tags == null ? new HashSet<>() : b.tags;
-    this.points = b.points;
-  }
-
   // Getters
-  public UUID getId() {
-    return id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getSolution() {
-    return solution;
-  }
-
-  public ProblemSolutionType getSolutionType() {
-    return solutionType;
-  }
-
-  public Boolean getIsChallenge() {
-    return isChallenge;
-  }
-
-  public Set<Tag> getTags() {
-    return tags;
-  }
 
   public Tag getTagById(UUID tagId) {
     return tags.stream()
@@ -147,37 +87,7 @@ public class Problem {
       .orElse(null);
   }
 
-  public Integer getPoints() {
-    return points;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
   // Setters
-
-  public void setDescription(String newDescription) {
-    this.description = Objects.requireNonNull(newDescription);
-  }
-
-  public void setSolution(String solution) {
-    this.solution = solution;
-  }
-
-  public void setIsChallenge(Boolean trueOrFalse) {
-    this.isChallenge = trueOrFalse;
-  }
-
-  public void setPoints(int newPoints) {
-    if (newPoints < 0)
-      throw new IllegalArgumentException("Points cannot be negative!");
-    this.points = newPoints;
-  }
 
   public void setSolutionType(ProblemSolutionType newSolutionType) {
     if (newSolutionType != ProblemSolutionType.NUMERICAL && newSolutionType != ProblemSolutionType.EXPRESSION) {
@@ -188,7 +98,9 @@ public class Problem {
   }
 
   public void addTag(Tag newTag) {
+    Objects.requireNonNull(newTag, "Tag cannot be null");
     this.tags.add(newTag);
+    // No bidirectional sync needed.
   }
 
   // Removers
@@ -200,25 +112,5 @@ public class Problem {
         .orElseThrow(() -> new IllegalArgumentException("Page not found"));
 
     tags.remove(tag);
-  }
-
-  @Override
-  public String toString() {
-    return "\nProblem{\n" +
-        "id=" + id +
-        ", description=" + description +
-        ", solution=" + solution +
-        ", solutionType=" + solutionType +
-        ", isChallenge=" + isChallenge +
-        ", points=" + points +
-        ", tags=" + tags.toString() +
-        ", createdAt=" + createdAt +
-        ", updatedAt=" + updatedAt +
-        "\n}";
-  }
-
-  // Allows for simplicity when creating a new Problem object
-  public static Builder builder() {
-    return new Builder();
   }
 }
