@@ -11,19 +11,47 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    // Specfic Handlers (for expected business logic errors)
+
+    @ExceptionHandler(TagNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTagNotFound(TagNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),  // 404 
+            "Not Found",   
+            ex.getMessage(),
+            request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(
+        IllegalArgumentException ex,
+        HttpServletRequest request) {
+        
+            ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),  // 400  
+                "Bad Request", 
+                ex.getMessage(), 
+                request.getRequestURI());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    
+    // Catch-all fallback (for internal errors 500)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, HttpServletRequest request) {
         // Catch-all for any unexpected errors.
         ErrorResponse error = new ErrorResponse(
-            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "Internal Server Error",
-            "An unexpected error occured. Please try again later.",
-            request.getRequestURI()
-        );
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), // 500
+                "Internal Server Error",
+                "An unexpected error occured. Please try again later.",
+                request.getRequestURI());
 
         // Log actual error to console for debugging.
+        System.err.println("INTERNAL SERVER ERROR: " + ex.getMessage());
         ex.printStackTrace();
-        
+
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
