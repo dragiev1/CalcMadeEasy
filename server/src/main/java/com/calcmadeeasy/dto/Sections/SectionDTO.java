@@ -5,11 +5,12 @@ import java.util.List;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.models.Sections.Section;
 
+import lombok.Getter;
+
 // Outbound only.
+@Getter
 public class SectionDTO extends SectionResponseDTO {
   private List<PageResponseDTO> pages;
-
-  public SectionDTO() {}
 
   public SectionDTO(Section section) {
     super(section);
@@ -18,11 +19,4 @@ public class SectionDTO extends SectionResponseDTO {
             .map(PageResponseDTO::new)
             .toList();
   }
-
-  // Getters.
-
-  public List<PageResponseDTO> getPages() {
-    return pages;
-  }
-
 }
