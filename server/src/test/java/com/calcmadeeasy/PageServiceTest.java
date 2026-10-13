@@ -32,7 +32,7 @@ public class PageServiceTest {
     public void setup() {
         CreatePageDTO dto = new CreatePageDTO();
         dto.setContent("CONTENT");
-        dto.setPosition(0);
+        dto.setPosition(1);
         PageResponseDTO response = pageService.createPage(dto);
         pageDTO = pageService.getPageDTO(response.getId());
     }
