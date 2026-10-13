@@ -62,7 +62,6 @@ public class ProblemServiceTest {
     ProblemResponseDTO response = problemService.createProblem(dto);
     problem1 = problemService.getProblemEntity(response.getId());
     testProblemDTO = problemService.getProblemDTO(response.getId());
-
   }
 
   // CREATE

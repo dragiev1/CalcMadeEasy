@@ -8,7 +8,10 @@ import java.util.stream.Collectors;
 import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.models.Problems.Problem;
 
+import lombok.Getter;
+
 // Outbound only.
+@Getter
 public class ProblemDTO extends ProblemResponseDTO {
   private Set<TagDTO> tags;
   private Instant updatedAt;
@@ -23,19 +26,10 @@ public class ProblemDTO extends ProblemResponseDTO {
 
   // Getters
 
-  public Set<TagDTO> getTags() {
-    return tags;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
   public TagDTO getTagById(UUID tagId) {
     return tags.stream()
         .filter(tag -> tag.getId().equals(tagId))
         .findFirst()
         .orElse(null);
   }
-
 }
