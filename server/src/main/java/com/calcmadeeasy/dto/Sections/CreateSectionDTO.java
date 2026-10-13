@@ -2,41 +2,20 @@ package com.calcmadeeasy.dto.Sections;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 // Inbound only.
+@Getter
+@Setter
+@NoArgsConstructor
 public class CreateSectionDTO {
+  @NotBlank(message = "Section title cannot be empty.")
   private String title;
   private String description;
-  private UUID chapterId;
-
-  public CreateSectionDTO() {}
-
-  // Getters
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public UUID getChapterId() {
-    return chapterId;
-  }
-
-  // Setters
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setChapterId(UUID chapterId) {
-    this.chapterId = chapterId;
-  }
-
-  
+  @NotNull(message = "Chapter ID for a given section cannot be null.")
+  private UUID chapterId;  
 }

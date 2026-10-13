@@ -76,7 +76,7 @@ public class SectionServiceTest {
 
     CreatePageDTO pdto = new CreatePageDTO();
     pdto.setContent("CONTENT");
-    pdto.setPosition(0);
+    pdto.setPosition(1);
     PageResponseDTO pageResponse = pageService.createPage(pdto);
     page = pageService.getPageEntity(pageResponse.getId());
 

@@ -3,13 +3,26 @@ package com.calcmadeeasy.dto.Sections;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 // Inbound only.
-public class UpdateSectionDTO extends CreateSectionDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+public class UpdateSectionDTO {
+  @NotBlank(message = "Section title cannot be empty.")
+  private String title;
+  private String description;
+  @NotNull(message = "Chapter ID for a given section cannot be null.")
+  private UUID chapterId;  
+  @NotBlank(message = "ID must not be blank.")
   private UUID id;
   private List<PageOrderDTO> pages;
-
-  public UpdateSectionDTO() {}
 
   public static class PageOrderDTO {
     private UUID pageId;
@@ -31,13 +44,4 @@ public class UpdateSectionDTO extends CreateSectionDTO {
       this.position = position;
     }
   }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public List<PageOrderDTO> getPages() {
-    return pages;
-  }
-
 }
