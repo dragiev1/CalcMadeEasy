@@ -3,6 +3,7 @@ package com.calcmadeeasy.services;
 import com.calcmadeeasy.dto.Tags.CreateTagDTO;
 import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.dto.Tags.UpdateTagDTO;
+import com.calcmadeeasy.exceptions.TagNotFoundException;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.TagRepo;
 
@@ -65,7 +66,7 @@ public class TagService {
   @Transactional(readOnly = true)
   public TagDTO getTag(UUID tagId) {
     Tag t = repo.findById(tagId)
-        .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
+        .orElseThrow(() -> new TagNotFoundException("No tag found with id: " + tagId));
 
     return new TagDTO(t);
   }
@@ -73,7 +74,7 @@ public class TagService {
   @Transactional(readOnly = true)
   public Tag getTagEntity(UUID tagId) {
     return repo.findById(tagId)
-        .orElseThrow(() -> new RuntimeException("No tag found with id: " + tagId));
+        .orElseThrow(() -> new TagNotFoundException("No tag found with id: " + tagId));
   }
 
   @Transactional(readOnly = true)
@@ -114,7 +115,7 @@ public class TagService {
   @Transactional
   public void removeTagById(UUID tagId) {
     if (!(repo.existsById(tagId)))
-      throw new RuntimeException("CANNOT REMOVE - tag does not exist with id: " + tagId);
+      throw new TagNotFoundException("CANNOT REMOVE: tag does not exist with id: " + tagId);
     repo.deleteById(tagId);
   }
 
