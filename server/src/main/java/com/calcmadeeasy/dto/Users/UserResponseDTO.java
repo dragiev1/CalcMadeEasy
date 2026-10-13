@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import com.calcmadeeasy.models.Users.User;
 
+import lombok.Getter;
+
 // Outbound only.
+@Getter
 public class UserResponseDTO {
   private UUID id;
   private String firstName;
@@ -13,9 +16,6 @@ public class UserResponseDTO {
   private String email;
   private String profilePicUrl;
   private Instant createdAt;
-
-  // No args constructor for Jackson.
-  public UserResponseDTO() {}
 
   public UserResponseDTO(User user) {
     this.id = user.getId();
@@ -25,31 +25,4 @@ public class UserResponseDTO {
     this.profilePicUrl = user.getProfilePicUrl();
     this.createdAt = user.getCreatedAt();
   }
-
-  // Getters
-
-  public UUID getId() {
-    return id;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public String getProfilePicUrl() {
-    return profilePicUrl;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
 }

@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import com.calcmadeeasy.models.Users.UserProgress;
 
+import lombok.Getter;
+
 // Outbound only.
+@Getter
 public class UserProgressDTO {
   private UUID id;
   private UUID userId;
@@ -24,8 +27,6 @@ public class UserProgressDTO {
   private Instant createdAt;
   private Instant updatedAt;
 
-  public UserProgressDTO() {}
-
   public UserProgressDTO(UserProgress up) {
     this.id = up.getId();
     this.userId = up.getUser().getId();
@@ -39,56 +40,4 @@ public class UserProgressDTO {
     this.createdAt = up.getCreatedAt();
     this.updatedAt = up.getUpdatedAt();
   }
-
-  // Getters
-
-  public UUID getId() {
-    return id;
-  }
-
-  public UUID getUser() {
-    return userId;
-  }
-
-  public UUID getProblem() {
-    return problemId;
-  }
-
-  public Boolean getIsChallenge() {
-    return isChallenge;
-  }
-
-  public Integer getPoints() {
-    return points;
-  }
-
-  public UUID getPage() {
-    return pageId;
-  }
-
-  public Integer getAttempts() {
-    return attempts;
-  }
-
-  public Boolean isSolved() {
-    return solved;
-  }
-
-  public Integer getPointsEarned() {
-    return pointsEarned;
-  }
-
-  public Instant getLastAttemptedAt() {
-    return lastAttempted;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
-  // No setters; immutable.
 }

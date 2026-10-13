@@ -7,17 +7,16 @@ import java.util.stream.Collectors;
 
 import com.calcmadeeasy.models.Users.User;
 
+import lombok.Getter;
+
 /*
  * Data Transfer Object for all/single User requests. 
  * Outbound only. 
  */
+@Getter
 public class UserDTO extends UserResponseDTO {
-
   private Set<CourseEnrollmentDTO> coursesEnrolled;
   private Instant updatedAt;
-
-  // No args constructor for Jackson.
-  public UserDTO() {}
 
   public UserDTO(User user) {
     super(user);
@@ -26,15 +25,5 @@ public class UserDTO extends UserResponseDTO {
             .map(CourseEnrollmentDTO::new)
             .collect(Collectors.toSet());
     this.updatedAt = user.getUpdatedAt();
-  }
-
-  // Getters
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public Set<CourseEnrollmentDTO> getCoursesEnrolled() {
-    return coursesEnrolled;
   }
 }
