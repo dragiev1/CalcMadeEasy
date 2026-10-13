@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import com.calcmadeeasy.models.Sections.Section;
 
+import lombok.Getter;
+
 // Outbound only.
+@Getter
 public class SectionResponseDTO {
   private UUID id;
   private String title;
@@ -14,41 +17,12 @@ public class SectionResponseDTO {
   private Instant updatedAt;
   private Instant createdAt;
 
-  public SectionResponseDTO() {}
-
   public SectionResponseDTO(Section section) {
     this.id = section.getId();
     this.description = section.getDescription();
     this.title = section.getTitle();
-    this.chapterId = section.getChapterId();
+    this.chapterId = section.getChapter().getId();
     this.updatedAt = section.getUpdatedAt();
     this.createdAt = section.getCreatedAt();
   }
-
-  // Getters.
-
-  public UUID getId() {
-    return id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public UUID getChapterId() {
-    return chapterId;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-  
 }
