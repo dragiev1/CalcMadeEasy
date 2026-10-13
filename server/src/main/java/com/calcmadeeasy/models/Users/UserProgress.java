@@ -89,5 +89,4 @@ public class UserProgress {
     this.pointsEarned = 0;
     this.lastAttempted = null;
   }
-
 }

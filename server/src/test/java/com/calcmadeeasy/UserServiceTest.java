@@ -1,164 +1,103 @@
-// package com.calcmadeeasy;
+package com.calcmadeeasy;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.junit.jupiter.api.Assertions.assertFalse;
-// import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// import java.util.List;
-// import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.test.context.ActiveProfiles;
+import com.calcmadeeasy.dto.Users.UserDTO;
+import com.calcmadeeasy.models.Courses.Course;
+import com.calcmadeeasy.models.Users.User;
+import com.calcmadeeasy.models.Users.UserCourseEnrollment;
+import com.calcmadeeasy.repository.CourseRepo;
+import com.calcmadeeasy.repository.UserRepo;
+import com.calcmadeeasy.services.UserProgressService;
+import com.calcmadeeasy.services.UserService;
 
-// import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
-// import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
-// import com.calcmadeeasy.dto.Pages.CreatePageDTO;
-// import com.calcmadeeasy.dto.Pages.PageResponseDTO;
-// import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
-// import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
-// import com.calcmadeeasy.models.Chapters.Chapter;
-// import com.calcmadeeasy.models.Courses.Course;
-// import com.calcmadeeasy.models.Pages.Page;
-// import com.calcmadeeasy.models.Problems.Problem;
-// import com.calcmadeeasy.models.Sections.Section;
-// import com.calcmadeeasy.models.Users.User;
-// import com.calcmadeeasy.models.Users.UserProgress;
-// import com.calcmadeeasy.services.ChapterService;
-// import com.calcmadeeasy.services.CourseService;
-// import com.calcmadeeasy.services.PageService;
-// import com.calcmadeeasy.services.SectionService;
-// import com.calcmadeeasy.services.UserProgressService;
-// import com.calcmadeeasy.services.UserService;
+import jakarta.transaction.Transactional;
 
-// import jakarta.transaction.Transactional;
+@SpringBootTest
+@Transactional
+@ActiveProfiles("test")
+public class UserServiceTest {
+    @Autowired private UserService userService;
+    @Autowired private UserProgressService upService;
 
-// @SpringBootTest
-// @Transactional
-// @ActiveProfiles("test")
-// public class UserServiceTest {
-//   @Autowired
-//   private UserService userService;
-//   @Autowired
-//   private UserProgressService upService;
-//   @Autowired
-//   private CourseService courseServices;
-//   @Autowired
-//   private ChapterService chapterService;
-//   @Autowired
-//   private SectionService sectionService;
-//   @Autowired
-//   private PageService pageService;
+    private User user;
+    private Course course;
 
-//   private User user;
-//   private UserProgress up;
-//   private Course course;
-//   private Chapter chapter;
-//   private Section section;
-//   private Page page;
-//   private Problem problem;
+    @Autowired private UserRepo userRepo;
+    @Autowired private CourseRepo courseRepo;
 
-//   @BeforeEach
-//   public void setup() {
+    @BeforeEach
+    public void setup() {
+        // Create and save course directly via repository
+        course = Course.builder()
+            .description("DESCRIPTION")
+            .title("TITLE")
+            .build();
+        course = courseRepo.save(course);
 
-//     CreatePageDTO padto = new CreatePageDTO();
-//     padto.setContent("CONTENT");
-//     PageResponseDTO pageResponse = pageService.createPage(padto);
-//     page = pageService.getPageEntity(pageResponse.getId());
+        user = User.builder()
+            .firstName("FIRSTNAME")
+            .lastName("LASTNAME")
+            .email("TEST@EXAMPLE.COM")
+            .profilePicUrl("/test.png")
+            .build();
+        user = userRepo.save(user);
+    }
 
-//     CreateSectionDTO sdto = new CreateSectionDTO();
-//     sdto.setDescription("DESCRIPTION");
-//     sdto.setTitle("TITLE");
-//     SectionResponseDTO sectionResponse = sectionService.createSection(sdto);
-//     section = sectionService.getSectionEntity(sectionResponse.getId());
-//     sectionService.addPage(section.getId(), page.getId());
+    @Test
+    public void testCreateUser() {
+        assertTrue(userService.exists(user.getId()), "User should exist after setup, but doesn't.");
+    }
 
-//     CreateChapterDTO chdto = new CreateChapterDTO();
-//     chdto.setDescription("CHAPTER DESCRIPTION");
-//     chdto.setTitle("CHAPTER TITLE");
-//     ChapterResponseDTO chapterResponse = chapterService.createChapter(chdto);
-//     chapter = chapterService.getChapterEntity(chapterResponse.getId());
-//     chapterService.addSection(chapter.getId(), section.getId());
+    @Test
+    public void testGetUser() {
+        User fetchedUser = userService.getUser(user.getId());
+        assertEquals(fetchedUser.getEmail(), user.getEmail());
+    }
 
-//     course = Course.builder()
-//         .description("description1")
-//         .title("title1")
-//         .chapters(chapter)
-//         .build();
-//     courseServices.createCourse(course);
+    @Test
+    public void testGetAllUsers() {
+        assertEquals(userService.getAllUsers().size(), 1);
+    }
 
-//     user = User.builder()
-//         .firstName("firstname")
-//         .lastName("lastname")
-//         .email("example@test.com")
-//         .profilePicUrl("/test")
-//         .build();
-//     userService.createUserEntity(user);
+    @Test
+    public void testEnrollCourse() {
+        UserDTO resultDTO = userService.enrollCourse(user.getId(), course.getId());
+        assertEquals(1, resultDTO.getCoursesEnrolled().size(), "DTO should show 1 enrolled course");
 
-//     // up = new UserProgress(user, page, problem);
-//     // upService.createUserProgress(up);
-//   }
+        User updatedUser = userService.getUser(user.getId());
+        assertEquals(1, updatedUser.getCoursesEnrolled().size(), "Updated user's enrolled courses is not 1");
+        
+        UserCourseEnrollment actualEnrollment = updatedUser.getCoursesEnrolled().iterator().next();
+        assertEquals(course.getId(), actualEnrollment.getCourse().getId());
+        assertEquals(user.getId(), actualEnrollment.getUser().getId());
+    }
 
-//   // Create
+    @Test
+    public void testUnenrollCourse() {
+        UserDTO resultDTO = userService.enrollCourse(user.getId(), course.getId());
+        assertEquals(1, resultDTO.getCoursesEnrolled().size());
 
-//   @Test
-//   public void testCreateUser() {
-//     boolean exists = userService.exists(user.getId());
-//     assertTrue(exists);
-//   }
+        resultDTO = userService.unenrollCourse(user.getId(), course.getId());
 
-//   // Retrieval
+        User updatedUser = userService.getUser(user.getId());
+        assertEquals(0, updatedUser.getCoursesEnrolled().size(), "User's course list must be empty, but isn't");
+        
+        // Should delete user progress for that course. 
+        assertTrue(upService.getProgressForUserEntity(user.getId()).isEmpty(), "All progress for this course should be removed upon unenrollment");
+    }
 
-//   @Test
-//   public void testGetUser() {
-//     UUID id = user.getId();
-//     User u = userService.getUser(id);
-//     boolean exists = userService.exists(id);
-//     assertEquals(user, u, "Error: users do not match what was saved");
-//     assertTrue(exists, "Error: user does not exists within DB");
-//   }
-
-//   @Test
-//   public void testGetAllUsers() {
-//     int size = userService.getAllUsers().size();
-
-//     String err = "Error: number of users did not match expected";
-//     assertEquals(1, size, err);
-//   }
-
-//   // Update
-
-//   @Test
-//   public void testEnrollNewCourse() {
-//     // Arrange
-//     int size = 1;
-//     UUID uId = user.getId();
-//     // Act
-//     userService.enrollCourse(uId, course.getId());
-//     int newSize = userService.getUser(uId).getCoursesEnrolled().size();
-
-//     // Assert
-//     String err = "Error: course was not but was expected";
-//     assertEquals(size, newSize, "Error: number of courses did not match expected");
-//     assertTrue(userService.getUser(uId).getCoursesEnrolled().contains(course), err);
-//   }
-
-//   // Remove
-
-//   @Test
-//   public void testUnenrollCourse() {
-//     userService.enrollCourse(user.getId(), course.getId());
-
-//     userService.unenrollCourse(user.getId(), course.getId());
-
-//     boolean contains = userService.getUser(user.getId()).getCoursesEnrolled().contains(course);
-//     int courseCount = userService.getUser(user.getId()).getCoursesEnrolled().size();
-//     List<UserProgress> progressAfter = upService.getProgressForUserEntity(user.getId());
-
-//     assertFalse(contains, "Error: course persisted after supposed removal");
-//     assertEquals(0, courseCount, "Error: courses is not empty");
-//     assertTrue(progressAfter.isEmpty(), "Error: progress was not removed when unenrolling course");
-//   }
-// }
+    @Test
+    public void testRemoveUser() {
+        userService.removeUser(user.getId());
+        assertFalse(userService.exists(user.getId()));
+    }
+}
