@@ -112,10 +112,6 @@ public class UserProgressService {
       throw new IllegalArgumentException("UserProgress does not exist with id," + upId + ", cannot remove");
 
     repo.deleteById(upId);
-    boolean removed = exists(upId);
-
-    if (!removed)
-      throw new IllegalArgumentException("UserProgress persists despite being removed");
   }
 
   @Transactional
