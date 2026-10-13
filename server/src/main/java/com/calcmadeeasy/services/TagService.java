@@ -7,8 +7,9 @@ import com.calcmadeeasy.exceptions.TagNotFoundException;
 import com.calcmadeeasy.models.Tags.Tag;
 import com.calcmadeeasy.repository.TagRepo;
 
-import org.springframework.transaction.annotation.Transactional; 
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class TagService {
                     DB write didn't complete, it does not corrupt anything as it was not saved yet. */
 
   @Transactional
-  public Tag getOrCreateTag(String tagName, Double difficulty) {
+  public Tag getOrCreateTag(String tagName, BigDecimal difficulty) {
     return repo.findByTagName(tagName).orElseGet(() -> repo.save(Tag.builder().difficulty(difficulty).tagName(tagName).build()));
   }
 
@@ -38,7 +39,9 @@ public class TagService {
     if (tag == null)
       throw new IllegalArgumentException("Cannot create tag with null value");
 
-    Tag t = Tag.builder().tagName(tag.getName()).difficulty(tag.getDifficulty()).build();
+    System.out.println("DEBUG: DTO Difficulty is = " + tag.getDifficulty());
+    
+    Tag t = Tag.builder().tagName(tag.getTagName()).difficulty(tag.getDifficulty()).build();
     repo.save(t);
 
     return new TagDTO(t);
@@ -78,8 +81,8 @@ public class TagService {
   }
 
   @Transactional(readOnly = true)
-  public List<Tag> getTagsByDifficultyRange(Double lowerBound, Double upperBound) {
-    if (upperBound > 1 || lowerBound < 0)
+  public List<Tag> getTagsByDifficultyRange(BigDecimal lowerBound, BigDecimal upperBound) {
+    if (upperBound.compareTo(BigDecimal.ONE) > 0 || lowerBound.compareTo(BigDecimal.ZERO) < 0)
       throw new IllegalArgumentException("Unacceptable bounds range inputted");
 
     // Fix/Tip: Use the method made inside of TagRepo, don't filter here. Let DB do it; not the backend.  
@@ -99,10 +102,11 @@ public class TagService {
     
     if (request.getDifficulty() != null)
       tag.setDifficulty(request.getDifficulty());
-    if (request.getName() != null)
-      tag.setTagName(request.getName());
+    if (request.getTagName() != null)
+      tag.setTagName(request.getTagName());
 
-    if (request.getDifficulty() > 1 || request.getDifficulty() < 0)
+    BigDecimal difficulty = request.getDifficulty();
+    if (difficulty.compareTo(BigDecimal.ONE) > 0 || difficulty.compareTo(BigDecimal.ZERO) < 0)
       throw new IllegalArgumentException("Difficulty must be a decimal between 0 and 1");
 
     repo.save(tag);

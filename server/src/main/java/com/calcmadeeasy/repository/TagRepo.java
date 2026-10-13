@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.calcmadeeasy.models.Tags.Tag;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,5 +15,5 @@ import java.util.Optional;
 public interface TagRepo extends JpaRepository<Tag, UUID> {
   Optional<Tag> findByTagName(String tagName);
 
-  List<Tag> findByDifficultyBetween(Double lower, Double upper);
+  List<Tag> findByDifficultyBetween(BigDecimal lower, BigDecimal upper);
 }

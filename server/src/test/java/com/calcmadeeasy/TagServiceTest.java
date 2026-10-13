@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,8 +35,8 @@ public class TagServiceTest {
   @BeforeEach
   public void setup() {
     CreateTagDTO dto = new CreateTagDTO();
-    dto.setDifficulty(0.9);
-    dto.setTagName("NAME");
+    dto.setDifficulty(BigDecimal.valueOf(0.9));
+    dto.setTagName("NAME" + UUID.randomUUID());
     tagDTO = tagServices.createTag(dto);
   }
 
@@ -65,28 +67,29 @@ public class TagServiceTest {
 
   @Test
   public void testGetTagsByDifficultyRange() {
-    List<Tag> retrieved = tagServices.getTagsByDifficultyRange(Double.valueOf(0), Double.valueOf(0.5));
+    List<Tag> retrieved = tagServices.getTagsByDifficultyRange(BigDecimal.valueOf(0), BigDecimal.valueOf(0.9));
 
-    assertTrue(retrieved.isEmpty());
+    assertFalse(retrieved.isEmpty());
+    assertTrue(retrieved.size() == 1);
   }
 
   // Update
 
   @Test
   public void testUpdateTag() {
-    Double ogDiff = tagDTO.getDifficulty();
+    BigDecimal ogDiff = tagDTO.getDifficulty();
     String ogName = tagDTO.getTagName();
     UpdateTagDTO update = new UpdateTagDTO();
-    update.setDifficulty(0.0);
+    update.setDifficulty(BigDecimal.valueOf(0.0));
     update.setTagName("CHANGED");
 
     TagDTO retrieved = tagServices.updateTag(tagDTO.getId(), update);
-    Double newDiff = retrieved.getDifficulty();
+    BigDecimal newDiff = retrieved.getDifficulty();
     String newName = retrieved.getTagName();
 
     assertNotEquals(ogDiff, newDiff);
     assertNotEquals(ogName, newName);
-    assertEquals(0.0, newDiff,
+    assertEquals(BigDecimal.valueOf(0.0), newDiff,
         "Error: difficulty does not match expected");
     assertEquals("CHANGED", newName,
         "Error: tag name does not match expected");

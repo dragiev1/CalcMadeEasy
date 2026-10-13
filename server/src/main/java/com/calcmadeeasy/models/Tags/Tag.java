@@ -1,5 +1,6 @@
 package com.calcmadeeasy.models.Tags;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -38,7 +39,7 @@ public class Tag {
   @Column(name = "tag_name", unique = true, nullable = false)
   private String tagName;
 
-  @DecimalMax(value = "0.0", message = "Difficulty must be at least 0")
-  @DecimalMin(value = "1.0", message = "Difficulty must not exceed 1")
-  private Double difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
+  @DecimalMax(value = "1.0", message = "Difficulty must be at least 0")
+  @DecimalMin(value = "0.0", message = "Difficulty must not exceed 1")
+  private BigDecimal difficulty; // Scale of 0 to 1 for each tag. 0 = simple and 1 = hard.
 }

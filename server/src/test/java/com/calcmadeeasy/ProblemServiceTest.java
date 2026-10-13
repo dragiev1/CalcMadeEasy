@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class ProblemServiceTest {
   public void setup() {
     CreateTagDTO tag1 = new CreateTagDTO();
     tag1.setTagName("Tag1");
-    tag1.setDifficulty(Double.valueOf(0));
+    tag1.setDifficulty(BigDecimal.valueOf(0));
     TagDTO tag1DTO = tagService.createTag(tag1);
     tagEntity1 = tagService.getTagEntity(tag1DTO.getId());
 
