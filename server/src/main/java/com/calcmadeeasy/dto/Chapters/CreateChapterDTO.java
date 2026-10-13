@@ -2,40 +2,20 @@ package com.calcmadeeasy.dto.Chapters;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 // Inbound only.
+@Getter
+@Setter
+@NoArgsConstructor
 public class CreateChapterDTO {
   private String description;
+  @NotBlank(message = "Chapter title cannot blank.")
+  @NotNull(message = "Chapter title cannot be null.")
   private String title;
   private UUID courseId;
-
-  public CreateChapterDTO() {}
-
-  // Getters
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public UUID getCourseId() {
-    return courseId;
-  }
-
-  // Setters
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setCourseId(UUID courseId) {
-    this.courseId = courseId;
-  }
-
 }

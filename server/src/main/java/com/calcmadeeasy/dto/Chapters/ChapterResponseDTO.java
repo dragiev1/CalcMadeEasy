@@ -5,15 +5,20 @@ import java.util.UUID;
 
 import com.calcmadeeasy.models.Chapters.Chapter;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+
 // Outbound
+@Getter
 public class ChapterResponseDTO {
   private UUID id;
   private String description;
+  @NotBlank(message = "Chapter title cannot blank.")
+  @NotNull(message = "Chapter title cannot be null.")
   private String title;
   private Instant createdAt;
   private Instant updatedAt;
-
-  public ChapterResponseDTO() {}
 
   public ChapterResponseDTO(Chapter chapter) {
     this.id = chapter.getId();
@@ -21,27 +26,5 @@ public class ChapterResponseDTO {
     this.title = chapter.getTitle();
     this.createdAt = chapter.getCreatedAt();
     this.updatedAt = chapter.getUpdatedAt();
-  }
-
-  // Getters
-
-  public UUID getId() {
-    return id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
   }
 }

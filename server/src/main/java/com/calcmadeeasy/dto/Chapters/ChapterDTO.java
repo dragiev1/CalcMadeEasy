@@ -5,14 +5,14 @@ import java.util.List;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.models.Chapters.Chapter;
 
+import lombok.Getter;
+
 // Outbound only.
+@Getter
 public class ChapterDTO extends ChapterResponseDTO {
 
   // Contains list of section response dtos instead of entities.
   private List<SectionResponseDTO> sections;
-
-  public ChapterDTO() {
-  }
 
   public ChapterDTO(Chapter chapter) {
     super(chapter);
@@ -21,11 +21,4 @@ public class ChapterDTO extends ChapterResponseDTO {
             .map(SectionResponseDTO::new)
             .toList();
   }
-
-  // Getters
-
-  public List<SectionResponseDTO> getSections() {
-    return sections;
-  }
-
 }
