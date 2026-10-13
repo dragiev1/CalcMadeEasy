@@ -1,31 +1,18 @@
 package com.calcmadeeasy.dto.Pages;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 // Inbound only.
+@Getter
+@Setter
+@NoArgsConstructor
 public class CreatePageDTO {
   private String content;
+  @NotBlank(message = "Position must not be blank.")
+  @Positive(message = "Position must be positive.")
   private Integer position;
-
-  // No-args constructor for Jackson.
-  public CreatePageDTO() {}
-
-  // Getters
-
-  public String getContent() {
-    return content;
-  }
-
-  public Integer getPosition() {
-    return position;
-  }
-
-  // Setters (Optional)
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-  public void setPosition(Integer position) {
-    this.position = position;
-  }
 }
