@@ -22,3 +22,8 @@ export const loginWithGoogle = async (idToken: string): Promise<AuthResponse> =>
     });
     return response.data;
 }
+
+export const logout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+};
