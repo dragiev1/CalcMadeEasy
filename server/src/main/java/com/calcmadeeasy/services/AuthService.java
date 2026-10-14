@@ -5,6 +5,7 @@ import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.util.Value;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,6 +43,10 @@ public class AuthService {
     @Transactional
     public AuthResponse loginWithGoogle(String idTokenString) {
         try {
+
+            // Debugging:
+            System.out.println("BACKEND CLIENT ID: " + googleClientId);
+
             // Verify token with Google.
             // Analogy: Bouncer at a nightclub.
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
