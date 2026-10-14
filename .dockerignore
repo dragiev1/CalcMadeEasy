@@ -1,0 +1,13 @@
+# Ignore node modules
+**/node_modules
+**/dist
+
+# Ignore Java build artifacts
+**/target
+//.mvn
+//.gradle
+
+# Ignore git and IDE settings
+.git
+.vscode
+.idea
