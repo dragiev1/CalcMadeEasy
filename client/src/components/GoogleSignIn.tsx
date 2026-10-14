@@ -3,7 +3,7 @@ import "../css/GoogleLogo.css"; // Make sure this path is correct
 
 const GoogleSignIn = () => {
   return (
-    <button className="gsi-material-button">
+    <div className="gsi-material-button">
       <div className="gsi-material-button-state"></div>
       <div className="gsi-material-button-content-wrapper">
         <div className="gsi-material-button-icon">
@@ -35,7 +35,7 @@ const GoogleSignIn = () => {
         </div>
         <span style={{ display: "none" }}>Sign in with Google</span>
       </div>
-    </button>
+    </div>
   );
 };
 
