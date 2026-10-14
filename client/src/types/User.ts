@@ -15,25 +15,22 @@ export interface UserProps {
   lastName: string;
   email: string;
   profilePic: string;
-  // courses: Course[];
-  // grades: UserProgress[];
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface UserProgressProps {
-  id: number;
-  userId: number;
-  problemId: number;
-  pageId: number;
+  id: string;
+  userId: string;
+  problemId: string;
+  pageId: string;
 
   answer: string;
   isCorrect: boolean;
   points: number;
   attempts?: number;
   pointsEarned?: number;
-  lastAttempted?: number;
+  lastAttempted?: string;
 
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
 }
-
