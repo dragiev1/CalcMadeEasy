@@ -21,21 +21,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO: Tie in with google auth 2.0 eventually to allow users to sign in with their google accounts.
-
 @Entity
-@Table(name = "app_user") // Because apparently user is not allowed as a table name.
-@Data // Generates getters, setters, toString, equals, hashCode methods
-@Builder  // Generates the builder pattern automatically
-@NoArgsConstructor  // Required for JPA/Hibernate
-@AllArgsConstructor  // Required for @Builder to work properly
+@Table(name = "app_user")  // Because apparently user is not allowed as a table name.
+@Data  // Generates getters, setters, toString, equals, hashCode methods.
+@Builder   // Generates the builder pattern automatically.
+@NoArgsConstructor   // Required for JPA/Hibernate.
+@AllArgsConstructor   // Required for @Builder to work properly.
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
+  @Column(unique = true)
+  private String googleId;
+
+  @Column(nullable = false)
   private String firstName;
+  @Column(nullable = false)
   private String lastName;
+  @Column(unique = true, nullable = false)
   private String email;
   private String profilePicUrl; 
 
@@ -78,5 +82,4 @@ public class User {
     return coursesEnrolled.stream()
         .anyMatch(c -> c.getCourse().getId().equals(courseId));
   }
-
 }
