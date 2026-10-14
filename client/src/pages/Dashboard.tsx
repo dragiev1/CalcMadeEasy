@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type User } from '../types/User';
+import { logout } from '../services/authService';
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -25,7 +26,7 @@ export default function Dashboard() {
   }
 
   const handleLogOut = () => {
-    localStorage.clear();
+    logout();
     navigate('/');
   };
 
