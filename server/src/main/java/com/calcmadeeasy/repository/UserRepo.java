@@ -1,5 +1,6 @@
 package com.calcmadeeasy.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ import com.calcmadeeasy.models.Users.User;
 @Repository
 public interface UserRepo extends JpaRepository<User, UUID> {
   
+    Optional<User> findByGoogleId(String googleId);
 }

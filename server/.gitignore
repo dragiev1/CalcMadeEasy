@@ -1,5 +1,7 @@
 ### dotenv ###
 .env
+.env.local
+application-local.yml
 
 ### dotenv ###
 *.sh
