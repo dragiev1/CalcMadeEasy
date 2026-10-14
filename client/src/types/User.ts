@@ -1,3 +1,15 @@
+export interface User {
+  id: string;
+  googleId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  profilePicUrl: string;
+  coursesEnrolled?: any[] // TODO: Make course enrollment interface later.
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface UserProps {
   firstName: string;
   lastName: string;
