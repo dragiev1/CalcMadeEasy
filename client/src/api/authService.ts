@@ -15,6 +15,7 @@ export interface AuthResponse {
     };
 }
 
+// TODO: REMOVE AXIOS ASAP
 // Dedicated function for logging in.
 export const loginWithGoogle = async (idToken: string): Promise<AuthResponse> => {
     const response = await axios.post<AuthResponse>(`${API_BASE_URL}/google`, {

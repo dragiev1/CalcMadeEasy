@@ -1,3 +1,7 @@
+/**
+ * ACTUAL INTERFACES:
+ */
+
 export interface User {
   id: string;
   googleId: string;
@@ -10,27 +14,36 @@ export interface User {
   updatedAt?: string;
 }
 
+
+
+/**
+ * FOR TESTING / HOMEPAGE PURPOSES ONLY.
+ */
+
 export interface UserProps {
   firstName: string;
   lastName: string;
   email: string;
   profilePic: string;
-  createdAt: string;
+  // courses: Course[];
+  // grades: UserProgress[];
+  createdAt: Date;
 }
 
 export interface UserProgressProps {
-  id: string;
-  userId: string;
-  problemId: string;
-  pageId: string;
+  id: number;
+  userId: number;
+  problemId: number;
+  pageId: number;
 
   answer: string;
   isCorrect: boolean;
   points: number;
   attempts?: number;
   pointsEarned?: number;
-  lastAttempted?: string;
+  lastAttempted?: number;
 
-  createdAt: string;
-  updatedAt: string;
+  createdAt: number;
+  updatedAt: number;
 }
+

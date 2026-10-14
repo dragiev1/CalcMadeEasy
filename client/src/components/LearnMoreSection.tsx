@@ -38,11 +38,14 @@ import "../css/LearnMoreSection.css";
 
 import UserStats from "./UserStats";
 import QuestionCard from "./QuestionCard";
-import Latex from "./Latex/Latex";
-import type { ProblemProps } from "../types/Problem";
-import type { UserProgressProps } from "../types/User";
+// import Latex from "./Latex/Latex";
+// import type { ProblemProps } from "../types/Problem";
+// import type { UserProgressProps } from "../types/User";
 import StressAnimation from "./StressedAnimation";
 import { useScrollReveal } from "../utils/useScrollReveal";
+import { type Problem } from "../types/Problem";
+import { getProblemById } from "../api/problemService";
+import { useEffect, useState } from "react";
 
 const LearnMoreSection = () => {
   const [sec1Ref, sec1Visible] =useScrollReveal();
@@ -50,66 +53,95 @@ const LearnMoreSection = () => {
   const [sec3Ref, sec3Visible] =useScrollReveal();
   const [sec4Ref, sec4Visible] =useScrollReveal();
 
-  const mockUserProgress: UserProgressProps[] = [
-    {
-      id: 0,
-      userId: 0,
-      problemId: 0,
-      pageId: 0,
-      attempts: 2,
-      lastAttempted: Date.now(),
-      points: 3,
-      answer: "\\int",
-      isCorrect: false,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    },
-    {
-      id: 1,
-      userId: 0,
-      problemId: 1,
-      pageId: 0,
-      attempts: 3,
-      lastAttempted: Date.now(),
-      points: 4,
-      answer: "2x",
-      isCorrect: true,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    },
-  ]
+  // const mockUserProgress: UserProgressProps[] = [
+    // {
+    //   id: 0,
+    //   userId: 0,
+    //   problemId: 0,
+    //   pageId: 0,
+    //   attempts: 2,
+    //   lastAttempted: Date.now(),
+    //   points: 3,
+    //   answer: "\\int",
+    //   isCorrect: false,
+    //   createdAt: Date.now(),
+    //   updatedAt: Date.now(),
+    // },
+    // {
+    //   id: 1,
+    //   userId: 0,
+    //   problemId: 1,
+    //   pageId: 0,
+    //   attempts: 3,
+    //   lastAttempted: Date.now(),
+    //   points: 4,
+    //   answer: "2x",
+    //   isCorrect: true,
+    //   createdAt: Date.now(),
+    //   updatedAt: Date.now(),
+    // },
+  // ]
 
-  const mockProblems: ProblemProps[] = [
-    {
-      id: 0,
-      question: <>
-                  {""} Integrate the following:{" "}
-                  <Latex>{"\\int_0^{\\pi/4} \\sec^2(x)\\,dx"}</Latex>
-                </>,
-      solved: false,
-      tags: [
-        { name: "Algebra", difficulty: 0.15, id: 1 },
-        { name: "Trig Identity", difficulty: 0.34, id: 2 },
-        { name: "Integration By Parts", difficulty: 0.9, id: 3 },
-      ],
-      confidenceScore: 82,
-    },
-    {
-      id: 1,
-      question: <>
-                  {""} Let <Latex>{"f(x) = x^2"}</Latex>. Using the limit definition of the derivative, find <Latex>{"f'"}</Latex>{" "}:
-                </>,
-      solved: true,
-      tags: [
-        { name: "Limit", difficulty: 0.4, id: 4 },
-        { name: "Algebra", difficulty: 0.2, id: 5 },
-      ],
-      confidenceScore: 80,
-      userSolution: mockUserProgress[1],
-    },
-  ];
+  // Mock problems
+  // const mockProblems: ProblemProps[] = [
+  //   {
+  //     id: 0,
+  //     question: <>
+  //                 {""} Integrate the following:{" "}
+  //                 <Latex>{"\\int_0^{\\pi/4} \\sec^2(x)\\,dx"}</Latex>
+  //               </>,
+  //     solved: false,
+  //     tags: [
+  //       { name: "Algebra", difficulty: 0.15, id: 1 },
+  //       { name: "Trig Identity", difficulty: 0.34, id: 2 },
+  //       { name: "Integration By Parts", difficulty: 0.9, id: 3 },
+  //     ],
+  //     confidenceScore: 82,
+  //   },
+  //   {
+  //     id: 1,
+  //     question: <>
+  //                 {""} Let <Latex>{"f(x) = x^2"}</Latex>. Using the limit definition of the derivative, find <Latex>{"f'"}</Latex>{" "}:
+  //               </>,
+  //     solved: true,
+  //     tags: [
+  //       { name: "Limit", difficulty: 0.4, id: 4 },
+  //       { name: "Algebra", difficulty: 0.2, id: 5 },
+  //     ],
+  //     confidenceScore: 80,
+  //     userSolution: mockUserProgress[1],
+  //   },
+  // ];
 
+
+  /**
+   * Testing: Fetching an example problem and passing the info in the QuestionCard component.
+   */
+  const problemId = "123e4567-e89b-12d3-a456-426614174000";  
+
+  const [problem, setProblem] = useState<Problem | null>(null);
+
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchProblem = async () => {
+      try {
+        setIsLoading(true);
+
+        // Await actual data, not Promise.
+        const data = await getProblemById(problemId);
+        setProblem(data);  // Save it to state!
+      } catch (e) { console.error("Failed to fetch problem!", e); }
+      finally {
+        setIsLoading(false);  // Stop loading whether it succeeded or not
+      }
+    };
+
+    fetchProblem();
+  }, [problemId]);  // Ensures only runs when problemId changes
   
+  if(isLoading) return <p>Loading problem...</p>; 
+  if(!problem) return <p>Failed to load problem. Check console.</p>
+
 
   return (
     <div className="learn-more-wrapper">
@@ -169,7 +201,7 @@ const LearnMoreSection = () => {
             </div>
           </div>
           <div className="demo">
-            {mockProblems.map((problem, index) => (
+            {/* {mockProblems.map((problem, index) => (
               <QuestionCard
                 key={index}
                 id={problem.id}
@@ -179,7 +211,14 @@ const LearnMoreSection = () => {
                 confidenceScore={problem.confidenceScore}
                 tags={problem.tags}
                 userSolution={problem.userSolution}/>
-            ))}
+            ))} */}
+            <QuestionCard 
+              id={problem.id}
+              question={problem.description}
+              tags={problem.tags}
+              position={0} 
+              solved={false}       
+            />
           </div>
         </div>
 

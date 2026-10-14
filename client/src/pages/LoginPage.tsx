@@ -1,6 +1,6 @@
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import { loginWithGoogle } from "../services/authService";
+import { loginWithGoogle } from "../api/authService";
 
 
 export default function LoginPage() {

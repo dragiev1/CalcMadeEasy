@@ -68,8 +68,9 @@ public class ProblemService {
 
   @Transactional(readOnly = true)
   public ProblemDTO getProblemDTO(UUID pId) {
-    ProblemDTO p = new ProblemDTO(getProblemEntity(pId));
-    return p;
+    Problem problem = repo.findByIdWithTags(pId)
+      .orElseThrow(() -> new RuntimeException("Problem not found"));
+    return new ProblemDTO(problem);
   }
 
   public boolean verifySolution(Problem problem, String userSolution) {

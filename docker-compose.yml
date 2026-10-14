@@ -12,6 +12,7 @@ services:
       POSTGRES_PASSWORD: 1234
     ports: 
       - "5432:5432"
+    # Where to save the data in DB
     volumes: 
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -50,5 +51,6 @@ networks:
   cme-network:
     driver: bridge
 
+# Data storage place
 volumes:
   postgres_data:

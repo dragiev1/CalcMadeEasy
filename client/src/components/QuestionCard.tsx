@@ -1,6 +1,6 @@
 import "../css/QuestionCard.css";
 import TagComponent from "../components/TagComponent";
-import type { ProblemProps } from "../types/Problem";
+import { type ProblemProps } from "../types/Problem.tsx";
 import RadialGraph from "./RadialGraph";
 import AnswerInput from "./AnswerInput";
 import { useEffect, useState } from "react";
@@ -85,7 +85,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
             />
           </button>
           {showTags &&
-            tags.map((tag, index) => (
+            tags.map((tag: any, index: number) => (
               <TagComponent
                 key={`${tag.name}-${index}`}
                 name={tag.name}

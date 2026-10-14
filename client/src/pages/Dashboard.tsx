@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type User } from '../types/User';
-import { logout } from '../services/authService';
+import { logout } from '../api/authService';
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
