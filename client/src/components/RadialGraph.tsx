@@ -37,8 +37,8 @@ const RadialGraph: React.FC<RadialGraphProps> = ({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  const clampedPercentage = Math.min(Math.max(value, 0), maxValue) / maxValue;
-  const targetOffset = circumference - clampedPercentage * circumference;
+  // const clampedPercentage = Math.min(Math.max(value, 0), maxValue) / maxValue;
+  // const targetOffset = circumference - clampedPercentage * circumference;
   
   useEffect(() => {
     if (animated) {

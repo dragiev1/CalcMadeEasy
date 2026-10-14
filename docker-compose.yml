@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: cme-db
+    networks:
+      - cme-network
+    environment:
+      POSTGRES_DB: calcmadeeasy
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 1234
+    ports: 
+      - "5432:5432"
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d calcmadeeasy"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend: 
+    build: ./server
+    container_name: cme-backend
+    networks:
+      - cme-network
+    ports:
+      - "8080:8080"
+    environment:
+      # BACK TO THE HOSTNAME 'db'
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/calcmadeeasy
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: 1234
+    depends_on:
+      db:
+        condition: service_healthy
+  
+  frontend:
+    build: ./client
+    container_name: cme-frontend
+    networks:
+      - cme-network
+    ports:
+      - "5173:80" 
+    depends_on:
+      - backend
+
+networks:
+  cme-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
