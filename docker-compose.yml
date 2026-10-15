@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: 1234
     ports: 
-      - "5432:5432"
+      - "5432:5432"  # Comment.
     # Where to save the data in DB
     volumes: 
       - postgres_data:/var/lib/postgresql/data
@@ -29,10 +29,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # BACK TO THE HOSTNAME 'db'
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/calcmadeeasy
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       db:
         condition: service_healthy
