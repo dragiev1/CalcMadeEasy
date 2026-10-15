@@ -51,11 +51,11 @@ h3 {
   align-items: center; 
   margin: 20px auto;
 }
-
+/* 
 .section.visible {
   opacity: 1;
   transform: translateY(0) scale(1);
-}
+} */
 
 .demo {
   display: flex;
@@ -67,8 +67,8 @@ h3 {
 
 .section .explanation,
 .section .demo {
-  opacity: 1;
-  transform: translateY(20px);
+  opacity: 0;
+  transform: translateY(30px);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
@@ -77,8 +77,8 @@ h3 {
   opacity: 1;
   transform: translateY(0);
 }
-.section.visible .explanation {transition-delay: 0.08s}
-.section.visible .demo {transition-delay: 0.16s;}
+.section.visible .explanation {transition-delay: 0.1s}
+.section.visible .demo {transition-delay: 0.25s;}
 
 
 .demo,

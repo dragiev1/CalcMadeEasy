@@ -116,7 +116,7 @@ const LearnMoreSection = () => {
   /**
    * Testing: Fetching an example problem and passing the info in the QuestionCard component.
    */
-    const problemId = "123e4567-e89b-12d3-a456-426614174000";  
+  const problemId = "123e4567-e89b-12d3-a456-426614174000";  
   const [problem, setProblem] = useState<Problem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
