@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -7,11 +5,11 @@ services:
     networks:
       - cme-network
     environment:
-      POSTGRES_DB: calcmadeeasy
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports: 
-      - "5432:5432"  # Comment.
+      - "5432:5432"
     # Where to save the data in DB
     volumes: 
       - postgres_data:/var/lib/postgresql/data
