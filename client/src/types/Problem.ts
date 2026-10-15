@@ -1,3 +1,5 @@
+import type { TagProps } from "./Tag";
+
 export interface Problem {
   id: string;
   description: string;
@@ -5,7 +7,7 @@ export interface Problem {
   isChallenge: boolean;
   solution: string;
   solutionType: string;  // TOOO: make a solutiontype enum.
-  tags: [];
+  tags?: TagProps[];
   createdAt?: string;
   updatedAt?: string;
 }

@@ -45,12 +45,12 @@ math-field::part(menu-toggle) {
   border-radius: 16px;
   padding: 0.75rem 1rem;
   transition: all 0.2s ease;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
 }
 
 .answer-input-container.focused {
   background: var(--input-bg);
-  box-shadow: 0 0 1px 2px var(--txt-secondary);
+  box-shadow: 0 0 1px 1.5px var(--txt-secondary);
 }
 
 .answer-input-container.has-value {

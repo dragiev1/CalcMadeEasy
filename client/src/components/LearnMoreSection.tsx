@@ -41,7 +41,6 @@ import QuestionCard from "./QuestionCard";
 // import Latex from "./Latex/Latex";
 // import type { ProblemProps } from "../types/Problem";
 // import type { UserProgressProps } from "../types/User";
-import StressAnimation from "./StressedAnimation";
 import { useScrollReveal } from "../utils/useScrollReveal";
 import { type Problem } from "../types/Problem";
 import { getProblemById } from "../api/problemService";
@@ -117,30 +116,42 @@ const LearnMoreSection = () => {
   /**
    * Testing: Fetching an example problem and passing the info in the QuestionCard component.
    */
-  const problemId = "123e4567-e89b-12d3-a456-426614174000";  
-
+    const problemId = "123e4567-e89b-12d3-a456-426614174000";  
   const [problem, setProblem] = useState<Problem | null>(null);
-
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchProblem = async () => {
       try {
         setIsLoading(true);
-
-        // Await actual data, not Promise.
         const data = await getProblemById(problemId);
-        setProblem(data);  // Save it to state!
-      } catch (e) { console.error("Failed to fetch problem!", e); }
-      finally {
-        setIsLoading(false);  // Stop loading whether it succeeded or not
+        setProblem(data); 
+      } catch (e) { 
+        console.error("Failed to fetch problem! Using fallback data.", e);
+        
+        // 🛡️ FALLBACK: If the API fails, use this mock data so the UI doesn't break!
+        setProblem({
+          id: problemId,
+          description: "What is the derivative of x²?",
+          points: 10,
+          isChallenge: false,
+          solution: "2x",
+          solutionType: "NUMERICAL",
+          tags: [
+            { id: "1", name: "Derivative", difficulty: 0.3 },
+            { id: "2", name: "Power Rule", difficulty: 0.2 }
+          ]
+        });
+      } finally {
+        setIsLoading(false); 
       }
     };
 
     fetchProblem();
-  }, [problemId]);  // Ensures only runs when problemId changes
-  
-  if(isLoading) return <p>Loading problem...</p>; 
-  if(!problem) return <p>Failed to load problem. Check console.</p>
+  }, [problemId]);
+
+  // Keep the loading screen, but remove the null return so it falls back gracefully
+  if (isLoading) return <p style={{ textAlign: 'center', padding: '2rem' }}>Loading problem...</p>; 
 
 
   return (
@@ -172,7 +183,7 @@ const LearnMoreSection = () => {
         {/* Section 2 */}
         <div className={`section ${sec2Visible ? 'visible' : ''}`} ref={sec2Ref}>
           <div className="demo">
-            <StressAnimation alt="Stressed Person Animation"/>
+
           </div>
           <div className="explanation">
             <div className="explanation-title text-right">
@@ -213,10 +224,10 @@ const LearnMoreSection = () => {
                 userSolution={problem.userSolution}/>
             ))} */}
             <QuestionCard 
-              id={problem.id}
-              question={problem.description}
-              tags={problem.tags}
-              position={0} 
+              id={problem?.id}
+              question={problem?.description}
+              tags={problem?.tags || []}
+              position={3} 
               solved={false}       
             />
           </div>

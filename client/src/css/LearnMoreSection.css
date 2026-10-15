@@ -23,7 +23,7 @@ h3 {
 }
 
 .learn-more-wrapper {
-  position: sticky;
+  position: relative;
   margin-top: 10rem;
 }
 
@@ -67,7 +67,7 @@ h3 {
 
 .section .explanation,
 .section .demo {
-  opacity: 0;
+  opacity: 1;
   transform: translateY(20px);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }

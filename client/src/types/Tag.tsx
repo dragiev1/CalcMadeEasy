@@ -1,7 +1,9 @@
 export interface TagProps {
-  id: number;
+  id: string;
   name: string;
   difficulty: number;
 };
+
+
 
 

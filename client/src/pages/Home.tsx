@@ -2,6 +2,8 @@ import Navbar from "../components/Navbar";
 import "../css/Home.css";
 import { useState } from "react";
 
+import logo from '../assets/full_logo.svg'
+
 import gaussianIntegral from "../assets/math-animations/GaussianIntegral.mp4";
 import riemannSums from "../assets/math-animations/RiemannSums.mp4";
 import lorenzAttractor from "../assets/math-animations/LorenzAttractorWithEquations.mp4";
@@ -24,7 +26,7 @@ function Home() {
       <div className="hero-container">
         <div className="full-logo-container">
           <img
-            src={"src/assets/full_logo.svg"}
+            src={logo}
             className="full-logo"
             alt="CalcMadeEasy Logo"
           ></img>
