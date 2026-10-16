@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useScrollReveal = () => {
-  const ref = useRef<HTMLDivElement>(null);
+  const [element, setElement] = useState<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const ref = useCallback((node: HTMLElement | null) => {
+    setElement(node);
+  }, []);
 
   useEffect(() => {
-    // 1. Add a tiny delay to bypass React Strict Mode timing bugs
-    const timer = setTimeout(() => {
-      const element = ref.current;
-      
+    // Add a tiny delay to bypass React Strict Mode timing bugs
+    const timer = setTimeout(() => {      
       if (!element) {
         console.warn("⚠️ useScrollReveal: No element found for ref!");
         return;
@@ -39,7 +40,7 @@ export const useScrollReveal = () => {
 
     // Cleanup function for the timer
     return () => clearTimeout(timer);
-  }, []);
+  }, [element]);
 
   return [ref, isVisible] as const;
 };
