@@ -1,7 +1,6 @@
 import "../css/QuestionCard.css";
 import TagComponent from "../components/TagComponent";
 import { type ProblemProps } from "../types/Problem.tsx";
-import RadialGraph from "./RadialGraph";
 import AnswerInput from "./AnswerInput";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +9,6 @@ import { faTag } from "@fortawesome/free-solid-svg-icons";
 const ProblemCard: React.FC<ProblemProps> = ({
   question,
   position,
-  confidenceScore = 100,
   showQuestion = true,
   solved = false,
   tags = [], // Default to empty array.
@@ -60,18 +58,6 @@ const ProblemCard: React.FC<ProblemProps> = ({
               {showQuestion && question}
             </div>
           </div>
-          <div className="">
-            {/* Confidence Score */}
-            <RadialGraph
-              value={confidenceScore}
-              className="confidence-score"
-              size={50}
-              strokeWidth={5}
-              secondaryColor={"gray"}
-            />
-          </div>
-        </div>
-        <div className="card-tags">
           <button
             type="button"
             className="tag-toggle-btn"
@@ -84,6 +70,9 @@ const ProblemCard: React.FC<ProblemProps> = ({
               className={`tag-icon ${showTags ? "active" : ""}`}
             />
           </button>
+        </div>
+
+        <div className="card-tags">
           {showTags &&
             tags.map((tag: any, index: number) => (
               <TagComponent
@@ -92,7 +81,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
                 difficulty={tag.difficulty}
                 id={tag.id}
               />
-            ))}
+          ))}
         </div>
 
         <AnswerInput
