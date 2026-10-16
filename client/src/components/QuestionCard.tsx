@@ -58,8 +58,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
               {showQuestion && question}
             </div>
           </div>
-          <button
-            type="button"
+          <div
             className="tag-toggle-btn"
             onClick={toggleTags}
             aria-expanded={showTags}
@@ -69,7 +68,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
               icon={faTag}
               className={`tag-icon ${showTags ? "active" : ""}`}
             />
-          </button>
+          </div>
         </div>
 
         <div className="card-tags">
