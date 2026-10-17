@@ -35,27 +35,11 @@
   }
 
   .tag-icon {
-    @apply mr-2.5 h-4.5 cursor-pointer text-(--txt-secondary) opacity-80 transition-all duration-200 ease-in-out scale-125 hover:text-(--accent-primary) hover:opacity-100;   
+    @apply mr-2.5 h-4.5 cursor-pointer text-(--txt-secondary) opacity-80 transition-all duration-200 ease-in-out scale-125 hover:text-(--accent-primary) hover:opacity-100 active:text-(--text-primary); 
+  }
+
+  .card-header .radial-graph {
+    @apply shrink-0;
   }
 }
 
-
-.tag-icon {
-  color: var(--txt-secondary, #6b7280);
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.tag-icon.active {
-  color: var(--txt-primary, #ffffff);
-}
-
-
-.card-header .radial-graph {
-  flex-shrink: 0;
-}
-
-
-.tag-icon:hover {
-  color: var(--accent-primary);
-  opacity: 1;
-}

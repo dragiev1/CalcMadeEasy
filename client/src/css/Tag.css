@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --difficulty-1: #1fb62e; /* soft green */
   --difficulty-2: #d5be3a; /* muted gold */
@@ -6,59 +8,19 @@
   --difficulty-5: #a873d1;
 }
 
-.tag-container {
-  display: inline-flex;
-  margin: auto;
-  margin-right: 0.5rem;
-  margin-top: 0.3rem;
-  justify-content: center;
-  align-items: center;
-  opacity: 0.85;
-  border-radius: 100px;
-  font-size: 1.2rem;
-  font-weight: 500;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  transition: 0.2s ease-in-out;
-  cursor: pointer;
-  min-width: 50px;
-  min-height: 20px;
-  padding: 5px 10px 5px 10px;
-
-  background: linear-gradient(
-    to right,
-    var(--difficulty-1) 0%,
-    /* 0% - green */ var(--difficulty-2) 25%,
-    /* 25% - yellow */ var(--difficulty-3) 50%,
-    /* 50% - orange */ var(--difficulty-4) 75%,
-    /* 75% - red */ var(--difficulty-5) 100% /* 100% - purple */
-  );
-  background-size: 1000% 100%;
-  background-position: 0% 0%; /* default, overridden inline */
-  transform-origin: center;
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-.tag-name {
-  color: var(--txt-primary);
-  text-shadow: 2px 2px 2px rgb(0, 0, 0, 0.6);
-  white-space: nowrap;
-  display: inline-block;
-  line-height: 1;
-  transform: translateZ(0);
-}
-
-.tag-container:hover {
-  opacity: 1;
-  transform: translateZ(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer components {
   .tag-container {
-    transition: none;
+    @apply inline-flex mx-[0.5rem] mt-[0.3rem] mb-auto justify-center items-center opacity-85 rounded-full text-[1.2rem] 
+           font-semibold font-serif transition-all duration-200 ease-in-out cursor-pointer 
+           min-w-[50px] min-h-[20px] px-[10px] py-[5px]
+           bg-[linear-gradient(to_right,var(--difficulty-1)_0%,var(--difficulty-2)_25%,var(--difficulty-3)_50%,var(--difficulty-4)_75%,var(--difficulty-5)_100%)]
+           bg-[length:1000%_100%] bg-left origin-center will-change-transform backface-hidden
+           hover:opacity-100 hover:translate-z-0 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:hover:shadow-none;
   }
-  .tag-container:hover {
-    transform: none;
-    box-shadow: none;
+
+  .tag-name {
+    @apply text-(--txt-primary)
+          [text-shadow:2px_2px_2px_rgb(0_0_0_/_0.6)]
+          whitespace-nowrap inline-block leading-none translate-z-0;
   }
 }

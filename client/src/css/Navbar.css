@@ -1,49 +1,29 @@
-.navbar {
-  height: 50px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: var(--bg-primary);
-  box-shadow: none;
-  padding: 0.75rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid var(--divider-secondary);
-}
+@import 'tailwindcss';
 
-.navbar-items {
-  max-width: 100vw;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+@layer components {
+  .navbar {
+    @apply h-[75px] fixed top-0 left-0 right-0 z-[1000] bg-(--bg-primary) shadow-none p-[0.75rem] mb-[0.5rem] border-b border-(--divider-secondary)
+  }
 
-.nav-text {
-  font-weight: 100;
-  font-family: 'Times New Roman', Times, serif;
-  letter-spacing: 1.5px;
-  font-size: 2rem;
-  margin: 2rem;
+  .navbar-items {
+    @apply max-w-[100vw] h-[50px] flex items-center justify-between;
+  }
+
+  .nav-text {
+    @apply font-thin font-serif tracking-[1.5px] text-[2rem] m-[2rem]; 
+  }
+
+  .nav-link {
+    @apply flex gap-[3.25rem] text-(--txt-secondary);
+  }
+
+  .logo {
+    @apply h-[50px] w-auto opacity-100 hover:text-(--accent-primary);
+  }
 }
 
 .nav-link {
-  display: flex;
-  gap: 3.25rem;
-  align-items: flex-start;
-  color: var(--txt-secondary);
   animation: fadeIn 1.3s ease;
-}
-
-.logo {
-  height: 50px;
-  width: auto;
-  opacity: 1;
-}
-
-.logo:hover {
-  color: var(--accent-primary);
 }
 
 @keyframes fadeIn {
