@@ -41,5 +41,15 @@
   .card-header .radial-graph {
     @apply shrink-0;
   }
+
+  @media (max-width: 768px) {
+    .card-container {
+      @apply min-w-[80%];
+    }
+
+    .demo {
+      @apply min-w-[90%] p-0;
+    }
+  }
 }
 
