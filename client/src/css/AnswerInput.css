@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --input-bg: #1a1a1a;
   --input-bg-focused: #252525;
@@ -19,170 +21,132 @@ math-field::part(menu-toggle) {
   color: var(--bg-secondary);
 }
 
+@layer components {
+  .incorrect {
+    @apply border-2 border-(--incorrect) rounded-[15px];
+  }
 
-.incorrect {
-  border: 2px solid var(--incorrect);
-  border-radius: 15px;
-}
-.correct {
-  border: 2px solid var(--correct);
-  border-radius: 15px;
-}
+  .correct {
+    @apply border-2 border-(--correct) rounded-[15px];
+  }
 
+  .answer-input-wrapper {
+    @apply w-full mt-[1rem];
+  }
 
-.answer-input-wrapper {
-  width: 100%;
-  margin-top: 1rem;
-}
+  .answer-input-container {
+    @apply relative flex items-center justify-between gap-[0.5rem] bg-(--input-bg) rounded-[16px] py-3 px-4 
+           border-transparent
+           transition-[border-color,box-shadow,background-color] duration-200 ease-in-out h-[4.5rem];
+  }
 
-.answer-input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  background: var(--input-bg); 
-  border-radius: 16px;
-  padding: 0.75rem 1rem;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-}
+  .answer-input-container.focused {
+    @apply bg-(--input-bg) [box-shadow:0_0_1px_1.5px_var(--txt-secondary)];
+  }
 
-.answer-input-container.focused {
-  background: var(--input-bg);
-  box-shadow: 0 0 1px 1.5px var(--txt-secondary);
-}
+  .answer-input-container.has-value {
+    @apply bg-(--input-bg);
+  }
 
-.answer-input-container.has-value {
-  background: var(--input-bg);
-}
+  .answer-input.container.checking {
+    @apply border-none;
+  }
 
-.answer-input-field {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--txt-primary);
-  font-size: 1.15rem;
-  font-family: inherit;
-  padding: 0.25rem 0;
-  min-width: 0; 
-  font-size: 1.33rem;
-}
+  .answer-input-field {
+    @apply flex-1 bg-transparent border-none outline-none text-(--txt-primary) text-[1.33rem] font-[inherit] py-1 px-0 min-w-0;
+  }
 
-.answer-input-field::placeholder {
-  color: #6b7280;
-  opacity: 0.7;
-}
+  .answer-input-field::placeholder {
+    @apply text-[#6b7280] opacity-70;
+  }
 
-.answer-input-field:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
+  .answer-input-field:disabled {
+    @apply opacity-50 cursor-default ;
+  }
 
-.submit-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
+  .submit-btn {
+    @apply w-[44px] h-[44px] border-none rounded-[50%] flex items-center justify-center cursor-pointer shrink-0 transition-all duration-500 ease-in-out;
+    transform: translateZ(0);
+    will-change: background-color, box-shadow, color;
+  }
 
-.submit-btn.active {
-  background: var(--bg-secondary); 
-  color: var(--txt-primary);
-}
+  .submit-btn.active {
+    @apply bg-(--bg-secondary) text-(--txt-primary);
+  }
 
-.submit-btn.active:hover {
-  background: var(--accent-secondary);
-  transform: scale(1.05);
-  color: var(--bg-primary);
-  box-shadow: 0 0 12px rgba(5, 5, 5, 0.5);
-}
+  .submit-btn.active:hover {
+    @apply bg-(--accent-secondary) text-(--bg-primary);
+  }
 
-.submit-btn.active:active {
-  transform: scale(0.95);
-}
+  .submit-btn.active:active {
+    @apply bg-(--accent-secondary);
+  }
+  
+  .submit-btn.disabled {
+    @apply bg-transparent border-none text-[#9ca3af] cursor-default opacity-80;
+    box-shadow: none;
+    border: 0;
+  }
 
-.submit-btn.disabled {
-  background: var(--submit-disabled);
-  color: #9ca3af;
-  cursor: default;
-  opacity: 0.8;
-}
+  .submit-icon {
+    @apply text-[1.125rem] text-[currentColor] block;
+    transform: translateZ(0);
+  }
 
-.submit-icon {
-  font-size: 1.125rem;
-  transition: transform 0.2s ease;
-  color: currentColor;
-  display: block;
-}
+  .submit-btn.correct {
+    @apply bg-(--correct) cursor-default text-(--txt-primary); 
+  }
 
-.submit-btn.correct {
-  background: var(--correct);
-  cursor: default;
-  color: var(--txt-primary);
-}
-.submit-btn.correct:hover {
-  background-color: var(--correct);
-  color: var(--txt-primary);
-  transform: none;
-  box-shadow: 0 0 12px rgba(44, 171, 44, 0.3);
-}
+  .submit-btn.correct:hover {
+    @apply bg-(--correct) text-(--txt-primary);
+    box-shadow: 0 0 12px rgba(44, 171, 44, 0.3);
+  } 
 
-/* Button state: INCORRECT */
-.submit-btn.incorrect {
-  background: var(--incorrect); /* Your red rgba */
-  color: #ffffff; /* White icon for contrast */
-  cursor: default;
-}
-.submit-btn.incorrect:hover {
-  transform: none;
-  box-shadow: 0 0 12px rgba(202, 45, 45, 0.3);
-}
+  .submit-btn.incorrect {
+    @apply bg-(--incorrect) text-[#ffffff] cursor-default;
+  }
 
-.submit-btn.disabled.correct,
-.submit-btn.disabled.incorrect {
-  opacity: 1; /* Full visibility when showing result */
-}
+  .submit-btn.incorrect:hover {
+    box-shadow: 0 0 12px rgba(202, 45, 45, 0.3);
+  }
 
-/* Button state: CHECKING (spinner) */
-.submit-btn.checking {
-  background: var(--input-action-bg);
-  color: var(--txt-primary);
-  cursor: wait;
-}
+  .submit-btn.disabled.correct,
+  .submit-btn.disabled.incorrect {
+    @apply opacity-100;
+  }
 
-.submit-btn.active:hover .submit-icon {
-  transform: scale(1.1);
-}
+  .submit-btn.checking {
+    background: none !important;
+    background-color: transparent;
+    border: 0 !important;
+    border-color: transparent;
+    box-shadow: none;
+    outline: none;
+    @apply text-(--txt-primary);
+  }
 
-.answer-input-container {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  .answer-input-container {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    transform: translateZ(0);
+    will-change: border-color, box-shadow, background-color;
+  }
 }
 
 @media (max-width: 640px) {
   .tools-label {
-    display: none; /* Hide "Tools" text on mobile */
+    @apply hidden;
   }
   
   .input-action-btn {
-    padding: 0.5rem;
+    @apply p-[0.5rem];
   }
   
   .latex-btn,
   .mic-btn {
-    width: 36px;
-    height: 36px;
+    @apply w-[36px] h-[36px];
   }
   
   .submit-btn {
-    width: 40px;
-    height: 40px;
+    @apply w-[40px] h-[40px];
   }
 }
