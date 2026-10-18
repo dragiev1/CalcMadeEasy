@@ -10,7 +10,7 @@ function Navbar() {
         <Link to={"/"} className="nav-text nav-link">
           <img src={logo} alt="logo" className="logo" />
         </Link>
-        <Link to={"/login"} className="nav-text nav-link">
+        <Link to={"/login"} className="nav-text nav-link scale-100">
           <GoogleSignIn />
         </Link>
       </div>
