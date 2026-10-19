@@ -1,43 +1,39 @@
-/* CalcMadeEasy Long Logo */
-.full-logo {
-  width: 48rem;
-  letter-spacing: 1px;
-  margin-bottom: 2rem;
-  transform: translateX(-6rem);
-  opacity: 1;
-  animation: FadeInMoveLeft 2s ease;
-}
+@import "tailwindcss";
 
-.subtitle {
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-size: 1.75rem;
-  letter-spacing: 1.5px;
-  margin: 0;
-  opacity: 0;
-  color: var(--txt-secondary);
-  animation: fadeUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
-}
+@layer components {
+  /* CalcMadeEasy Long Logo */
+  .full-logo {
+    @apply w-[48rem] tracking-[1px] mb-[2rem] opacity-100;
+    transform: translateX(-6rem);
+    animation: FadeInMoveLeft 2s ease;
+  }
 
+  .subtitle {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    @apply text-[1.75rem] tracking-[1.5px] m-0 opacity-0 text-(--txt-secondary);
+    animation: fadeUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+  }
 
-.hero-container {
-  width: 90vw;
-  margin-top: 8rem;
-  min-height: 60vh;
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
+  .hero-container {
+    @apply w-[90vw] mt-[8rem] min-h-[60vh] max-w-full flex items-center relative justify-between gap-[0.5rem];
+  }
 
-.full-logo-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  position: relative;
-  justify-content: space-between;
-  align-items: flex-start;
+  .full-logo-container {
+    @apply flex flex-col gap-[0.5rem] relative justify-between items-start;
+  }
+
+  .animation-player {
+    @apply mt-0 bg-none flex items-center justify-center opacity-100 flex-1 max-w-[60vw] scale-100;
+    background-color: none;
+    animation: fadeIn 3s ease;
+  }
+
+  .lorenz-animation {
+    @apply w-full h-auto object-contain;
+    pointer-events: none;
+    user-select: none;
+    animation: fadeIn 0.5s ease;
+  }
 }
 
 @keyframes fadeUp {
@@ -49,32 +45,6 @@
     opacity: 0.9;
   }
 }
-
-.animation-player {
-  margin-top: 0;
-  background-color: none;
-  background: none;
-  border-color: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-  animation: fadeIn 3s ease;
-  flex: 1;
-  max-width: 60vw;
-  scale: 1;
-}
-
-.lorenz-animation {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-
-  animation: fadeIn 0.5s ease;
-}
-
 
 @keyframes fadeIn {
   from{

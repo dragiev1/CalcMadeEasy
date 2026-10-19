@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.dto.Users.UserProgressDTO;
+import com.calcmadeeasy.dto.Users.UserProgressRequest;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
@@ -19,6 +20,8 @@ import com.calcmadeeasy.repository.UserProgressRepo;
 @Service
 public class UserProgressService {
   private UserProgressRepo repo;
+
+  private ProblemService problemService;
 
   public UserProgressService(UserProgressRepo repo) {
     this.repo = repo;
@@ -83,9 +86,16 @@ public class UserProgressService {
   // ==================== UPDATE ====================
 
   @Transactional
-  public void recordAttempt(UUID upId, boolean isCorrect, Problem p) {
-    UserProgress up = getUserProgressEntity(upId);
-    up.recordAttempt(isCorrect, p);
+  public void recordAttempt(UserProgressRequest request) {
+    // Fetch problem entity using problemId from request. 
+    UserProgress up = getUserProgressEntity();
+    Problem p = up.getProblem();
+
+    // Get solution results.
+    boolean result = problemService.verifySolution(p, request.getUserSolution());
+
+    // Record result
+    up.recordAttempt(result, p);
   }
 
   /*

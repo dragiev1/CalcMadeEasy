@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.calcmadeeasy.dto.Users.CreateUserDTO;
 import com.calcmadeeasy.dto.Users.UserDTO;
+import com.calcmadeeasy.dto.Users.UserProgressReponse;
+import com.calcmadeeasy.dto.Users.UserProgressRequest;
+import com.calcmadeeasy.dto.Users.CreateUserDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
 
 import com.calcmadeeasy.services.UserService;
@@ -51,6 +53,13 @@ public class UserController {
   }
 
   // ---------------- UPDATE ----------------
+
+  @PutMapping("/verify")
+  public ResponseEntity<UserProgressReponse> verifyUserSolution(
+    @RequestBody UserProgressRequest request
+  ) {
+    UserProgressReponse problemResult = userService.recordAttempt(request);
+  }
 
   @PutMapping("/{userId}/enroll/{courseId}")
   public ResponseEntity<Void> enrollCourse(@PathVariable UUID userId, @PathVariable UUID courseId) {
