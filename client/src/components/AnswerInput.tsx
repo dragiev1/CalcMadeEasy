@@ -13,18 +13,8 @@ import "../css/AnswerInput.css";
 // Import mathlive once to register the custom element
 import "mathlive";
 import Latex from "./Latex/Latex";
+import type { AnswerInputProps } from "../types/Problem";
 
-export interface AnswerInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  onSubmit: () => void;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
-  "aria-label"?: string;
-  onLaTeXMenuOpen?: () => void;
-  evaluationStatus?: "idle" | "checking" | "correct" | "incorrect";
-}
 
 const AnswerInput: React.FC<AnswerInputProps> = ({
   value,

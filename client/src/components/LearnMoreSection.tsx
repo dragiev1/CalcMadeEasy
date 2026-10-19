@@ -38,9 +38,6 @@ import "../css/LearnMoreSection.css";
 
 import UserStats from "./UserStats";
 import QuestionCard from "./QuestionCard";
-// import Latex from "./Latex/Latex";
-// import type { ProblemProps } from "../types/Problem";
-// import type { UserProgressProps } from "../types/User";
 import { useScrollReveal } from "../utils/useScrollReveal";
 import { type Problem } from "../types/Problem";
 import { getProblemById } from "../api/problemService";
@@ -151,23 +148,12 @@ const LearnMoreSection = () => {
             </div>
           </div>
           <div className="demo">
-            {/* {mockProblems.map((problem, index) => (
-              <QuestionCard
-                key={index}
-                id={problem.id}
-                question={problem.question}
-                position={index + 1}
-                solved={problem.solved}
-                confidenceScore={problem.confidenceScore}
-                tags={problem.tags}
-                userSolution={problem.userSolution}/>
-            ))} */}
             <QuestionCard 
               id={problem?.id}
-              question={problem?.description}
+              description={problem?.description}
               tags={problem?.tags || []}
               position={3} 
-              solved={false}       
+              solved={false}
             />
           </div>
         </div>

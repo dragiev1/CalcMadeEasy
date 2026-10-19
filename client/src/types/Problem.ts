@@ -18,18 +18,15 @@ export interface Tag {
   difficulty: number;
 }
 
-// 2. Update ProblemProps to use the Tag array
 export interface ProblemProps {
-  question: string;
+  id: string;
+  description: string;
   position: number;
   confidenceScore?: number;
   showQuestion?: boolean;
   solved?: boolean;
   tags?: Tag[]; 
-  userSolution?: {
-    answer: string;
-    isCorrect?: boolean;
-  };
+  userSolution?: string;
 }
 
 export interface ProblemResponse {
@@ -49,3 +46,14 @@ export interface UpdateProblem {
   solutionType: string;   // TODO: make a solutiontype interface enum.
 }
 
+export interface AnswerInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  "aria-label"?: string;
+  onLaTeXMenuOpen?: () => void;
+  evaluationStatus?: "idle" | "checking" | "correct" | "incorrect";
+}

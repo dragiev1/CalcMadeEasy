@@ -1,13 +1,15 @@
 import "../css/QuestionCard.css";
 import TagComponent from "../components/TagComponent";
-import { type ProblemProps } from "../types/Problem.tsx";
+import { type ProblemProps } from "../types/Problem";
 import AnswerInput from "./AnswerInput";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/free-solid-svg-icons";
+import { verifyUserSolution } from "../api/problemService";
 
 const ProblemCard: React.FC<ProblemProps> = ({
-  question,
+  id,
+  description,
   position,
   showQuestion = true,
   solved = false,
@@ -15,30 +17,29 @@ const ProblemCard: React.FC<ProblemProps> = ({
   userSolution,
 }) => {
   const [userAnswer, setUserAnswer] = useState(
-    solved && userSolution?.answer ? userSolution.answer : "",
+    solved ? userSolution : "",
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showTags, setShowTags] = useState(true);
 
   useEffect(() => {
-    if (userSolution?.answer) setUserAnswer(userSolution.answer);
-  }, [solved, userSolution?.answer]);
+    if (userSolution) setUserAnswer(userSolution);
+  }, [solved, userSolution]);
 
-  const handleSubmit = () => {
-    if (!userAnswer.trim() || isSubmitting) return;
+  const handleSubmit = async () => {
+    if (!userAnswer || isSubmitting) return;
     setIsSubmitting(true);
-    console.log("Checking answer:", userAnswer);
-    // TODO: replace with real API call.
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 800);
+    // DEBUG: console.log("Checking answer:", userAnswer);
+    
+    // Call API to verify and fetch result:
+    const result = await verifyUserSolution(id, userAnswer);
   };
 
   const toggleTags = () => setShowTags((prev) => !prev);
 
   const evaluationStatus = solved
-    ? userSolution?.isCorrect !== false
+    ? result.isCorrect !== false
       ? "correct"
       : "incorrect"
     : isSubmitting
@@ -88,7 +89,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
           onChange={setUserAnswer}
           onSubmit={handleSubmit}
           disabled={isSubmitting || userSolution?.isCorrect}
-          aria-label={`Answer for: ${question}`}
+          aria-label={`Answer for: ${description}`}
           className={evaluationStatus}
           evaluationStatus={evaluationStatus}
         />

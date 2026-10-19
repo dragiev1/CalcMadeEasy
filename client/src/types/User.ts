@@ -14,6 +14,12 @@ export interface User {
   updatedAt?: string;
 }
 
+export interface UserProgressResponse {
+  attempts: number;
+  lastAttempted: string;  // Date.
+  pointsEarned: number;
+  isCorrect: boolean;
+}
 
 
 /**
@@ -28,22 +34,5 @@ export interface UserProps {
   // courses: Course[];
   // grades: UserProgress[];
   createdAt: Date;
-}
-
-export interface UserProgressProps {
-  id: number;
-  userId: number;
-  problemId: number;
-  pageId: number;
-
-  answer: string;
-  isCorrect: boolean;
-  points: number;
-  attempts?: number;
-  pointsEarned?: number;
-  lastAttempted?: number;
-
-  createdAt: number;
-  updatedAt: number;
 }
 
