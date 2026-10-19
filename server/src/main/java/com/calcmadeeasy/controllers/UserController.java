@@ -12,23 +12,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.calcmadeeasy.dto.Users.UserDTO;
-import com.calcmadeeasy.dto.Users.UserProgressReponse;
+import com.calcmadeeasy.dto.Users.UserProgressResponse;
 import com.calcmadeeasy.dto.Users.UserProgressRequest;
 import com.calcmadeeasy.dto.Users.CreateUserDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
-
+import com.calcmadeeasy.services.UserProgressService;
 import com.calcmadeeasy.services.UserService;
+
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@AllArgsConstructor
 public class UserController {
   private final UserService userService;
-
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
+  private final UserProgressService upService;
 
   // ---------------- CREATE ----------------
 
@@ -54,11 +55,14 @@ public class UserController {
 
   // ---------------- UPDATE ----------------
 
-  @PutMapping("/verify")
-  public ResponseEntity<UserProgressReponse> verifyUserSolution(
+  @PutMapping("/{problemId}/verify")
+  public ResponseEntity<UserProgressResponse> verifyUserSolution(
+    @PathVariable UUID problemId,
+    @AuthenticationPrincipal UUID userId,
     @RequestBody UserProgressRequest request
   ) {
-    UserProgressReponse problemResult = userService.recordAttempt(request);
+    UserProgressResponse response = upService.verifyAndRecordAttempt(userId, problemId, request.getUserSolution());
+    return ResponseEntity.ok(response);
   }
 
   @PutMapping("/{userId}/enroll/{courseId}")

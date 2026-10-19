@@ -1,6 +1,7 @@
 package com.calcmadeeasy.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,10 +16,10 @@ public interface UserProgressRepo extends JpaRepository<UserProgress, UUID> {
   List<UserProgress> findByUserId(UUID userId);
 
   // Get all progress for a page
-  List<UserProgress> findByPageId(UUID userId);
+  List<UserProgress> findByPageIdAndUserId(UUID userId, UUID pageId);
 
   // Get all progress for a problem
-  List<UserProgress> findByProblemId(UUID userId);
+  Optional<UserProgress> findByProblemIdAndUserId(UUID userId, UUID problemId);
 
   // Get all progress for a user in a unique section
   List<UserProgress> findByUserIdAndPage_Section_Id(UUID userId, UUID sectionId);

@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.dto.Users.UserProgressDTO;
-import com.calcmadeeasy.dto.Users.UserProgressRequest;
+import com.calcmadeeasy.dto.Users.UserProgressResponse;
 import com.calcmadeeasy.models.Problems.Problem;
+import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
 
@@ -22,6 +23,7 @@ public class UserProgressService {
   private UserProgressRepo repo;
 
   private ProblemService problemService;
+  private UserService userService;
 
   public UserProgressService(UserProgressRepo repo) {
     this.repo = repo;
@@ -66,6 +68,19 @@ public class UserProgressService {
   }
 
   @Transactional(readOnly = true)
+  public UserProgress getProblemProgressForUser(User user, Problem problem) {
+    return repo.findByProblemIdAndUserId(user.getId(), problem.getId())
+      .orElseGet(() -> {
+        UserProgress newProgress = new UserProgress();
+        newProgress.setUser(user);
+        newProgress.setProblem(problem);
+        newProgress.setAttempts(0);
+        newProgress.setPointsEarned(0);
+        return createUserProgress(newProgress);
+      });
+  }
+
+  @Transactional(readOnly = true)
   public List<UserProgressDTO> getAllProgressDTO() {
     return getAllProgresses()
         .stream()
@@ -86,16 +101,26 @@ public class UserProgressService {
   // ==================== UPDATE ====================
 
   @Transactional
-  public void recordAttempt(UserProgressRequest request) {
-    // Fetch problem entity using problemId from request. 
-    UserProgress up = getUserProgressEntity();
-    Problem p = up.getProblem();
+  public UserProgressResponse verifyAndRecordAttempt(UUID problemId, UUID userId, String userSolution) {
+    // Fetch problem entity using problem service. 
+    Problem p = problemService.getProblemEntity(problemId);
+    User u = userService.getUser(userId);
 
     // Get solution results.
-    boolean result = problemService.verifySolution(p, request.getUserSolution());
+    boolean isCorrect = problemService.verifySolution(p, userSolution);
 
-    // Record result
-    up.recordAttempt(result, p);
+    // Record result and then save.
+    UserProgress up = getProblemProgressForUser(u, p);
+    up.recordAttempt(isCorrect, p);
+    repo.save(up);
+
+    // Return the response for client.
+    return new UserProgressResponse(
+      isCorrect,
+      up.getAttempts(),
+      up.getLastAttempted(),
+      up.getPointsEarned()
+    );
   }
 
   /*
