@@ -41,7 +41,10 @@ export default function Dashboard() {
             height: '120px',
             border: '4px solid #4CAF50',
             marginTop: '20px'
-        }} />
+        }} 
+            referrerPolicy='no-referrer'
+            onError={(e) => {e.currentTarget.src = "/default-user-picture.png"; }} 
+        />
 
         <p style={{fontSize: '1.2rem', marginTop: '20px'}}>
             <strong>Email:</strong> {user.email}
