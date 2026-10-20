@@ -3,16 +3,24 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/
 
 // Reusable function to authorize API calls elegantly. 
 export async function apiClient<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const token = localStorage.getItem("auth_token");
+    const token = localStorage.getItem("authToken");
 
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        ...options,
-        headers: {
+    // 🚨 TEMPORARY DEBUG LOG 🚨
+    console.log("🔑 Token found in localStorage:", token ? "YES (Length: " + token.length + ")" : "NO");
+
+    const headers = {
             'Content-Type': 'application/json',
             ...(token && { 'Authorization': `Bearer ${token}` }),
             ...options.headers, // Allow overriding headers if needed.
         }
+
+    // 🚨 TEMPORARY DEBUG LOG 🚨
+    console.log("📦 Headers being sent to backend:", headers);
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers: headers,
     })
+
 
     if (!response.ok) {
         const errorText = await response.text();

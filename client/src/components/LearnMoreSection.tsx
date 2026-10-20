@@ -60,6 +60,7 @@ const LearnMoreSection = () => {
     const fetchProblem = async () => {
       try {
         setIsLoading(true);
+        // Fetch problem.
         const data = await getProblemById(problemId);
         setProblem(data); 
       } catch (e) { 
@@ -68,7 +69,7 @@ const LearnMoreSection = () => {
         // FALLBACK: If the API fails, use this mock data so the UI doesn't break!
         setProblem({
           id: problemId,
-          description: "What is the derivative of x²?",
+          description: "What is the derivative of x^2?",
           points: 10,
           isChallenge: false,
           solution: "2x",
@@ -88,7 +89,7 @@ const LearnMoreSection = () => {
 
   // Keep the loading screen, but remove the null return so it falls back gracefully
   if (isLoading) return <p style={{ textAlign: 'center', padding: '2rem' }}>Loading problem...</p>; 
-
+  if (!problem) return <p style={{ textAlign: 'center', padding: '2rem' }}>Demo could not be loaded</p>
 
   return (
     <div className="learn-more-wrapper">
@@ -149,11 +150,10 @@ const LearnMoreSection = () => {
           </div>
           <div className="demo">
             <QuestionCard 
-              id={problem?.id}
-              description={problem?.description}
-              tags={problem?.tags || []}
+              id={problem.id}
+              description={problem.description}
+              tags={problem.tags || []}
               position={3} 
-              solved={false}
             />
           </div>
         </div>

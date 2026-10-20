@@ -23,28 +23,41 @@ const ProblemCard: React.FC<ProblemProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showTags, setShowTags] = useState(true);
 
+  const [status, setStatus] = useState<"idle" | "checking" | "correct" | "incorrect">("idle");
+
   useEffect(() => {
-    if (userSolution) setUserAnswer(userSolution);
+    if(userSolution !== undefined) {
+      setUserAnswer(userSolution);
+      if (solved) setStatus("correct");
+    }
   }, [solved, userSolution]);
 
   const handleSubmit = async () => {
-    if (!userAnswer || isSubmitting) return;
+    if (!userAnswer?.trim() || isSubmitting) return;
+
     setIsSubmitting(true);
-    // DEBUG: console.log("Checking answer:", userAnswer);
+    setStatus("checking");
     
-    // Call API to verify and fetch result:
-    const result = await verifyUserSolution(id, userAnswer);
+    try {
+      // Call API to verify and fetch result:
+      const result = await verifyUserSolution(id, userAnswer);
+    
+      if(result.isCorrect) setStatus("correct");
+      else setStatus("incorrect");
+    } catch (e) {
+      console.error("Verification failed: ", e);
+      setStatus("incorrect");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleTags = () => setShowTags((prev) => !prev);
 
-  const evaluationStatus = solved
-    ? result.isCorrect !== false
-      ? "correct"
-      : "incorrect"
-    : isSubmitting
-      ? "checking"
-      : "idle";
+  // Determine visual status, prioritize live submission status, fallback is idle.
+  const evaluationStatus = status
+    ? status
+    : (solved ? "correct" : "idle");
 
   return (
     <>
@@ -56,7 +69,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
             </span>
             <div className="question-text">
               {/* Question */}
-              {showQuestion && question}
+              {showQuestion && description}
             </div>
           </div>
           <div
@@ -85,10 +98,10 @@ const ProblemCard: React.FC<ProblemProps> = ({
         </div>
 
         <AnswerInput
-          value={userAnswer}
+          value={userAnswer || ""}
           onChange={setUserAnswer}
           onSubmit={handleSubmit}
-          disabled={isSubmitting || userSolution?.isCorrect}
+          disabled={isSubmitting || status === "correct"}
           aria-label={`Answer for: ${description}`}
           className={evaluationStatus}
           evaluationStatus={evaluationStatus}
