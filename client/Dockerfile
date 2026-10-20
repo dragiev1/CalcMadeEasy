@@ -1,6 +1,12 @@
 # Stage 1: Build the React app
 FROM node:18-alpine AS build-stage
 WORKDIR /app
+
+# Tells Docker that this build expects a variable.
+ARG VITE_GOOGLE_CLIENT_ID
+# Makes the variable avaiable.
+ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
+
 COPY package*.json ./
 RUN npm install
 COPY . .

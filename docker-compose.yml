@@ -37,7 +37,10 @@ services:
         condition: service_healthy
   
   frontend:
-    build: ./client
+    build: 
+      context: ./client
+      args:
+        - VITE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
     container_name: cme-frontend
     networks:
       - cme-network
