@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import com.calcmadeeasy.dto.Users.UserDTO;
 import com.calcmadeeasy.dto.Users.UserProgressResponse;
@@ -32,11 +33,22 @@ public class UserController {
   private final UserProgressService upService;
 
   // ---------------- CREATE ----------------
-
+  
   @PostMapping
   public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserDTO newUser) {
     UserResponseDTO savedUser = userService.createUser(newUser);
     return ResponseEntity.ok(savedUser);
+  }
+  
+  @PostMapping("/page/{pageId}/problems/{problemId}/verify")
+  public ResponseEntity<UserProgressResponse> verifyUserSolution(
+    @PathVariable UUID problemId,
+    @AuthenticationPrincipal Jwt jwt,
+    @PathVariable UUID pageId,
+    @RequestBody UserProgressRequest request
+  ) {
+    UserProgressResponse response = upService.verifyAndRecordAttempt(pageId, problemId, jwt, request.getUserSolution());
+    return ResponseEntity.ok(response);
   }
 
   // ---------------- READ ----------------
@@ -55,15 +67,6 @@ public class UserController {
 
   // ---------------- UPDATE ----------------
 
-  @PutMapping("/{problemId}/verify")
-  public ResponseEntity<UserProgressResponse> verifyUserSolution(
-    @PathVariable UUID problemId,
-    @AuthenticationPrincipal UUID userId,
-    @RequestBody UserProgressRequest request
-  ) {
-    UserProgressResponse response = upService.verifyAndRecordAttempt(userId, problemId, request.getUserSolution());
-    return ResponseEntity.ok(response);
-  }
 
   @PutMapping("/{userId}/enroll/{courseId}")
   public ResponseEntity<Void> enrollCourse(@PathVariable UUID userId, @PathVariable UUID courseId) {

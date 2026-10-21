@@ -1,6 +1,9 @@
 package com.calcmadeeasy.services;
 
 import com.calcmadeeasy.repository.PageRepo;
+
+import lombok.AllArgsConstructor;
+
 import com.calcmadeeasy.dto.Pages.CreatePageDTO;
 import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageProblemDTO;
@@ -17,14 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class PageService {
   private final PageRepo repo;
+  // private final PageProblemRepo pageProblemRepo;  // Eventually will need it probably. 
   private ProblemService problemService;
-
-  public PageService(PageRepo repo, ProblemService problemService) {
-    this.repo = repo;
-    this.problemService = problemService;
-  }
 
   // ==================== CREATE ====================
 

@@ -5,8 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/
 export async function apiClient<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const token = localStorage.getItem("authToken");
 
-    // 🚨 TEMPORARY DEBUG LOG 🚨
-    console.log("🔑 Token found in localStorage:", token ? "YES (Length: " + token.length + ")" : "NO");
+    // console.log("Token found in localStorage:", token ? "YES (Length: " + token.length + ")" : "NO");
 
     const headers = {
             'Content-Type': 'application/json',
@@ -14,8 +13,7 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
             ...options.headers, // Allow overriding headers if needed.
         }
 
-    // 🚨 TEMPORARY DEBUG LOG 🚨
-    console.log("📦 Headers being sent to backend:", headers);
+    // console.log("Headers being sent to backend:", headers);
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         ...options,
         headers: headers,

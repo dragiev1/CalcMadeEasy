@@ -16,6 +16,10 @@ const ProblemCard: React.FC<ProblemProps> = ({
   tags = [], // Default to empty array.
   userSolution,
 }) => {
+  //  ========== TEMP FOR TESTING ==========
+  const pageId = "c3d4e5f6-a7b8-4901-d1e2-f3a4b5c6d7e8";
+  //  ======================================
+
   const [userAnswer, setUserAnswer] = useState(
     solved ? userSolution : "",
   );
@@ -40,7 +44,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
     
     try {
       // Call API to verify and fetch result:
-      const result = await verifyUserSolution(id, userAnswer);
+      const result = await verifyUserSolution(pageId, id, userAnswer);
     
       if(result.isCorrect) setStatus("correct");
       else setStatus("incorrect");

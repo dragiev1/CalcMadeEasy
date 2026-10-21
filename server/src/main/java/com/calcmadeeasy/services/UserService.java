@@ -6,7 +6,10 @@ import com.calcmadeeasy.dto.Users.UserDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserCourseEnrollment;
+import com.calcmadeeasy.repository.UserProgressRepo;
 import com.calcmadeeasy.repository.UserRepo;
+
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,22 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserService {
   private final UserRepo repo;
-  private UserProgressService upService;
+  private final UserProgressRepo upRepo;
   private CourseService courseService;
   private UserGradeService gradeServices;
 
-  public UserService(
-      UserRepo repo,
-      UserProgressService upService,
-      CourseService courseService,
-      UserGradeService gradeServices) {
-    this.repo = repo;
-    this.upService = upService;
-    this.courseService = courseService;
-    this.gradeServices = gradeServices;
-  }
 
   // ==================== CREATE ====================
 
@@ -109,7 +103,7 @@ public class UserService {
     if(!u.isEnrolledIn(courseId)) throw new IllegalArgumentException("User is not enrolled in this course"); 
 
     // Remove all the progress in course.
-    upService.removeAllProgressByUserAndCourseId(userId, courseId);
+    upRepo.deleteByUserIdAndPage_Section_Chapter_Course_Id(userId, courseId);
     
     // Remove all grades calculated from progress.
     gradeServices.removeAllGrades(userId, courseId);

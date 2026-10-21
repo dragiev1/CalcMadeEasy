@@ -3,15 +3,19 @@ package com.calcmadeeasy.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.dto.Users.UserProgressDTO;
 import com.calcmadeeasy.dto.Users.UserProgressResponse;
+import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
+
+import lombok.AllArgsConstructor;
 
 
 /*
@@ -19,15 +23,13 @@ import com.calcmadeeasy.repository.UserProgressRepo;
  */
 
 @Service
+@AllArgsConstructor
 public class UserProgressService {
-  private UserProgressRepo repo;
+  private final UserProgressRepo repo;
 
-  private ProblemService problemService;
-  private UserService userService;
-
-  public UserProgressService(UserProgressRepo repo) {
-    this.repo = repo;
-  }
+  private final UserService userService;
+  private final ProblemService problemService;
+  private final PageService pageService;
 
   // ==================== CREATE ====================
 
@@ -68,12 +70,14 @@ public class UserProgressService {
   }
 
   @Transactional(readOnly = true)
-  public UserProgress getProblemProgressForUser(User user, Problem problem) {
+  public UserProgress getProblemProgressForUser(User user, Problem problem, Page page) {
     return repo.findByProblemIdAndUserId(user.getId(), problem.getId())
       .orElseGet(() -> {
+        // Create the new progress and return it if it doesn't exist.
         UserProgress newProgress = new UserProgress();
         newProgress.setUser(user);
         newProgress.setProblem(problem);
+        newProgress.setPage(page);
         newProgress.setAttempts(0);
         newProgress.setPointsEarned(0);
         return createUserProgress(newProgress);
@@ -101,8 +105,12 @@ public class UserProgressService {
   // ==================== UPDATE ====================
 
   @Transactional
-  public UserProgressResponse verifyAndRecordAttempt(UUID problemId, UUID userId, String userSolution) {
+  public UserProgressResponse verifyAndRecordAttempt(UUID pageId, UUID problemId, Jwt jwt, String userSolution) {
+    // Extract the user id from the jwt
+    UUID userId = UUID.fromString(jwt.getSubject());
+    
     // Fetch problem entity using problem service. 
+    Page pg = pageService.getPageEntity(pageId);
     Problem p = problemService.getProblemEntity(problemId);
     User u = userService.getUser(userId);
 
@@ -110,7 +118,7 @@ public class UserProgressService {
     boolean isCorrect = problemService.verifySolution(p, userSolution);
 
     // Record result and then save.
-    UserProgress up = getProblemProgressForUser(u, p);
+    UserProgress up = getProblemProgressForUser(u, p, pg);
     up.recordAttempt(isCorrect, p);
     repo.save(up);
 
