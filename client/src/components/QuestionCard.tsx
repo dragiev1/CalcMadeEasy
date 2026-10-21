@@ -59,7 +59,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
   const toggleTags = () => setShowTags((prev) => !prev);
 
   // Determine visual status, prioritize live submission status, fallback is idle.
-  const evaluationStatus = status
+  const evaluationStatus = status !== "idle"
     ? status
     : (solved ? "correct" : "idle");
 

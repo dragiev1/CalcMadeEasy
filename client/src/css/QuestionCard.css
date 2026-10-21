@@ -51,18 +51,19 @@
       @apply min-w-[90%] p-0;
     }
   }
-}
-
+  
   /* AnswerInput Status Styles */
   .checking {
     @apply border-gray-400 bg-gray-100 animate-pulse;
   }
-
+  
   .correct {
     @apply border-green-500 bg-green-50 text-green-700 ring-2 ring-green-200;
   }
-
+  
   .incorrect {
     @apply border-red-500 bg-red-50 text-red-700 ring-2 ring-red-200;
   }
+}
+
 
