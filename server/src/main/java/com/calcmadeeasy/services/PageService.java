@@ -73,7 +73,7 @@ public class PageService {
 
   @Transactional(readOnly = true)
   public PageDTO getPageDTO(UUID pageId) {
-    Page page = repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found with id: " + pageId));
+    Page page = repo.findById(pageId).orElseThrow(() -> new PageNotFoundException("Page not found with id: " + pageId));
 
     return new PageDTO(page);
   }
@@ -82,7 +82,7 @@ public class PageService {
   public List<Page> getPagesBySection(UUID sectionId) {
     List<Page> pages = repo.findBySectionId(sectionId);
     if (pages.isEmpty())
-      throw new RuntimeException("Section id " + sectionId + " either does not exist or has no pages");
+      throw new PageNotFoundException("Section id " + sectionId + " either does not exist or has no pages");
     return pages;
   }
 
@@ -122,7 +122,7 @@ public class PageService {
   @Transactional
   public void removePage(UUID pageId) {
     if (!repo.existsById(pageId)) {
-      throw new RuntimeException("CANNOT REMOVE - page not found with id: " + pageId);
+      throw new PageNotFoundException("CANNOT REMOVE - page not found with id: " + pageId);
     }
     repo.deleteById(pageId);
 

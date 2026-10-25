@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.calcmadeeasy.dto.Users.UserProgressDTO;
 import com.calcmadeeasy.dto.Users.UserProgressResponse;
+import com.calcmadeeasy.exceptions.UserProgressNotFoundException;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Users.User;
@@ -44,13 +45,13 @@ public class UserProgressService {
   public UserProgressDTO getUserProgressDTO(UUID upId) {
 
     return new UserProgressDTO(repo.findById(upId)
-        .orElseThrow(() -> new RuntimeException("UserProgress could not be found with id: " + upId)));
+        .orElseThrow(() -> new UserProgressNotFoundException("UserProgress could not be found with id: " + upId)));
   }
 
   @Transactional(readOnly = true)
   public UserProgress getUserProgressEntity(UUID upId) {
     return repo.findById(upId)
-        .orElseThrow(() -> new RuntimeException("UserProgress does not exists with id: " + upId));
+        .orElseThrow(() -> new UserProgressNotFoundException("UserProgress does not exists with id: " + upId));
   }
 
   @Transactional(readOnly = true)
@@ -64,7 +65,7 @@ public class UserProgressService {
   @Transactional(readOnly = true)
   public List<UserProgress> getProgressForUserEntity(UUID userId) {
     if (userId == null)
-      throw new IllegalArgumentException("");
+      throw new IllegalArgumentException("User ID cannot be null");
 
     return repo.findByUserId(userId);
   }
@@ -137,14 +138,8 @@ public class UserProgressService {
    */
   @Transactional
   public void resetProgress(UUID upId) {
-    if (!exists(upId))
-      throw new IllegalArgumentException("UserProgress does not exist, cannot reset");
-
     UserProgress up = getUserProgressEntity(upId);
     up.resetProgress();
-
-    if (up.isSolved() || up.getAttempts() != 0)
-      throw new RuntimeException("User progress did not reset correctly!");
   }
 
   // ==================== DELETE ====================
@@ -152,7 +147,7 @@ public class UserProgressService {
   @Transactional
   public void removeProgress(UUID upId) {
     if (!exists(upId))
-      throw new IllegalArgumentException("UserProgress does not exist with id," + upId + ", cannot remove");
+      throw new UserProgressNotFoundException("UserProgress does not exist with id," + upId + "; cannot remove");
 
     repo.deleteById(upId);
   }
