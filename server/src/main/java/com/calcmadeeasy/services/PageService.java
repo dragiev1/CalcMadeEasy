@@ -9,6 +9,7 @@ import com.calcmadeeasy.dto.Pages.PageDTO;
 import com.calcmadeeasy.dto.Pages.PageProblemDTO;
 import com.calcmadeeasy.dto.Pages.PageResponseDTO;
 import com.calcmadeeasy.dto.Pages.UpdatePageDTO;
+import com.calcmadeeasy.exceptions.PageNotFoundException;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Problems.Problem;
 
@@ -67,7 +68,7 @@ public class PageService {
 
   @Transactional(readOnly = true)
   public Page getPageEntity(UUID pageId) {
-    return repo.findById(pageId).orElseThrow(() -> new RuntimeException("Page not found with id: " + pageId));
+    return repo.findById(pageId).orElseThrow(() -> new PageNotFoundException("Page not found with id: " + pageId));
   }
 
   @Transactional(readOnly = true)
