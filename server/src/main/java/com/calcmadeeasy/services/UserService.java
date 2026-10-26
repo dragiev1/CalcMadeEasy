@@ -4,6 +4,8 @@ import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.dto.Users.CreateUserDTO;
 import com.calcmadeeasy.dto.Users.UserDTO;
 import com.calcmadeeasy.dto.Users.UserResponseDTO;
+import com.calcmadeeasy.exceptions.UserNotEnrolledInCourseException;
+import com.calcmadeeasy.exceptions.UserNotFoundException;
 import com.calcmadeeasy.models.Users.User;
 import com.calcmadeeasy.models.Users.UserCourseEnrollment;
 import com.calcmadeeasy.repository.UserProgressRepo;
@@ -33,7 +35,7 @@ public class UserService {
   @Transactional
   public UserResponseDTO createUser(CreateUserDTO user) {
     if (user == null)
-      throw new IllegalArgumentException("Cannot save null user");
+      throw new IllegalStateException("Cannot save null user");
 
     User u = User.builder()
         .firstName(user.getFirstName())
@@ -51,7 +53,7 @@ public class UserService {
   @Transactional
   public User createUserEntity(User user) {
     if (user == null)
-      throw new IllegalArgumentException("Cannot save null user");
+      throw new IllegalStateException("Cannot save null user");
     return repo.save(user);
   }
 
@@ -65,14 +67,14 @@ public class UserService {
   @Transactional(readOnly = true)
   public UserDTO getUserDTO(UUID userId) {
     User u = repo.findById(userId)
-        .orElseThrow(() -> new RuntimeException("User does not exist with id: " + userId));
+        .orElseThrow(() -> new UserNotFoundException("User does not exist with id: " + userId));
 
     return new UserDTO(u);
   }
 
   @Transactional(readOnly = true)
   public User getUser(UUID userId) {
-    return repo.findById(userId).orElseThrow(() -> new RuntimeException("User does not exist with id: " + userId));
+    return repo.findById(userId).orElseThrow(() -> new UserNotFoundException("User does not exist with id: " + userId));
   }
 
   @Transactional(readOnly = true)
@@ -100,7 +102,7 @@ public class UserService {
   public UserDTO unenrollCourse(UUID userId, UUID courseId) {
     User u = getUser(userId);
 
-    if(!u.isEnrolledIn(courseId)) throw new IllegalArgumentException("User is not enrolled in this course"); 
+    if(!u.isEnrolledIn(courseId)) throw new UserNotEnrolledInCourseException("User is not enrolled in this course"); 
 
     // Remove all the progress in course.
     upRepo.deleteByUserIdAndPage_Section_Chapter_Course_Id(userId, courseId);

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.calcmadeeasy.exceptions.UserNotEnrolledInCourseException;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Pages.Page;
@@ -76,7 +77,7 @@ public class UserGradeService {
     // Course grade logic.
     float courseGrade = computeCourseGrade(user.getId(), course.getId());
     UserCourseEnrollment uce = courseEnrollmentRepo.findByUserIdAndCourseId(user.getId(), course.getId())
-        .orElseThrow(() -> new IllegalArgumentException("User is not enrolled in a course"));
+        .orElseThrow(() -> new UserNotEnrolledInCourseException("User is not enrolled in a course"));
     if(Float.compare(uce.getFinal_grade(), courseGrade) != 0) {
       uce.setFinal_grade(courseGrade);
       courseEnrollmentRepo.save(uce);
