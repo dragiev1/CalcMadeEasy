@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.exceptions.PageOnSectionNotFoundException;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Pages.Page;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -96,7 +97,7 @@ public class Section {
     Page page = pages.stream()
         .filter(p -> p.getId().equals(pageId))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Page not found"));
+        .orElseThrow(() -> new PageOnSectionNotFoundException("Cannot remove page with id " + pageId + " because it is not associated with section"));
 
     this.pages.remove(page);
     // Breaks back-reference so Hibernate knows it's been orphaned.

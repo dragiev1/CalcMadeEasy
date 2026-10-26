@@ -4,14 +4,15 @@ import com.calcmadeeasy.dto.Chapters.ChapterDTO;
 import com.calcmadeeasy.dto.Chapters.ChapterResponseDTO;
 import com.calcmadeeasy.dto.Chapters.CreateChapterDTO;
 import com.calcmadeeasy.dto.Chapters.UpdateChapterDTO;
+import com.calcmadeeasy.exceptions.ChapterNotFoundException;
+import com.calcmadeeasy.exceptions.SectionNotFoundException;
+import com.calcmadeeasy.exceptions.SectionNotOnChapterException;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.models.Sections.Section;
 import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.CourseRepo;
 import com.calcmadeeasy.repository.SectionRepo;
-
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class ChapterService {
         .build();
 
     Course co = courseRepo.findById(chapter.getCourseId())
-        .orElseThrow(() -> new IllegalArgumentException("Could not find course to set inside chapter"));
+        .orElseThrow(() -> new ChapterNotFoundException("Could not find course to set inside chapter"));
     c.setCourse(co);
 
     repo.save(c);
@@ -53,7 +54,7 @@ public class ChapterService {
   @Transactional(readOnly = true)
   public ChapterDTO getChapterDTO(UUID chapterId) {
     Chapter c = repo.findById(chapterId)
-        .orElseThrow(() -> new IllegalArgumentException("Cannot find chapter with id: " + chapterId));
+        .orElseThrow(() -> new ChapterNotFoundException("Cannot find chapter with id: " + chapterId));
 
     return new ChapterDTO(c);
   }
@@ -61,7 +62,7 @@ public class ChapterService {
   @Transactional(readOnly = true)
   public Chapter getChapterEntity(UUID chapterId) {
     return repo.findById(chapterId)
-        .orElseThrow(() -> new IllegalArgumentException("Cannot find chapter with id: " + chapterId));
+        .orElseThrow(() -> new ChapterNotFoundException("Cannot find chapter with id: " + chapterId));
   }
 
   @Transactional(readOnly = true)
@@ -80,7 +81,7 @@ public class ChapterService {
   @Transactional
   public ChapterResponseDTO updateChapter(UUID chapterId, UpdateChapterDTO request) {
     if (!exists(chapterId))
-      throw new IllegalArgumentException("Chapter does not exist");
+      throw new ChapterNotFoundException("Chapter does not exist");
 
     Chapter c = getChapterEntity(chapterId);
 
@@ -97,11 +98,11 @@ public class ChapterService {
   public ChapterDTO moveSection(UUID chapterId, UUID sectionId) {
     Chapter target = getChapterEntity(chapterId);
     Section s = sectionRepo.findById(sectionId)
-        .orElseThrow(() -> new EntityNotFoundException("No section is found with id: " + sectionId));
+        .orElseThrow(() -> new SectionNotFoundException("No section is found with id: " + sectionId));
     Chapter current = s.getChapter();
 
     if (current == null)
-      throw new IllegalStateException("Section is not attached to courseId" + chapterId);
+      throw new SectionNotOnChapterException("Section is not attached to chapterId" + chapterId);
 
     if (current.getId().equals(chapterId))
       return new ChapterDTO(current);
@@ -118,7 +119,7 @@ public class ChapterService {
 
   @Transactional
   public void removeChapter(UUID chapterId) {
-    if(!exists(chapterId)) throw new IllegalAccessError("Cannot delete: Chapter not found with id: "  + chapterId);
+    if(!exists(chapterId)) throw new ChapterNotFoundException("Cannot delete: Chapter not found with id: "  + chapterId);
     repo.deleteById(chapterId);
   }
 
@@ -131,7 +132,7 @@ public class ChapterService {
     boolean removed = c.getSections().removeIf(s -> s.getId().equals(sectionId));
 
     if (!removed)
-      throw new IllegalArgumentException("Section does not exist in Chapter, could not remove");
+      throw new SectionNotOnChapterException("Section does not exist in Chapter, could not remove");
 
     repo.save(c);
     return new ChapterDTO(c);

@@ -15,12 +15,29 @@ public class GlobalExceptionHandler {
     // Specfic Handlers (for expected business logic errors).
     // HttpServletRequest allows us to tell the frontend exactly which API endpoint failed. 
 
+    @ExceptionHandler(SectionNotOnChapterException.class) 
+    public ResponseEntity<ErrorResponse> handleSectionNotOnChapterException(SectionNotOnChapterException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SectionNotFoundException.class) 
+    public ResponseEntity<ErrorResponse> handleSectionNotFound(SectionNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Section not found", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ChapterNotFoundException.class) 
+    public ResponseEntity<ErrorResponse> handleChapterNotFound(ChapterNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Chapter not found", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(TagNotOnProblemException.class)
     public ResponseEntity<ErrorResponse> handleTagNotOnProblemEntity(TagNotOnProblemException ex, HttpServletRequest request) {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage(), request.getRequestURI());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(ProblemNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProblemNotFound(ProblemNotFoundException ex, HttpServletRequest request) {
