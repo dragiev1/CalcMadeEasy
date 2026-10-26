@@ -4,12 +4,12 @@ import com.calcmadeeasy.dto.Courses.CourseDTO;
 import com.calcmadeeasy.dto.Courses.CourseResponseDTO;
 import com.calcmadeeasy.dto.Courses.CreateCourseDTO;
 import com.calcmadeeasy.dto.Courses.UpdateCourseDTO;
+import com.calcmadeeasy.exceptions.ChapterNotOnCourseException;
+import com.calcmadeeasy.exceptions.CourseNotFoundException;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Courses.Course;
 import com.calcmadeeasy.repository.ChapterRepo;
 import com.calcmadeeasy.repository.CourseRepo;
-
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,13 +44,13 @@ public class CourseService {
   @Transactional(readOnly = true)
   public Course getCourseEntity(UUID courseId) {
     return repo.findById(courseId)
-        .orElseThrow(() -> new IllegalArgumentException("No course found with id: " + courseId));
+        .orElseThrow(() -> new CourseNotFoundException("No course found with id: " + courseId));
   }
 
   @Transactional(readOnly = true)
   public CourseDTO getCourseDTO(UUID courseId) {
     Course c = repo.findById(courseId)
-        .orElseThrow(() -> new IllegalArgumentException("No course found with id: " + courseId));
+        .orElseThrow(() -> new CourseNotFoundException("No course found with id: " + courseId));
 
     return new CourseDTO(c);
   }
@@ -70,7 +70,7 @@ public class CourseService {
   @Transactional
   public CourseResponseDTO updateCourse(UUID courseId, UpdateCourseDTO request) {
     if (request == null)
-      throw new IllegalArgumentException("Data sent is null; did not update course.");
+      throw new IllegalStateException("Data sent is null; did not update course.");
 
     Course c = getCourseEntity(courseId);
 
@@ -87,11 +87,11 @@ public class CourseService {
   public CourseDTO moveChapter(UUID courseId, UUID chapterId) {
     Course target = getCourseEntity(courseId);
     Chapter chapter = chapterRepo.findById(chapterId)
-        .orElseThrow(() -> new EntityNotFoundException("No chapter is found with id: " + chapterId));
+        .orElseThrow(() -> new CourseNotFoundException("No chapter is found with id: " + chapterId));
     Course current = chapter.getCourse();
 
     if (current == null)
-      throw new IllegalStateException("Chapter is not attached to Course: " + chapterId);
+      throw new ChapterNotOnCourseException("Chapter is not attached to Course: " + chapterId);
 
     if (chapter.getCourse().getId().equals(courseId))
       return new CourseDTO(current);  // Chapter does not move; return original course.
@@ -111,7 +111,7 @@ public class CourseService {
   public void removeCourse(UUID courseId) {
     boolean exists = exists(courseId);
     if (!exists)
-      throw new IllegalArgumentException("Course does not exist with id: " + courseId);
+      throw new CourseNotFoundException("Course does not exist with id: " + courseId);
 
     repo.deleteById(courseId);
   }
@@ -121,7 +121,7 @@ public class CourseService {
     Course c = getCourseEntity(courseId);
     boolean removed = c.getChapters().removeIf(ch -> ch.getId().equals(chapterId));
     if (!removed)
-      throw new IllegalArgumentException("Chapter does not exist in course, could not remove");
+      throw new ChapterNotOnCourseException("Chapter does not exist in course, could not remove");
     repo.save(c);
     return new CourseDTO(c);
   }

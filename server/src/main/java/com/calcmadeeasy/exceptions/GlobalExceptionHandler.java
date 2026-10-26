@@ -15,6 +15,18 @@ public class GlobalExceptionHandler {
     // Specfic Handlers (for expected business logic errors).
     // HttpServletRequest allows us to tell the frontend exactly which API endpoint failed. 
 
+    @ExceptionHandler(ChapterNotOnCourseException.class)
+    public ResponseEntity<ErrorResponse> handleChapterNotOnCourse(ChapterNotOnCourseException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCourseNotFound(CourseNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Course not found", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(SectionNotOnChapterException.class) 
     public ResponseEntity<ErrorResponse> handleSectionNotOnChapterException(SectionNotOnChapterException ex, HttpServletRequest request) {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage(), request.getRequestURI());
