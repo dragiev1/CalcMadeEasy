@@ -11,6 +11,8 @@ import com.calcmadeeasy.dto.Sections.CreateSectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionDTO;
 import com.calcmadeeasy.dto.Sections.SectionResponseDTO;
 import com.calcmadeeasy.dto.Sections.UpdateSectionDTO;
+import com.calcmadeeasy.exceptions.ChapterNotFoundException;
+import com.calcmadeeasy.exceptions.SectionNotFoundException;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.calcmadeeasy.models.Pages.Page;
 import com.calcmadeeasy.models.Sections.Section;
@@ -39,7 +41,7 @@ public class SectionService {
         .build();
 
     Chapter c = chapterRepo.findById(section.getChapterId())
-        .orElseThrow(() -> new IllegalArgumentException("Cannot find chapter to assign section to"));
+        .orElseThrow(() -> new ChapterNotFoundException("Cannot find chapter with id " + section.getChapterId() + " to assign section to"));
     s.setChapter(c);
 
     repo.save(s);
@@ -61,7 +63,7 @@ public class SectionService {
   @Transactional(readOnly = true)
   public SectionDTO getSectionDTO(UUID sectionId) {
     Section s = repo.findById(sectionId)
-        .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
+        .orElseThrow(() -> new SectionNotFoundException("No section is found with id: " + sectionId));
 
     return new SectionDTO(s);
   }
@@ -69,7 +71,7 @@ public class SectionService {
   @Transactional(readOnly = true)
   public Section getSectionEntity(UUID sectionId) {
     return repo.findById(sectionId)
-        .orElseThrow(() -> new RuntimeException("No section is found with id: " + sectionId));
+        .orElseThrow(() -> new SectionNotFoundException("No section is found with id: " + sectionId));
   }
 
   @Transactional(readOnly = true)
@@ -132,7 +134,7 @@ public class SectionService {
   @Transactional
   public SectionDTO removePage(UUID sectionId, UUID pageId) {
     if (!exists(sectionId))
-      throw new IllegalArgumentException("Section does not exist, cannot remove page");
+      throw new SectionNotFoundException("Section does not exist, cannot remove page");
 
     Section s = getSectionEntity(sectionId);
     Page p = pageServices.getPageEntity(pageId);

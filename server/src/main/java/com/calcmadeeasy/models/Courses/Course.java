@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.exceptions.ChapterNotOnCourseException;
 import com.calcmadeeasy.models.Chapters.Chapter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -62,7 +63,7 @@ public class Course {
     return chapters.stream()
         .filter(c -> c.getId().equals(chapterId))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Chapter not found within Course object"));
+        .orElseThrow(() -> new ChapterNotOnCourseException("Chapter not found within Course object"));
   }
 
   public int getChapterQuantity() {

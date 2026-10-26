@@ -126,7 +126,7 @@ public class ChapterService {
   @Transactional
   public ChapterDTO removeSection(UUID chapterId, UUID sectionId) {
     if (!exists(chapterId))
-      throw new RuntimeException("Chapter does not exist");
+      throw new ChapterNotFoundException("Chapter does not exist");
     Chapter c = getChapterEntity(chapterId);
 
     boolean removed = c.getSections().removeIf(s -> s.getId().equals(sectionId));

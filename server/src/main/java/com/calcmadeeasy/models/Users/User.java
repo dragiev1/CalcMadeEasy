@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.exceptions.UserNotEnrolledInCourseException;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -73,7 +75,7 @@ public class User {
     boolean removed = coursesEnrolled.removeIf(c -> c.getCourse().getId().equals(courseId));
 
     if (!removed)
-      throw new IllegalArgumentException("No course was enrolled with id: " + courseId);
+      throw new UserNotEnrolledInCourseException("No course was enrolled with id: " + courseId);
   }
 
   // Additional convenience methods.
