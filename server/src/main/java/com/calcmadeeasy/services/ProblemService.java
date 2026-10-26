@@ -10,6 +10,7 @@ import com.calcmadeeasy.dto.Problems.CreateProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemDTO;
 import com.calcmadeeasy.dto.Problems.ProblemResponseDTO;
 import com.calcmadeeasy.dto.Problems.UpdateProblemDTO;
+import com.calcmadeeasy.exceptions.ProblemNotFoundException;
 import com.calcmadeeasy.models.Problems.Problem;
 import com.calcmadeeasy.models.Problems.ProblemSolutionType;
 import com.calcmadeeasy.models.Tags.Tag;
@@ -63,13 +64,13 @@ public class ProblemService {
 
   @Transactional(readOnly = true)
   public Problem getProblemEntity(UUID id) {
-    return repo.findById(id).orElseThrow(() -> new IllegalAccessError("Problem cannot be found with id + " + id));
+    return repo.findById(id).orElseThrow(() -> new ProblemNotFoundException("Problem cannot be found with id: " + id));
   }
 
   @Transactional(readOnly = true)
   public ProblemDTO getProblemDTO(UUID pId) {
     Problem problem = repo.findByIdWithTags(pId)
-      .orElseThrow(() -> new RuntimeException("Problem not found"));
+      .orElseThrow(() -> new ProblemNotFoundException("Problem not found with id: " + pId));
     return new ProblemDTO(problem);
   }
 
@@ -86,7 +87,7 @@ public class ProblemService {
         return VerifyExpressionSolution(userSolution, problem.getSolution());
 
       default:
-        throw new IllegalArgumentException("Unknown problem solution type.");
+        throw new IllegalStateException("Unknown problem solution type.");
     }
   }
 
@@ -161,16 +162,17 @@ public class ProblemService {
   @Transactional
   public void removeProblem(UUID problemId) {
     if (!exists(problemId))
-      throw new IllegalArgumentException("Problem to be removed does not exist");
+      throw new ProblemNotFoundException("Problem to be removed does not exist");
     repo.deleteById(problemId);
   }
 
   @Transactional
   public void removeTagFromProblem(UUID tagId, UUID problemId) {
     if (!exists(problemId))
-      throw new IllegalArgumentException("Problem to be removed does not exist");
+      throw new ProblemNotFoundException("Problem whose tags need to be removed does not exist");
     
     Problem p = getProblemEntity(problemId);
+
     p.removeTag(tagId);
    
     repo.save(p);

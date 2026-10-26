@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.calcmadeeasy.exceptions.TagNotOnProblemException;
 import com.calcmadeeasy.models.Pages.PageProblem;
 import com.calcmadeeasy.models.Tags.Tag;
 
@@ -109,7 +110,7 @@ public class Problem {
     Tag tag = tags.stream()
         .filter(t -> t.getId().equals(tagId))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Page not found"));
+        .orElseThrow(() -> new TagNotOnProblemException("Tag with id " + tagId + " is not associated with this problem"));
 
     tags.remove(tag);
   }

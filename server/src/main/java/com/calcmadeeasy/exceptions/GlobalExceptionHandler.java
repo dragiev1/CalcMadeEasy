@@ -15,7 +15,18 @@ public class GlobalExceptionHandler {
     // Specfic Handlers (for expected business logic errors).
     // HttpServletRequest allows us to tell the frontend exactly which API endpoint failed. 
 
-    
+    @ExceptionHandler(TagNotOnProblemException.class)
+    public ResponseEntity<ErrorResponse> handleTagNotOnProblemEntity(TagNotOnProblemException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(ProblemNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProblemNotFound(ProblemNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Problem not found", ex.getMessage(), request.getRequestURI());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(UserProgressNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserProgressNotFound(UserProgressNotFoundException ex, HttpServletRequest request) {
