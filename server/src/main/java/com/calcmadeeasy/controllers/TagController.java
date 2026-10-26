@@ -18,6 +18,8 @@ import com.calcmadeeasy.dto.Tags.TagDTO;
 import com.calcmadeeasy.dto.Tags.UpdateTagDTO;
 import com.calcmadeeasy.services.TagService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/tags")
 public class TagController {
@@ -54,7 +56,7 @@ public class TagController {
   @PutMapping("/{tagId}")
   public ResponseEntity<TagDTO> updateTag(
       @PathVariable UUID tagId,
-      @RequestBody UpdateTagDTO request) {
+      @Valid @RequestBody UpdateTagDTO request) {
         TagDTO updated = tagService.updateTag(tagId, request);
         return ResponseEntity.ok(updated);
   }

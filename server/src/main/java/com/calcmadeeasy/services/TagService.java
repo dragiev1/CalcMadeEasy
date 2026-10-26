@@ -102,15 +102,11 @@ public class TagService {
     
     if (request.getDifficulty() != null)
       tag.setDifficulty(request.getDifficulty());
-    if (request.getTagName() != null)
+    if (request.getTagName() != null) {
       tag.setTagName(request.getTagName());
-
-    BigDecimal difficulty = request.getDifficulty();
-    if (difficulty.compareTo(BigDecimal.ONE) > 0 || difficulty.compareTo(BigDecimal.ZERO) < 0)
-      throw new IllegalArgumentException("Difficulty must be a decimal between 0 and 1");
-
+    }
+  
     repo.save(tag);
-
     return new TagDTO(tag);
   }
 
