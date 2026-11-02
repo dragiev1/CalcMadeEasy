@@ -37,17 +37,26 @@ const ProblemCard: React.FC<ProblemProps> = ({
   }, [solved, userSolution]);
 
   const handleSubmit = async () => {
-    if (!userAnswer?.trim() || isSubmitting) return;
+    // Added status === "correct" as an extra frontend guard
+    if (!userAnswer?.trim() || isSubmitting || status === "correct") return;
 
     setIsSubmitting(true);
     setStatus("checking");
     
     try {
-      // Call API to verify and fetch result:
       const result = await verifyUserSolution(pageId, id, userAnswer);
-    
-      if(result.isCorrect) setStatus("correct");
-      else setStatus("incorrect");
+      
+      // DEBUG: Open your browser console and Network tab to see the exact shape
+      console.log("🔍 API Result:", result); 
+      
+      // Fallback to common property names just in case
+      const isCorrect = result.isCorrect;
+      
+      if (isCorrect) {
+        setStatus("correct");
+      } else {
+        setStatus("incorrect");
+      }
     } catch (e) {
       console.error("Verification failed: ", e);
       setStatus("incorrect");
