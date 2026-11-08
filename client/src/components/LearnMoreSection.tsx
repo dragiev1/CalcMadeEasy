@@ -1,5 +1,6 @@
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import demo from "../assets/kawaii_pi.svg";
 import "../css/LearnMoreSection.css";
 
 // import UserStats from "./UserStats";
@@ -73,7 +74,7 @@ const LearnMoreSection = () => {
         {/* Section 1 */}
         <div className={`section ${sec1Visible ? 'visible' : ''}`} ref={sec1Ref}>
           <div className="explanation">
-            <div className="explanation-title">See Math; Be Comfortable With It.</div>
+            <div className="explanation-title">See Math; Be Comfortable With It</div>
             <div className="explanation-body">
               Stop memorizing formulas. Our interactive animations reveal the{" "}
               <i>why</i> behind "alien" concepts, transforming abstract symbols
@@ -90,7 +91,7 @@ const LearnMoreSection = () => {
         {/* Section 2 */}
         <div className={`section ${sec2Visible ? 'visible' : ''}`} ref={sec2Ref}>
           <div className="demo">
-            
+            <img src={demo} alt="logo" className="mr-3"/>
           </div>
           <div className="explanation flex flex-col items-end">
             <div className="explanation-title text-right">Learn at the Speed of Understanding</div>
