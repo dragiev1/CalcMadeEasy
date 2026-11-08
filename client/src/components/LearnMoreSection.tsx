@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/LearnMoreSection.css";
 
 import UserStats from "./UserStats";
-import QuestionCard from "./QuestionCard";
+import QuestionCard from "./ProblemCard";
 import { useScrollReveal } from "../utils/useScrollReveal";
 import { type Problem } from "../types/Problem";
 import { getProblemById } from "../api/problemService";

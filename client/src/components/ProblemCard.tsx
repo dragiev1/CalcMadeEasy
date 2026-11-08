@@ -1,5 +1,5 @@
 import "../css/QuestionCard.css";
-import TagComponent from "../components/TagComponent";
+import TagComponent from "./TagComponent";
 import { type ProblemProps } from "../types/Problem";
 import AnswerInput from "./AnswerInput";
 import { useEffect, useState } from "react";
