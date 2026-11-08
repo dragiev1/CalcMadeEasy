@@ -101,45 +101,59 @@ public class UserProgressService {
     // Extract the user id from the jwt
     UUID userId = UUID.fromString(jwt.getSubject());
 
-    // Fetch problem entity using problem service.
-    Page pg = pageService.getPageEntity(pageId);
-    Problem p = problemService.getProblemEntity(problemId);
-    User u = userService.getUser(userId);
-
     // Try to find existing progress for this specific page.
     Optional<UserProgress> existingProgress = repo.findByUserIdAndProblemIdAndPageId(userId, problemId, pageId);
 
     // Get solution results.
-    boolean isCorrect = problemService.verifySolution(p, userSolution);
-
+    
     if (existingProgress.isPresent()) {
       UserProgress up = existingProgress.get();
-      up.setAttempts(up.getAttempts() + 1);
-      up.setLastAttempted(Instant.now());
+      
+      // Problem is already solved, just send that progress back.
+      if(up.isSolved()) return new UserProgressResponse(true, up.getAttempts(), up.getLastAttempted(), up.getPointsEarned(), false);
+      
+      // Max attempts have been reached.
+      if(up.getAttempts() >= 3) return new UserProgressResponse(false, up.getAttempts(), up.getLastAttempted(), up.getPointsEarned(), true);
+      
+      // Fetch problem entity using problem service.
+      Problem p = problemService.getProblemEntity(problemId);
+      boolean isCorrect = problemService.verifySolution(p, userSolution);
 
-      if (!up.isSolved() && isCorrect) {
+      // Update managed entity.
+      up.setLastAttempted(Instant.now());
+      up.setAttempts(up.getAttempts() + 1);
+      
+      if (isCorrect) {
         up.setSolved(true);
         up.setPointsEarned(p.getPoints());
       }
 
-      return new UserProgressResponse(isCorrect, up.getAttempts(), up.getLastAttempted(), up.getPointsEarned());
-    } else {
-      int pointsToAward = isCorrect ? p.getPoints() : 0;
-      // Create new user progress if progress does not exist.
-      UserProgress newProgress = UserProgress.builder()
-          .user(u)
-          .problem(p)
-          .page(pg)
-          .attempts(1)
-          .solved(isCorrect)
-          .pointsEarned(pointsToAward)
-          .lastAttempted(Instant.now())
-          .build();
+      repo.save(up);
 
-      repo.save(newProgress);
-      return new UserProgressResponse(isCorrect, newProgress.getAttempts(), newProgress.getLastAttempted(),
-          newProgress.getPointsEarned());
+      boolean maxReached = up.getAttempts() >= 3;
+      return new UserProgressResponse(isCorrect, up.getAttempts(), up.getLastAttempted(), up.getPointsEarned(), maxReached);
     }
+    
+    // If it's a brand new attempt. 
+    Page pg = pageService.getPageEntity(pageId);
+    Problem p = problemService.getProblemEntity(problemId);
+    User u = userService.getUser(userId);
+    
+    boolean isCorrect = problemService.verifySolution(p, userSolution);
+    int pointsToAward = isCorrect ? p.getPoints() : 0;
+    UserProgress newProgress = UserProgress.builder()
+        .user(u)
+        .problem(p)
+        .page(pg)
+        .attempts(1)
+        .solved(isCorrect)
+        .pointsEarned(pointsToAward)
+        .lastAttempted(Instant.now())
+        .build();
+
+    repo.save(newProgress);
+    return new UserProgressResponse(isCorrect, 1, newProgress.getLastAttempted(),
+        newProgress.getPointsEarned(), false);
   }
 
   /*

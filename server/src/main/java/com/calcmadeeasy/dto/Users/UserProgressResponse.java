@@ -17,4 +17,5 @@ public class UserProgressResponse {
     private int attempts;
     private Instant lastAttempted;
     private int pointsEarned;
+    private boolean maxAttemptsReached;
 }
