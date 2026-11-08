@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --difficulty-1: #1fb62e; /* soft green */
-  --difficulty-2: #d5be3a; /* muted gold */
-  --difficulty-3: #e68a3d; /* softened orange */
-  --difficulty-4: #dc2d2d; /* muted red */
-  --difficulty-5: #a873d1;
+  --difficulty-1: #1fb62e; /* Green */
+  --difficulty-2: #d5be3a; /* Gold */
+  --difficulty-3: #e68a3d; /* Orange */
+  --difficulty-4: #dc2d2d; /* Red */
+  --difficulty-5: #a873d1; /* Purple */
 }
 
 @layer components {
-  .tag-container {
-    @apply inline-flex mx-[0.5rem] mt-[0.3rem] mb-auto justify-center items-center opacity-85 rounded-full text-[1.2rem] 
-           font-semibold font-serif transition-all duration-200 ease-in-out cursor-pointer 
-           min-w-[50px] min-h-[20px] px-[10px] py-[5px]
-           bg-[linear-gradient(to_right,var(--difficulty-1)_0%,var(--difficulty-2)_25%,var(--difficulty-3)_50%,var(--difficulty-4)_75%,var(--difficulty-5)_100%)]
-           bg-[length:1000%_100%] bg-left origin-center will-change-transform backface-hidden
-           hover:opacity-100 hover:translate-z-0 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:hover:shadow-none;
+  /* Container for the tags */
+  .card-tags {
+    @apply flex flex-wrap items-center gap-2 mt-2; 
   }
 
-  .tag-name {
-    @apply text-(--txt-primary)
-          [text-shadow:2px_2px_2px_rgb(0_0_0_/_0.6)]
-          whitespace-nowrap inline-block leading-none translate-z-0;
+  .tag-container {
+    @apply relative inline-flex items-center justify-center 
+           px-2 py-1 rounded-full text-[var(--bg-primary)]
+           text-[1rem] font-semibold
+           transition-all duration-200 ease-in-out 
+           cursor-pointer select-none;
+    
+    background: linear-gradient(to right, 
+      var(--difficulty-1) 0%, 
+      var(--difficulty-2) 25%, 
+      var(--difficulty-3) 50%, 
+      var(--difficulty-4) 75%, 
+      var(--difficulty-5) 100%
+    );
+    background-size: 1000% 100%;
+
+    &:hover {
+      @apply transform -translate-y-0.5;
+    }
   }
+
+  /* Transparent Text */
+  .tag-name {
+    @apply whitespace-nowrap leading-none group-hover:text-[var(--txt-primary)] transition-colors duration-200;;
+    font-weight: 600;
+    font-family: system-ui, -apple-system, 'Arial', sans-serif; 
+    text-transform: capitalize; 
+    letter-spacing: 0.03em;
+   
+    /* &:hover {
+      @apply text-[var(--txt-primary)];
+    } */
+  }
+
+  .plus-icon {
+    @apply text-(--bg-primary) group-hover:text-[var(--txt-primary)] pr-[3px] transition-colors duration-200;;
+  }
+  
 }

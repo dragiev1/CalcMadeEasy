@@ -2,7 +2,7 @@ import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/LearnMoreSection.css";
 
-import UserStats from "./UserStats";
+// import UserStats from "./UserStats";
 import QuestionCard from "./ProblemCard";
 import { useScrollReveal } from "../utils/useScrollReveal";
 import { type Problem } from "../types/Problem";
@@ -13,7 +13,7 @@ const LearnMoreSection = () => {
   const [sec1Ref, sec1Visible] =useScrollReveal();
   const [sec2Ref, sec2Visible] =useScrollReveal();
   const [sec3Ref, sec3Visible] =useScrollReveal();
-  const [sec4Ref, sec4Visible] =useScrollReveal();
+  // const [sec4Ref, sec4Visible] =useScrollReveal();
 
   /**
    * Testing: Fetching an example problem and passing the info in the QuestionCard component.
@@ -35,14 +35,18 @@ const LearnMoreSection = () => {
         // FALLBACK: If the API fails, use this mock data so the UI doesn't break.
         setProblem({
           id: problemId,
-          description: "What is the derivative of x^2?",
+          description: "Example Question?",
           points: 10,
           isChallenge: false,
           solution: "2x",
           solutionType: "NUMERICAL",
           tags: [
-            { id: "1", name: "Derivative", difficulty: 0.3 },
-            { id: "2", name: "Power Rule", difficulty: 0.2 }
+            { id: "1", name: "Example", difficulty: 0.1 },
+            { id: "2", name: "Example", difficulty: 0.2 },
+            { id: "3", name: "Example", difficulty: 0.5 },
+            { id: "4", name: "Example", difficulty: 0.6 },
+            { id: "5", name: "Example", difficulty: 0.9 },
+            { id: "6", name: "Example", difficulty: 1.0 },
           ]
         });
       } finally {
@@ -86,14 +90,12 @@ const LearnMoreSection = () => {
         {/* Section 2 */}
         <div className={`section ${sec2Visible ? 'visible' : ''}`} ref={sec2Ref}>
           <div className="demo">
-
+            
           </div>
-          <div className="explanation">
-            <div className="explanation-title text-right">
-              Learn at the Speed of Understanding
-            </div>
+          <div className="explanation flex flex-col items-end">
+            <div className="explanation-title text-right">Learn at the Speed of Understanding</div>
 
-            <div className="explanation-body">
+            <div className="explanation-body text-right">
               No rushing. No stress. Just clear, professional explanations that
               respect your intelligence. Master mathematics deeply at your own
               pace.
@@ -109,8 +111,8 @@ const LearnMoreSection = () => {
             </div>
 
             <div className="explanation-body">
-              Every homework problem is hand-designed with purposeful tags,
-              calibrated difficulty, and intelligent confidence scoring. We
+              Every lesson and problem is hand-designed with purposeful tags,
+              calibrated difficulty, and intelligent verification. We
               learn your patterns, record, and display it.
             </div>
           </div>
@@ -124,7 +126,7 @@ const LearnMoreSection = () => {
           </div>
         </div>
 
-        {/* Section 4 */}
+        {/* Section 4
         <div className={`section ${sec4Visible ? 'visible' : ''}`} ref={sec4Ref}>
           <div className="demo">
             <UserStats />
@@ -140,7 +142,7 @@ const LearnMoreSection = () => {
               forward.
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="divider-bottom"></div>
     </div>

@@ -50,11 +50,60 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
   );
 
   // Attach/detach native keydown listener to math-field
-  useEffect(() => {
-    const mf = mfref.current;
+    useEffect(() => {
+    const mf = mfref.current as any; // Cast to 'any' to bypass strict TS definitions for menuItems
     if (!mf) return;
 
+    // 1. Define the custom menu with the EXACT property names MathLive expects
+    interface CustomMenuItem {
+      type: 'command' | 'divider' | 'submenu' | 'heading';
+      label?: string;
+      action?: string;
+      latex?: string; // <-- THIS IS THE KEY! MathLive looks for 'latex', not 'arg'
+    }
+
+    const customMenu: CustomMenuItem[] = [
+      // Basic Editing
+      { type: 'command', label: 'Cut', action: 'cut' },
+      { type: 'command', label: 'Copy', action: 'copy' },
+      { type: 'command', label: 'Paste', action: 'paste' },
+      
+      { type: 'divider' }, // Visual separator
+      
+      // Math Insertions
+      // The '#?' tells MathLive exactly where to place the cursor after insertion!
+      { 
+        type: 'command', 
+        label: 'Insert Integral', 
+        action: 'insert', 
+        latex: '\\int_{#?}^{#?} #?' 
+      },
+      { 
+        type: 'command', 
+        label: 'Insert 2x2 Matrix', 
+        action: 'insert', 
+        latex: '\\begin{matrix} #? & #? \\\\ #? & #? \\end{matrix}' 
+      },
+      { 
+        type: 'command', 
+        label: 'Insert Square Root', 
+        action: 'insert', 
+        latex: '\\sqrt{#?}' 
+      }
+    ];
+
+    // 2. Overwrite the default menu
+    mf.menuItems = customMenu;
+
+    // 3. Set visual options
+    mf.toolbar = 'none';
+    mf.virtualKeyboardMode = 'off';
+    mf.smartFence = true;
+    mf.smartSuperscript = true;
+
+    // 4. Your existing keydown listener
     mf.addEventListener("keydown", handleKeyDown as EventListener);
+    
     return () => {
       mf.removeEventListener("keydown", handleKeyDown as EventListener);
     };

@@ -10,6 +10,7 @@ export const verifyUserSolution = (pageId:string, problemId: string, solution: s
     attempts: number,
     lastAttempted: string,
     pointsEarned: number
+    maxAttemptsReached: boolean,
   }>
   (`/users/page/${pageId}/problems/${problemId}/verify`, {
     method: 'POST',

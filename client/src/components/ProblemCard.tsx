@@ -26,7 +26,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showTags, setShowTags] = useState(true);
-
+  const [maxAttemptsReached, setMaxAttemptsReached] = useState(false);
   const [status, setStatus] = useState<"idle" | "checking" | "correct" | "incorrect">("idle");
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
   }, [solved, userSolution]);
 
   const handleSubmit = async () => {
-    // Added status === "correct" as an extra frontend guard
+    // Prevents submission if already correct, submitting.
     if (!userAnswer?.trim() || isSubmitting || status === "correct") return;
 
     setIsSubmitting(true);
@@ -45,21 +45,18 @@ const ProblemCard: React.FC<ProblemProps> = ({
     
     try {
       const result = await verifyUserSolution(pageId, id, userAnswer);
-      
-      // DEBUG: Open your browser console and Network tab to see the exact shape
-      console.log("🔍 API Result:", result); 
-      
-      // Fallback to common property names just in case
-      const isCorrect = result.correct;
-      
-      if (isCorrect) {
-        setStatus("correct");
-      } else {
-        setStatus("incorrect");
-      }
+            
+      if(result.correct) setStatus("correct");
+      else setStatus("incorrect");
+
+      // TODO: Create a message bubble displaying this to user!
+      if(result.maxAttemptsReached) {
+        console.log("Max Attempts Reached!");
+        setMaxAttemptsReached(true);
+      };
     } catch (e) {
       console.error("Verification failed: ", e);
-      setStatus("incorrect");
+      setStatus("idle");
     } finally {
       setIsSubmitting(false);
     }
@@ -98,23 +95,25 @@ const ProblemCard: React.FC<ProblemProps> = ({
           </div>
         </div>
 
-        <div className="card-tags">
-          {showTags &&
-            tags.map((tag: any, index: number) => (
+        {/* Tags */}
+        <div className={`tags-wrapper ${showTags ? 'show' : 'hide'}`}>
+          <div className="card-tags">
+            {tags.map((tag: any, index: number) => (
               <TagComponent
                 key={`${tag.name}-${index}`}
                 name={tag.name}
                 difficulty={tag.difficulty}
                 id={tag.id}
               />
-          ))}
+            ))}
+          </div>
         </div>
 
         <AnswerInput
           value={userAnswer || ""}
           onChange={setUserAnswer}
           onSubmit={handleSubmit}
-          disabled={isSubmitting || status === "correct"}
+          disabled={isSubmitting || status === "correct" || maxAttemptsReached}
           aria-label={`Answer for: ${description}`}
           className={evaluationStatus}
           evaluationStatus={evaluationStatus}

@@ -15,7 +15,7 @@
   }
 
   .hero-container {
-    @apply w-[90vw] mt-[8rem] min-h-[60vh] max-w-full flex items-center relative justify-between gap-[0.5rem];
+    @apply w-[90vw] mt-[8rem] min-h-[70vh] max-w-full flex items-center relative justify-between gap-[0.5rem];
   }
 
   .full-logo-container {
