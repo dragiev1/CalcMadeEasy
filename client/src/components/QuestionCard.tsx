@@ -50,7 +50,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
       console.log("🔍 API Result:", result); 
       
       // Fallback to common property names just in case
-      const isCorrect = result.isCorrect;
+      const isCorrect = result.correct;
       
       if (isCorrect) {
         setStatus("correct");

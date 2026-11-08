@@ -58,11 +58,11 @@
   }
   
   .correct {
-    @apply border-green-500 bg-green-50 text-green-700 ring-2 ring-green-200;
+    @apply border-green ring-1 ring-green;
   }
   
   .incorrect {
-    @apply border-red-500 bg-red-50 text-red-700 ring-2 ring-red-200;
+    @apply border-red ring-1 ring-red;
   }
 }
 

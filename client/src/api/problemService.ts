@@ -6,7 +6,7 @@ export const getProblemById = (id: string) =>
 
 export const verifyUserSolution = (pageId:string, problemId: string, solution: string) => {
   return apiClient<{
-    isCorrect: boolean,
+    correct: boolean,
     attempts: number,
     lastAttempted: string,
     pointsEarned: number
