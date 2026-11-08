@@ -16,13 +16,13 @@ public interface UserProgressRepo extends JpaRepository<UserProgress, UUID> {
   List<UserProgress> findByUserId(UUID userId);
 
   // Get all progress for a page
-  List<UserProgress> findByPageIdAndUserId(UUID userId, UUID pageId);
+  List<UserProgress> findByUserIdAndPageId(UUID userId, UUID pageId);
 
   // Get all progress for a problem
-  Optional<UserProgress> findByProblemIdAndUserId(UUID userId, UUID problemId);
+  Optional<UserProgress> findByUserIdAndProblemId(UUID userId, UUID problemId);
   
   // Retrieve progress with user, page, and problem id
-  Optional<UserProgress> findByUserIdAndPageIdAndProblemId(UUID userId, UUID problemId);
+  Optional<UserProgress> findByUserIdAndProblemIdAndPageId(UUID userId, UUID problemId, UUID pageId);
 
   // Get all progress for a user in a unique section
   List<UserProgress> findByUserIdAndPage_Section_Id(UUID userId, UUID sectionId);

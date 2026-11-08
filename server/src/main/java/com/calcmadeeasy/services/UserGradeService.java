@@ -21,6 +21,8 @@ import com.calcmadeeasy.repository.CourseEnrollmentRepo;
 import com.calcmadeeasy.repository.SectionGradeRepo;
 import com.calcmadeeasy.repository.UserProgressRepo;
 
+import lombok.AllArgsConstructor;
+
 
 
 /*
@@ -28,22 +30,12 @@ import com.calcmadeeasy.repository.UserProgressRepo;
  */
 
 @Service
+@AllArgsConstructor
 public class UserGradeService {
   private final UserProgressRepo upRepo;
   private final ChapterGradeRepo chapterGradeRepo;
   private final SectionGradeRepo sectionGradeRepo;
   private final CourseEnrollmentRepo courseEnrollmentRepo;
-
-  public UserGradeService(
-      UserProgressRepo upRepo,
-      ChapterGradeRepo chapterGradeRepo,
-      SectionGradeRepo sectionGradeRepo,
-      CourseEnrollmentRepo courseEnrollmentRepo) {
-    this.upRepo = upRepo;
-    this.chapterGradeRepo = chapterGradeRepo;
-    this.sectionGradeRepo = sectionGradeRepo;
-    this.courseEnrollmentRepo = courseEnrollmentRepo;
-  }
 
   // ==================== UPDATE ====================
 

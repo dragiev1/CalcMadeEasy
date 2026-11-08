@@ -1,6 +1,8 @@
 package com.calcmadeeasy.services;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -17,7 +19,6 @@ import com.calcmadeeasy.models.Users.UserProgress;
 import com.calcmadeeasy.repository.UserProgressRepo;
 
 import lombok.AllArgsConstructor;
-
 
 /*
  * Service for handling raw progress updates. 
@@ -71,18 +72,8 @@ public class UserProgressService {
   }
 
   @Transactional(readOnly = true)
-  public UserProgress getProblemProgressForUser(User user, Problem problem, Page page) {
-    return repo.findByProblemIdAndUserId(user.getId(), problem.getId())
-      .orElseGet(() -> {
-        // Create the new progress and return it if it doesn't exist.
-        UserProgress newProgress = new UserProgress();
-        newProgress.setUser(user);
-        newProgress.setProblem(problem);
-        newProgress.setPage(page);
-        newProgress.setAttempts(0);
-        newProgress.setPointsEarned(0);
-        return createUserProgress(newProgress);
-      });
+  public Optional<UserProgress> getProblemProgressForUser(UUID userId, UUID pageId, UUID problemId) {
+    return repo.findByUserIdAndProblemIdAndPageId(userId, problemId, pageId);
   }
 
   @Transactional(readOnly = true)
@@ -109,27 +100,46 @@ public class UserProgressService {
   public UserProgressResponse verifyAndRecordAttempt(UUID pageId, UUID problemId, Jwt jwt, String userSolution) {
     // Extract the user id from the jwt
     UUID userId = UUID.fromString(jwt.getSubject());
-    
-    // Fetch problem entity using problem service. 
+
+    // Fetch problem entity using problem service.
     Page pg = pageService.getPageEntity(pageId);
     Problem p = problemService.getProblemEntity(problemId);
     User u = userService.getUser(userId);
 
+    // Try to find existing progress for this specific page.
+    Optional<UserProgress> existingProgress = repo.findByUserIdAndProblemIdAndPageId(userId, problemId, pageId);
+
     // Get solution results.
     boolean isCorrect = problemService.verifySolution(p, userSolution);
 
-    // Record result and then save.
-    UserProgress up = getProblemProgressForUser(u, p, pg);
-    up.recordAttempt(isCorrect, p);
-    repo.save(up);
+    if (existingProgress.isPresent()) {
+      UserProgress up = existingProgress.get();
+      up.setAttempts(up.getAttempts() + 1);
+      up.setLastAttempted(Instant.now());
 
-    // Return the response for client.
-    return new UserProgressResponse(
-      isCorrect,
-      up.getAttempts(),
-      up.getLastAttempted(),
-      up.getPointsEarned()
-    );
+      if (!up.isSolved() && isCorrect) {
+        up.setSolved(true);
+        up.setPointsEarned(p.getPoints());
+      }
+
+      return new UserProgressResponse(isCorrect, up.getAttempts(), up.getLastAttempted(), up.getPointsEarned());
+    } else {
+      int pointsToAward = isCorrect ? p.getPoints() : 0;
+      // Create new user progress if progress does not exist.
+      UserProgress newProgress = UserProgress.builder()
+          .user(u)
+          .problem(p)
+          .page(pg)
+          .attempts(1)
+          .solved(isCorrect)
+          .pointsEarned(pointsToAward)
+          .lastAttempted(Instant.now())
+          .build();
+
+      repo.save(newProgress);
+      return new UserProgressResponse(isCorrect, newProgress.getAttempts(), newProgress.getLastAttempted(),
+          newProgress.getPointsEarned());
+    }
   }
 
   /*
