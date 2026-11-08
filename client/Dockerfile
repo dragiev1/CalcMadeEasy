@@ -1,5 +1,5 @@
 # Stage 1: Build the React app
-FROM node:18-alpine AS build-stage
+FROM node:20-alpine AS build-stage
 WORKDIR /app
 
 # Tells Docker that this build expects a variable.
