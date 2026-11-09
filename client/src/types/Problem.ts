@@ -24,6 +24,7 @@ export interface ProblemProps {
   position: number;
   confidenceScore?: number;
   showQuestion?: boolean;
+  showTags?: boolean;
   solved?: boolean;
   tags?: Tag[]; 
   userSolution?: string;

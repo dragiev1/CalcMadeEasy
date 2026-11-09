@@ -1,6 +1,6 @@
 import "../css/QuestionCard.css";
-import TagComponent from "./TagComponent";
 import { type ProblemProps } from "../types/Problem";
+import TagComponent from "./TagComponent";
 import AnswerInput from "./AnswerInput";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -100,8 +100,8 @@ const ProblemCard: React.FC<ProblemProps> = ({
           <div className="card-tags">
             {tags.map((tag: any, index: number) => (
               <TagComponent
-                key={`${tag.name}-${index}`}
-                name={tag.name}
+                key={`${tag.tagName}-${index}`}
+                name={tag.tagName}
                 difficulty={tag.difficulty}
                 id={tag.id}
               />
