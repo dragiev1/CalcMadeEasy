@@ -2,6 +2,9 @@
 
 .review-card {
     @apply break-inside-avoid mb-8 relative bg-[var(--bg-trinary)] text-[var(--txt-primary)] rounded-3xl px-6 pt-10 pb-10 max-w-md mx-auto transition-all duration-200 ease-in-out;
+    opacity: 0;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.2s ease-in-out;
 }
 
 .review-card:hover {
@@ -21,6 +24,16 @@
 /* Hover state */
 .review-card:hover::after {
     @apply shadow-[1.5px_1.5px_1px_0px_var(--bg-secondary)];
+}
+
+.review-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.review-card.visible:hover {
+    transform: translateY(-4px) scale(1.02); 
+    box-shadow: 0px 1px 12px 1px var(--bg-secondary);
 }
 
 .quote-mark {
@@ -56,7 +69,7 @@
 }
 
 .star.empty {
-    @apply text-[var(--bg-primary)] opacity-30;
+    @apply text-[var(--bg-primary)];
 }
 
 /* Review Body Text */

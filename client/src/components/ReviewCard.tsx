@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/ReviewCard.css";
 import avatar from "../assets/default-user-picture.png";
+import { useScrollReveal } from "../utils/useScrollReveal";
 
 // TODO: Move to model folder later when implementing real google reviews!
 interface ReviewCardProps {
@@ -8,6 +9,7 @@ interface ReviewCardProps {
     rating: number;
     text: string;
     avatarUrl?: string; // optional google account pfp.
+    delay?: number;
 }
 
 const StarIcon: React.FC<{filled: boolean}> = ({filled}) => (
@@ -41,9 +43,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     rating,
     text,
     avatarUrl = avatar,
+    delay = 0,
 }) => {
+    const [cardRef, isVisible] = useScrollReveal();
     return (
-        <div className="review-card">
+        <div ref={cardRef} className={`review-card ${isVisible ? 'visible' : ''}`} style={{ transitionDelay: `${delay}ms` }}>
             {/* Quotation marks */}
             <span className="quote-mark left">&ldquo;</span>
             <span className="quote-mark right">&rdquo;</span>
