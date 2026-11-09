@@ -1,6 +1,7 @@
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import demo from "../assets/kawaii_pi.svg";
+import derivativeDefinition from "../assets/math-animations/DerivativeDefinition.mp4";
 import "../css/LearnMoreSection.css";
 
 // import UserStats from "./UserStats";
@@ -82,9 +83,17 @@ const LearnMoreSection = () => {
             </div>
           </div>
           <div className="demo">
-            DEMO : Show an animation of a derivative being built up from secant
-            lines approaching a tangent, with the limit process visualized
-            smoothly.
+            <video
+            src={derivativeDefinition}
+            autoPlay
+            loop={true}
+            muted
+            playsInline
+            className="lorenz-animation"
+          >
+            {" "}
+            Your browser does not support the video tag.
+          </video>
           </div>
         </div>
 

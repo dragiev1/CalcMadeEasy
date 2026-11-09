@@ -7,10 +7,12 @@ import logo from '../assets/full_logo.svg'
 import gaussianIntegral from "../assets/math-animations/GaussianIntegral.mp4";
 import riemannSums from "../assets/math-animations/RiemannSums.mp4";
 import lorenzAttractor from "../assets/math-animations/LorenzAttractorWithEquations.mp4";
+import loading from "../assets/math-animations/loading.mp4";
+import derivativeDefinition from "../assets/math-animations/DerivativeDefinition.mp4";
 import BeginButton from "../components/BeginButton";
 import LearnMoreSection from "../components/LearnMoreSection";
 
-const mathAnimations = [riemannSums, gaussianIntegral, lorenzAttractor];
+const mathAnimations = [riemannSums, lorenzAttractor, derivativeDefinition, gaussianIntegral, loading];
 
 function Home() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
