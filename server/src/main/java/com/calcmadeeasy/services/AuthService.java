@@ -45,7 +45,7 @@ public class AuthService {
         try {
 
             // Debugging:
-            System.out.println("BACKEND CLIENT ID: " + googleClientId);
+            // System.out.println("BACKEND CLIENT ID: " + googleClientId);
 
             // Verify token with Google.
             // Analogy: Bouncer at a nightclub.
