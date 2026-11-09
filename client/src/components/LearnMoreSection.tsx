@@ -10,12 +10,38 @@ import { useScrollReveal } from "../utils/useScrollReveal";
 import { type Problem } from "../types/Problem";
 import { getProblemById } from "../api/problemService";
 import { useEffect, useState } from "react";
+import ReviewCard from "./ReviewCard";
 
 const LearnMoreSection = () => {
   const [sec1Ref, sec1Visible] =useScrollReveal();
   const [sec2Ref, sec2Visible] =useScrollReveal();
   const [sec3Ref, sec3Visible] =useScrollReveal();
   // const [sec4Ref, sec4Visible] =useScrollReveal();
+
+  // Fake Reviews
+  // TODO: Replace with real google reviews later!
+  const fakeReviews = [
+    {
+      name: "Mr. Anonymous",
+      rating: 5,
+      text: "I always struggled with the intuition behind derivatives in college. The interactive animations on this site completely changed how I see calculus. It’s not just memorizing formulas anymore; I actually understand WHY things work. The homework problems are challenging but incredibly fair."
+    },
+    {
+      name: "Igor Ivanov",
+      rating: 4.5,
+      text: "Very good."
+    },
+    {
+      name: "Mrs. Professor",
+      rating: 5,
+      text: "As a professor, this website teaches math how I like to teach it. Simple, easy to follow explanations that shape the mind to think, rather than to guess. Beautiful work."
+    },
+    {
+      name: "Sharon L.",
+      rating: 5,
+      text: "I used this to prep for my AP Calc BC exam and ended up getting an A! The lessons are actually so fun, which I never thought I'd say about math. The progress tracking keeps me motivated, and the tag hints on the homework saved me when I got stuck. Would love to see more advanced topics added soon!"
+    },
+  ];
 
   /**
    * Testing: Fetching an example problem and passing the info in the QuestionCard component.
@@ -154,7 +180,18 @@ const LearnMoreSection = () => {
           </div>
         </div> */}
       </div>
+
       <div className="divider-bottom"></div>
+
+      {/* Reviews */}
+      <div className="columns-1 md:columns-2 lg:columns-3 max-w-[75%] mt-20 mx-auto mb-20">
+        {fakeReviews.map((r, i) => (
+          <ReviewCard key={i} {...r} />
+        ))}
+      </div>
+
+      <div className="divider-bottom"></div>
+
     </div>
   );
 };

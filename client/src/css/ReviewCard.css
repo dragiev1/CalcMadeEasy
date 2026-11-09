@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+.review-card {
+    @apply break-inside-avoid mb-8 relative bg-[var(--bg-trinary)] text-[var(--txt-primary)] rounded-3xl px-6 pt-10 pb-10 max-w-md mx-auto transition-all duration-200 ease-in-out;
+}
+
+.review-card:hover {
+    @apply -translate-y-1 scale-[1.02] shadow-[0px_1px_12px_1px_var(--bg-secondary)];
+}
+
+/* Speech bubble tail */
+.review-card::after {
+    content: "";
+    @apply absolute w-5 h-5 bg-[var(--bg-trinary)] transition-all duration-200 ease-in-out;
+    bottom: 0; 
+    left: 3rem; 
+    
+    transform: rotate(45deg) translateY(10px); 
+}
+
+/* Hover state */
+.review-card:hover::after {
+    @apply shadow-[1.5px_1.5px_1px_0px_var(--bg-secondary)];
+}
+
+.quote-mark {
+    @apply absolute top-6 text-6xl text-[var(--txt-secondary)] font-serif leading-none select-none;
+}
+
+.quote-mark.right {
+    @apply right-8;
+}
+
+.quote-mark.left {
+    @apply left-8;
+}
+
+.avatar-placeholder {
+    @apply w-24 h-24 bg-[var(--bg-primary)] rounded-2xl p-2 mx-auto mb-3 items-center justify-center;
+}
+
+.reviewer-name {
+    @apply text-center font-semibold text-xl tracking-wide mb-1;
+}
+
+.stars {
+    @apply flex justify-center gap-1 mb-5;
+}
+
+.star {
+    @apply w-6 h-6;
+}
+
+.star.filled {
+    @apply text-[var(--accent-secondary)];
+}
+
+.star.empty {
+    @apply text-[var(--bg-primary)] opacity-30;
+}
+
+/* Review Body Text */
+.review-text {
+    @apply text-center text-[var(--txt-secondary)] text-lg leading-relaxed bg-[var(--bg-primary)] p-5 rounded-3xl;
+}
+
