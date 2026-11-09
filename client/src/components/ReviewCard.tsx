@@ -23,21 +23,6 @@ const StarIcon: React.FC<{filled: boolean}> = ({filled}) => (
     </svg>
 );
 
-const CameraIcon: React.FC = () => {
-    <svg
-    className="w-10 h-10 text-gray-500"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
-    <circle cx="12" cy="13" r="4" />
-  </svg>
-};
-
 const ReviewCard: React.FC<ReviewCardProps> = ({
     name,
     rating,
@@ -61,7 +46,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 ) : (
-                    <CameraIcon />
+                    <img
+                    src={avatarUrl}
+                    alt={name}
+                    className="w-full h-full object-cover rounded-2xl"
+                />
                 )}
             </div>
 

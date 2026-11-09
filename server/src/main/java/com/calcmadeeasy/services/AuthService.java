@@ -32,7 +32,7 @@ public class AuthService {
     @Value("${google.client.id}")
     private String googleClientId;
 
-    @Value("${jwt.secret}")
+    @Value("${app.jwt.secret}")
     private String jwtSecretString;
 
     private Key getSigningKey() {
@@ -85,7 +85,7 @@ public class AuthService {
                     return userRepo.save(newUser);
                 });
 
-            // But this nightclub is weird, they take your license and gives you a special wristband. You have 24 hours max to be there. 
+            // But this nightclub is weird, they take your license and give you a special wristband. You have 24 hours max to be there. 
             // Generate app's JWT
             String appJWT = Jwts.builder()
                 .setSubject(user.getId().toString())

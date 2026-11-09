@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/google").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll() // Allow login endpoints
                         .anyRequest().authenticated()                   // Protect everything else
                 )

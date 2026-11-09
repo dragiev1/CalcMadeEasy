@@ -1,27 +1,15 @@
-import axios from "axios";
+import { apiClient } from "./apiClient";
+import { type AuthResponse } from "../types/AuthReponse";
 
-// Move to .env later. 
-const API_BASE_URL = 'http://localhost:8080/api/v1/auth';
-
-// Define shape of the data we expect back.
-export interface AuthResponse {
-    token: string;
-    user: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        profilePicUrl: string;
-    };
-}
-
-// TODO: REMOVE AXIOS ASAP
 // Dedicated function for logging in.
 export const loginWithGoogle = async (idToken: string): Promise<AuthResponse> => {
-    const response = await axios.post<AuthResponse>(`${API_BASE_URL}/google`, {
-        idToken: idToken
+    logout();
+
+    localStorage.clear();
+    return apiClient<AuthResponse>(`/auth/google`, {
+        method: 'POST',
+        body: JSON.stringify({ idToken: idToken })
     });
-    return response.data;
 }
 
 export const logout = () => {

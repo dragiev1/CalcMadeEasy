@@ -1,11 +1,9 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 
 
-// Reusable function to authorize API calls elegantly. 
+// Reusable function to authorize API calls. 
 export async function apiClient<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const token = localStorage.getItem("authToken");
-
-    // console.log("Token found in localStorage:", token ? "YES (Length: " + token.length + ")" : "NO");
 
     const headers = {
             'Content-Type': 'application/json',
@@ -13,11 +11,16 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
             ...options.headers, // Allow overriding headers if needed.
         }
 
-    // console.log("Headers being sent to backend:", headers);
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         ...options,
         headers: headers,
     })
+
+    // Handle expired jwt causing errors
+    if(response.status == 401) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+    }
 
 
     if (!response.ok) {
