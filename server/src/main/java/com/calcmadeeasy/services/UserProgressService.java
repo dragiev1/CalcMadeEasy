@@ -71,11 +71,19 @@ public class UserProgressService {
     return repo.findByUserId(userId);
   }
 
+  // Backend only
   @Transactional(readOnly = true)
-  public Optional<UserProgress> getProblemProgressForUser(UUID userId, UUID pageId, UUID problemId) {
+  public Optional<UserProgress> getProblemProgressForUser(UUID userId, UUID problemId, UUID pageId) {
     return repo.findByUserIdAndProblemIdAndPageId(userId, problemId, pageId);
   }
 
+  @Transactional(readOnly = true)
+  public Optional<UserProgressDTO> getProblemProgressForUserDTO(UUID userId, UUID problemId, UUID pageId) {
+    return repo.findByUserIdAndProblemIdAndPageId(userId, problemId, pageId)
+      .map(UserProgressDTO::new);
+  }
+
+  // WARNING: EVERY USER'S PROGRESS
   @Transactional(readOnly = true)
   public List<UserProgressDTO> getAllProgressDTO() {
     return getAllProgresses()

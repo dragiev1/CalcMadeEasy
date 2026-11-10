@@ -40,4 +40,5 @@ public class UserProgressDTO {
     this.createdAt = up.getCreatedAt();
     this.updatedAt = up.getUpdatedAt();
   }
+  
 }

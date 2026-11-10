@@ -1,4 +1,5 @@
 import type { Problem } from "../types/Problem";
+import type { UserProgressResponse } from "../types/User";
 import { apiClient } from "./apiClient";
 
 export const getProblemById = (id: string) =>
@@ -16,4 +17,12 @@ export const verifyUserSolution = (pageId:string, problemId: string, solution: s
     method: 'POST',
     body: JSON.stringify({ userSolution: solution })
   });
+}
+
+export const getUserProblemProgress = async (userId: string, problemId: string, pageId: string) => {
+  return apiClient<UserProgressResponse>(
+    `/users/${userId}/${problemId}/${pageId}`, {
+      method: 'GET'
+    }
+  ) 
 }
