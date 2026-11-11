@@ -112,7 +112,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
           value={userAnswer || ""}
           onChange={setUserAnswer}
           onSubmit={handleSubmit}
-          disabled={isSubmitting || status === "correct" || maxAttemptsReached}
+          disabled={isSubmitting || evaluationStatus === "correct" || maxAttemptsReached}
           aria-label={`Answer for: ${description}`}
           className={evaluationStatus}
           evaluationStatus={evaluationStatus}
