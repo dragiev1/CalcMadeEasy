@@ -1,16 +1,17 @@
+import "../css/LearnMoreSection.css";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import demo from "../assets/kawaii_pi.svg";
 import derivativeDefinition from "../assets/math-animations/DerivativeDefinition.mp4";
-import "../css/LearnMoreSection.css";
 
-// import UserStats from "./UserStats";
+import { type UserProgressResponse } from "../types/User";
+import { type Problem } from "../types/Problem";
+import ReviewCard from "./ReviewCard";
 import QuestionCard from "./ProblemCard";
 import { useScrollReveal } from "../utils/useScrollReveal";
-import { type Problem } from "../types/Problem";
-import { getProblemById } from "../api/problemService";
+import { getProblemById, getUserProblemProgress } from "../api/problemService";
 import { useEffect, useState } from "react";
-import ReviewCard from "./ReviewCard";
 
 const LearnMoreSection = () => {
   const [sec1Ref, sec1Visible] =useScrollReveal();
@@ -46,17 +47,36 @@ const LearnMoreSection = () => {
   /**
    * Testing: Fetching an example problem and passing the info in the QuestionCard component.
    */
-  const problemId = "123e4567-e89b-12d3-a456-426614174000";  
+  const problemId = "123e4567-e89b-12d3-a456-426614174000";
+  const pageId = "c3d4e5f6-a7b8-4901-d1e2-f3a4b5c6d7e8";
+
   const [problem, setProblem] = useState<Problem | null>(null);
+  const [progress, setProgress] = useState<UserProgressResponse | null>(null); 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProblem = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        // Fetch problem.
+
+        // Fetch problem details.
         const data = await getProblemById(problemId);
         setProblem(data); 
+
+        // Fetch user progress (no userId needed, user is already logged in).
+        try {
+          const progData = await getUserProblemProgress(problemId, pageId);
+          setProgress(progData);
+        } catch (e) {
+          console.error("Failed to retrieve user progress: ", e);
+          setProgress({
+            isCorrect: false,
+            attempts: 0,
+            pointsEarned: 0,
+            lastAttempted: null,
+            maxAttemptsReached: false,
+          });
+        }
       } catch (e) { 
         console.error("Failed to fetch problem! Using fallback data.", e);
         
@@ -77,13 +97,16 @@ const LearnMoreSection = () => {
             { id: "6", name: "Example", difficulty: 1.0 },
           ]
         });
+
+        // FALLBACK: If API fails use fake user progress so UI does not break. 
+        setProgress({isCorrect: false, attempts: 0, lastAttempted: null, pointsEarned: 0, maxAttemptsReached: false});
       } finally {
         setIsLoading(false); 
       }
     };
 
-    fetchProblem();
-  }, [problemId]);
+    fetchData();
+  }, [problemId, pageId]);
 
   // Keep the loading screen, but remove the null return so it falls back gracefully
   if (isLoading) return <p style={{ textAlign: 'center', padding: '2rem' }}>Loading problem...</p>; 
@@ -158,6 +181,8 @@ const LearnMoreSection = () => {
               description={problem.description}
               tags={problem.tags || []}
               position={3} 
+              solved={progress?.isCorrect ?? false}
+              maxAttemptsReached={progress?.maxAttemptsReached ?? false}
             />
           </div>
         </div>

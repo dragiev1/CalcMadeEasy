@@ -34,20 +34,19 @@ public class UserController {
   private final UserProgressService upService;
 
   // ---------------- CREATE ----------------
-  
+
   @PostMapping
   public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserDTO newUser) {
     UserResponseDTO savedUser = userService.createUser(newUser);
     return ResponseEntity.ok(savedUser);
   }
-  
+
   @PostMapping("/page/{pageId}/problems/{problemId}/verify")
   public ResponseEntity<UserProgressResponse> verifyUserSolution(
-    @PathVariable UUID problemId,
-    @AuthenticationPrincipal Jwt jwt,
-    @PathVariable UUID pageId,
-    @RequestBody UserProgressRequest request
-  ) {
+      @PathVariable UUID problemId,
+      @AuthenticationPrincipal Jwt jwt,
+      @PathVariable UUID pageId,
+      @RequestBody UserProgressRequest request) {
     UserProgressResponse response = upService.verifyAndRecordAttempt(pageId, problemId, jwt, request.getUserSolution());
     return ResponseEntity.ok(response);
   }
@@ -66,19 +65,17 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
-  @GetMapping("/{userId}/{problemId}/{pageId}")
+  @GetMapping("/progress/{problemId}/{pageId}")
   public ResponseEntity<UserProgressResponse> getUserProgress(
-    @CurrentUser UUID currentUserId,
-    @PathVariable UUID problemId,
-    @PathVariable UUID pageId
-  ) {
-
+      @CurrentUser UUID currentUserId,
+      @PathVariable UUID problemId,
+      @PathVariable UUID pageId) {
     return upService.getProblemProgressForUserDTO(currentUserId, problemId, pageId)
-          .map(dto -> ResponseEntity.ok(new UserProgressResponse(dto))).orElseGet(() -> ResponseEntity.ok(new UserProgressResponse()));
+        .map(dto -> ResponseEntity.ok(new UserProgressResponse(dto)))
+        .orElseGet(() -> ResponseEntity.ok(new UserProgressResponse()));
   }
 
   // ---------------- UPDATE ----------------
-
 
   @PutMapping("/{userId}/enroll/{courseId}")
   public ResponseEntity<Void> enrollCourse(@PathVariable UUID userId, @PathVariable UUID courseId) {

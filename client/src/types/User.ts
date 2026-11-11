@@ -16,9 +16,10 @@ export interface User {
 
 export interface UserProgressResponse {
   attempts: number;
-  lastAttempted: string;  // Date.
+  lastAttempted: string | null;  // Date.
   pointsEarned: number;
   isCorrect: boolean;
+  maxAttemptsReached: boolean;
 }
 
 

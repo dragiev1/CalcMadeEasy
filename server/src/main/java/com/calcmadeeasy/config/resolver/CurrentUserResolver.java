@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,6 +20,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * 
  * CurrentUserResolver
  */
+@Component
 public class CurrentUserResolver implements HandlerMethodArgumentResolver {
     // Necessary to tell Spring that this is the supported annotation (@CurrentUser) and to not whine.
     @Override

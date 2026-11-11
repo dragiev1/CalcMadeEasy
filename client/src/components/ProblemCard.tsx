@@ -15,6 +15,7 @@ const ProblemCard: React.FC<ProblemProps> = ({
   solved = false,
   tags = [], // Default to empty array.
   userSolution,
+  maxAttemptsReached
 }) => {
   //  ========== TEMP FOR TESTING ==========
   const pageId = "c3d4e5f6-a7b8-4901-d1e2-f3a4b5c6d7e8";
@@ -26,7 +27,6 @@ const ProblemCard: React.FC<ProblemProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showTags, setShowTags] = useState(true);
-  const [maxAttemptsReached, setMaxAttemptsReached] = useState(false);
   const [status, setStatus] = useState<"idle" | "checking" | "correct" | "incorrect">("idle");
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const ProblemCard: React.FC<ProblemProps> = ({
       // TODO: Create a message bubble displaying this to user!
       if(result.maxAttemptsReached) {
         console.log("Max Attempts Reached!");
-        setMaxAttemptsReached(true);
       };
     } catch (e) {
       console.error("Verification failed: ", e);

@@ -28,6 +28,7 @@ export interface ProblemProps {
   solved?: boolean;
   tags?: Tag[]; 
   userSolution?: string;
+  maxAttemptsReached?: boolean;
 }
 
 export interface ProblemResponse {

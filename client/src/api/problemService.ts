@@ -19,10 +19,10 @@ export const verifyUserSolution = (pageId:string, problemId: string, solution: s
   });
 }
 
-export const getUserProblemProgress = async (userId: string, problemId: string, pageId: string) => {
+export const getUserProblemProgress = async (problemId: string, pageId: string) => {
   return apiClient<UserProgressResponse>(
-    `/users/${userId}/${problemId}/${pageId}`, {
+    `/users/progress/${problemId}/${pageId}`, {
       method: 'GET'
     }
-  ) 
+  );
 }
